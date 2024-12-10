@@ -73,3 +73,7 @@ body {
         border-color: var(--blue);
         color: var(--text);
     }
+
+body, .jumbotron, .card, .btn, .navbar, .form-control {
+    font-family: 'Roboto', sans-serif;
+}
