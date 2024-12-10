@@ -1,0 +1,75 @@
+﻿:root {
+    --base: #1e1e2e;
+    --mantle: #181825;
+    --crust: #11111b;
+    --text: #cdd6f4;
+    --subtext0: #a6adc8;
+    --subtext1: #bac2de;
+    --overlay0: #6c7086;
+    --overlay1: #7f849c;
+    --overlay2: #9399b2;
+    --surface0: #313244;
+    --surface1: #45475a;
+    --surface2: #585b70;
+    --blue: #89b4fa;
+    --lavender: #b4befe;
+    --sapphire: #74c7ec;
+    --sky: #89dceb;
+    --teal: #94e2d5;
+    --green: #a6e3a1;
+    --yellow: #f9e2af;
+    --peach: #fab387;
+    --maroon: #eba0ac;
+    --red: #f38ba8;
+    --mauve: #cba6f7;
+    --pink: #f5c2e7;
+    --flamingo: #f2cdcd;
+    --rosewater: #f5e0dc;
+}
+
+body {
+    background-color: var(--base);
+    color: var(--text);
+}
+
+.btn-primary {
+    background-color: var(--blue);
+    border-color: var(--blue);
+    color: var(--text);
+}
+
+    .btn-primary:hover {
+        background-color: var(--sapphire);
+        border-color: var(--sapphire);
+    }
+
+.card {
+    background-color: var(--surface0);
+    border-color: var(--surface1);
+    color: var(--text);
+}
+
+.navbar {
+    background-color: var(--mantle);
+    color: var(--text);
+}
+
+.navbar-brand, .navbar-nav .nav-link {
+    color: var(--text);
+}
+
+    .navbar-brand:hover, .navbar-nav .nav-link:hover {
+        color: var(--blue);
+    }
+
+.form-control {
+    background-color: var(--surface0);
+    border-color: var(--surface1);
+    color: var(--text);
+}
+
+    .form-control:focus {
+        background-color: var(--surface0);
+        border-color: var(--blue);
+        color: var(--text);
+    }

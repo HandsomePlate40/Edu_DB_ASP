@@ -1,8 +1,40 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Welcome to 'TEMP NAME'";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="jumbotron text-center" style="background-color: var(--mantle); color: var(--text); padding: 2rem; border-radius: 24px;">
+    <h1 class="display-4" style="color: var(--blue);">Welcome to Edu_DB_ASP</h1>
+    <p class="lead" style="color: var(--subtext0);">Your gateway to a world of knowledge and learning.</p>
+    <hr class="my-4" style="border-color: var(--overlay1);">
+    <p style="color: var(--subtext1);">Explore our wide range of courses and start your learning journey today.</p>
+    <a class="btn btn-primary btn-lg" href="@Url.Action("Index", "Courses")" role="button">Browse Courses</a>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm" style="background-color: var(--surface0); color: var(--text); border-radius: 24px;">
+                <div class="card-body">
+                    <h5 class="card-title" style="color: var(--green);">Interactive Learning</h5>
+                    <p class="card-text" style="color: var(--subtext0);">Engage with interactive content and hands-on activities to enhance your learning experience.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm" style="background-color: var(--surface0); color: var(--text); border-radius: 24px;">
+                <div class="card-body">
+                    <h5 class="card-title" style="color: var(--yellow);">Expert Instructors</h5>
+                    <p class="card-text" style="color: var(--subtext0);">Learn from industry experts and experienced educators who are passionate about teaching.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm" style="background-color: var(--surface0); color: var(--text); border-radius: 24px;">
+                <div class="card-body">
+                    <h5 class="card-title" style="color: var(--peach);">Flexible Schedule</h5>
+                    <p class="card-text" style="color: var(--subtext0);">Study at your own pace with flexible course schedules that fit your busy lifestyle.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
