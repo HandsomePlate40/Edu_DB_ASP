@@ -23,8 +23,8 @@ namespace Edu_DB_ASP.Controllers.Account
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Login(LoginViewModel model)
+     
+   /*     public IActionResult Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -43,7 +43,7 @@ namespace Edu_DB_ASP.Controllers.Account
             }
 
             return View(model);
-        }
+        } */
 
         [HttpGet]
         public IActionResult Register()
@@ -52,27 +52,55 @@ namespace Edu_DB_ASP.Controllers.Account
         }
 
         [HttpPost]
-        public IActionResult Register(RegisterViewModel model)
+        [Route("Account/Register")]
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var hashedPassword = HashPassword(model.Password);
-
-                var user = new User
+                try
                 {
-                    Email = model.Email,
-                    PasswordHash = hashedPassword,
-                    Role = model.Role
-                };
+                    if (model.Role == "Learner")
+                    {
+                        var hashedPassword = HashPassword(model.Password);
+                        var learner = new Learner
+                        {
+                            FirstName = model.FirstName,
+                            LastName = model.LastName,
+                            Birthdate = model.BirthDate,
+                            Gender = model.Gender,
+                            CountryOfOrigin = model.CountryOfOrigin,
+                            Email = model.Email,
+                            PasswordHash = hashedPassword // Implement secure hashing
+                        };
+                        _context.Learners.Add(learner);
+                        _context.SaveChanges();
+                    }
+                    else if (model.Role == "Instructor")
+                    {
+                        var hashedPassword = HashPassword(model.Password);
+                        var instructor = new Instructor
+                        {
+                            InstructorName = $"{model.FirstName} {model.LastName}",
+                            Qualifications = model.Qualifications,
+                            Email = model.Email,
+                            PasswordHash = hashedPassword // Implement secure hashing
+                        };
+                        _context.Instructors.Add(instructor);
+                        _context.SaveChanges();
+                    }
 
-                _context.Users.Add(user);
-                _context.SaveChanges();
-
-                return RedirectToAction("Login");
+                    
+                    return RedirectToAction("Login");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", $"An error occurred: {ex.Message}");
+                }
             }
 
             return View(model);
         }
+
 
         private string HashPassword(string password)
         {

@@ -91,8 +91,6 @@ public partial class EduDbContext : DbContext
 
     public virtual DbSet<TargetTrait> TargetTraits { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=edu_DB;Trusted_Connection=True;");
@@ -411,7 +409,7 @@ public partial class EduDbContext : DbContext
                     r => r.HasOne<Instructor>().WithMany()
                         .HasForeignKey("InstructorId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Review__Instruct__47A6A41B"),
+                        .HasConstraintName("FK_Review_Instructor"),
                     l => l.HasOne<EmotionalFeedback>().WithMany()
                         .HasForeignKey("FeedbackId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
@@ -463,7 +461,7 @@ public partial class EduDbContext : DbContext
             entity.HasOne(d => d.Instructor).WithMany(p => p.Expertises)
                 .HasForeignKey(d => d.InstructorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Expertise__Instr__10566F31");
+                .HasConstraintName("FK_Expertise_Instructor");
         });
 
         modelBuilder.Entity<Express>(entity =>
@@ -508,19 +506,18 @@ public partial class EduDbContext : DbContext
 
         modelBuilder.Entity<Instructor>(entity =>
         {
-            entity.HasKey(e => e.InstructorId).HasName("PK__Instruct__9D010B7BDE0D9400");
+            entity.HasKey(e => e.InstructorId).HasName("PK__Instruct__9D010B7B01C75B11");
 
             entity.ToTable("Instructor");
 
-            entity.Property(e => e.InstructorId)
-                .ValueGeneratedNever()
-                .HasColumnName("InstructorID");
+            entity.Property(e => e.InstructorId).HasColumnName("InstructorID");
             entity.Property(e => e.Email)
                 .HasMaxLength(255)
                 .IsUnicode(false);
             entity.Property(e => e.InstructorName)
                 .HasMaxLength(255)
                 .IsUnicode(false);
+            entity.Property(e => e.PasswordHash).HasMaxLength(255);
             entity.Property(e => e.Qualifications)
                 .HasMaxLength(500)
                 .IsUnicode(false);
@@ -535,7 +532,7 @@ public partial class EduDbContext : DbContext
                     l => l.HasOne<Instructor>().WithMany()
                         .HasForeignKey("InstructorId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Teach__Instructo__531856C7"),
+                        .HasConstraintName("FK_Teach_Instructor"),
                     j =>
                     {
                         j.HasKey("InstructorId", "CourseId").HasName("PK__Teach__F193DC63B5052AB2");
@@ -674,6 +671,7 @@ public partial class EduDbContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("cultural_background");
+            entity.Property(e => e.Email).HasMaxLength(255);
             entity.Property(e => e.EmotionalProfile)
                 .HasMaxLength(255)
                 .IsUnicode(false);
@@ -695,6 +693,7 @@ public partial class EduDbContext : DbContext
             entity.Property(e => e.MentalHealth)
                 .HasMaxLength(255)
                 .IsUnicode(false);
+            entity.Property(e => e.PasswordHash).HasMaxLength(255);
             entity.Property(e => e.PersonalityTraits)
                 .HasMaxLength(255)
                 .IsUnicode(false);
@@ -831,7 +830,7 @@ public partial class EduDbContext : DbContext
                     r => r.HasOne<Instructor>().WithMany()
                         .HasForeignKey("InstructorId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Adapt__Instructo__3B40CD36"),
+                        .HasConstraintName("FK_Adapt_Instructor"),
                     l => l.HasOne<LearningPath>().WithMany()
                         .HasForeignKey("PathId")
                         .OnDelete(DeleteBehavior.ClientSetNull)

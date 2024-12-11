@@ -1,43 +1,62 @@
 ﻿@model RegisterViewModel
 
-<h2>Register</h2>
 <form asp-action="Register" method="post">
     <div>
         <label asp-for="Email"></label>
-        <input asp-for="Email" />
+        <input asp-for="Email" class="form-control" />
         <span asp-validation-for="Email"></span>
     </div>
     <div>
         <label asp-for="Password"></label>
-        <input asp-for="Password" type="password" />
+        <input asp-for="Password" type="password" class="form-control" />
         <span asp-validation-for="Password"></span>
     </div>
     <div>
         <label asp-for="Role"></label>
-        <select asp-for="Role">
+        <select asp-for="Role" class="form-control">
             <option value="Learner">Learner</option>
             <option value="Instructor">Instructor</option>
-            <option value="Admin">Admin</option>
         </select>
         <span asp-validation-for="Role"></span>
     </div>
-    <button type="submit">Register</button>
     <div>
-        <label asp-for="FullName"></label>
-        <input asp-for="FullName" class="form-control" />
-        <span asp-validation-for="FullName"></span>
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName"></span>
     </div>
-
+    <div>
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName"></span>
+    </div>
     <div>
         <label asp-for="BirthDate"></label>
-        <input asp-for="BirthDate" class="form-control" type="date" />
+        <input asp-for="BirthDate" type="date" class="form-control" />
         <span asp-validation-for="BirthDate"></span>
     </div>
-
     <div>
+        <label asp-for="Gender"></label>
+        <input asp-for="Gender" class="form-control" />
+        <span asp-validation-for="Gender"></span>
+    </div>
+    <div>
+        <label asp-for="CountryOfOrigin"></label>
+        <input asp-for="CountryOfOrigin" class="form-control" />
+        <span asp-validation-for="CountryOfOrigin"></span>
+    </div>
+    <div id="qualifications-section" style="display:none;">
         <label asp-for="Qualifications"></label>
         <input asp-for="Qualifications" class="form-control" />
         <span asp-validation-for="Qualifications"></span>
     </div>
-
+    <button type="Submit" class="btn btn-primary">Register</button>
 </form>
+
+@section Scripts {
+    <script>
+        document.querySelector("[name='Role']").addEventListener("change", function () {
+            const qualificationsSection = document.getElementById("qualifications-section");
+            qualificationsSection.style.display = this.value === "Instructor" ? "block" : "none";
+        });
+    </script>
+}

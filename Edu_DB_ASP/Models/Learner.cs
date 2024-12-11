@@ -31,6 +31,12 @@ public partial class Learner
 
     public string? ExperienceLevel { get; set; }
 
+    public int UserId { get; set; }
+
+    public string Email { get; set; } = null!;
+
+    public string PasswordHash { get; set; } = null!;
+
     public virtual ICollection<Achievement> Achievements { get; set; } = new List<Achievement>();
 
     public virtual ICollection<CourseEnrollment> CourseEnrollments { get; set; } = new List<CourseEnrollment>();
