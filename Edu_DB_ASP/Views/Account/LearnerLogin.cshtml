@@ -1,16 +1,97 @@
 ﻿@model LoginViewModel
 
-<h2>Login</h2>
-<form asp-action="LearnerLogin" method="post">
-    <div>
-        <label asp-for="Email"></label>
-        <input asp-for="Email" />
-        <span asp-validation-for="Email"></span>
+<h2 class="form-title">LearnerLogin</h2>
+<form asp-action="LearnerLogin" method="post" class="login-form">
+    <div class="form-group">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-input" placeholder="Enter your email" />
+        <span asp-validation-for="Email" class="form-error"></span>
     </div>
-    <div>
-        <label asp-for="Password"></label>
-        <input asp-for="Password" type="password" />
-        <span asp-validation-for="Password"></span>
+    <div class="form-group">
+        <label asp-for="Password" class="form-label"></label>
+        <input asp-for="Password" type="password" class="form-input" placeholder="Enter your password" />
+        <span asp-validation-for="Password" class="form-error"></span>
     </div>
-    <button type="submit">Login</button>
-</form>
+
+    <button type="submit" class="form-button">Login</button>
+    <style>
+        /* Form Container Styling */
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 15px;
+            background-color: #2e3440; /* Dark background */
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Title Styling */
+        .form-title {
+            text-align: center;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #cdd6f4; /* Light text color */
+        }
+
+        /* Input Groups */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        /* Labels */
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #cdd6f4; /* Light text color */
+        }
+
+        /* Inputs */
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #4c566a; /* Border color */
+            border-radius: 5px;
+            background-color: #3b4252; /* Dark input background */
+            color: #cdd6f4; /* Light text color */
+            font-size: 1em;
+        }
+
+            /* Inputs: Focus */
+            .form-input:focus,
+            .form-select:focus {
+                border-color: #88c0d0; /* Accent color on focus */
+                outline: none;
+                box-shadow: 0 0 5px rgba(136, 192, 208, 0.5);
+            }
+
+        /* Error Messages */
+        .form-error {
+            color: #bf616a; /* Error color */
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        /* Button Styling */
+        .form-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #88c0d0; /* Accent button color */
+            color: #2e3440; /* Dark text color */
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            /* Button: Hover */
+            .form-button:hover {
+                background-color: #81a1c1; /* Slightly darker accent color */
+            }
+
+        <style >
+        </form >
