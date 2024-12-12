@@ -24,26 +24,41 @@ namespace Edu_DB_ASP.Controllers.Account
         }
 
      
-   /*     public IActionResult Login(LoginViewModel model)
+       public IActionResult Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = _context.Users.SingleOrDefault(u => u.Email == model.Email);
+                if(model.Role == "Learner"){
 
-                if (user != null && VerifyPassword(model.Password, user.PasswordHash))
+                    var Learner = _context.Learners.SingleOrDefault(u => u.Email == model.Email);
+
+                    if (Learner != null && VerifyPassword(model.Password, Learner.PasswordHash))
+                    {
+                        // Create session or cookie
+                        HttpContext.Session.SetString("UserEmail", Learner.Email);
+
+                        return RedirectToAction("Index", "Home");
+                    }
+
+                }else if (model.Role == "Instructor")
                 {
-                    // Create session or cookie
-                    HttpContext.Session.SetString("UserEmail", user.Email);
-                    HttpContext.Session.SetString("UserRole", user.Role);
 
-                    return RedirectToAction("Index", "Home");
+                    var Instructor = _context.Instructors.SingleOrDefault(u => u.Email == model.Email);
+
+                    if (Instructor != null && VerifyPassword(model.Password, Instructor.PasswordHash))
+                    {
+                        // Create session or cookie
+                        HttpContext.Session.SetString("UserEmail", Instructor.Email);
+
+                        return RedirectToAction("Index", "Home");//redirect to login-registe page
+                    }
                 }
 
                 ModelState.AddModelError("", "Invalid login attempt.");
             }
 
             return View(model);
-        } */
+        } 
 
         [HttpGet]
         public IActionResult Register()

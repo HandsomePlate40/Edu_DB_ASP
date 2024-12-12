@@ -12,5 +12,13 @@
         <input asp-for="Password" type="password" />
         <span asp-validation-for="Password"></span>
     </div>
+    <div>
+        <label asp-for="Role"></label>
+        <select asp-for="Role" class="form-control">
+            <option value="Learner">Learner</option>
+            <option value="Instructor">Instructor</option>
+        </select>
+        <span asp-validation-for="Role"></span>
+    </div>
     <button type="submit">Login</button>
 </form>

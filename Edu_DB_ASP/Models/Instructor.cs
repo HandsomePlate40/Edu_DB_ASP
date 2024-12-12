@@ -11,8 +11,6 @@ public partial class Instructor
 
     public string? Qualifications { get; set; }
 
-    public int? UserId { get; set; }
-
     public string PasswordHash { get; set; } = null!;
 
     public int InstructorId { get; set; }
