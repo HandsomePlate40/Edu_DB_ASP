@@ -29,7 +29,7 @@
         }
 
         .nav-item {
-            margin-right: 10px;
+            margin-right: 25px;
             position: relative; /* Position relative for dropdown positioning */
         }
 
@@ -48,6 +48,32 @@
             display: flex;
             flex-direction: row;
         }
+
+        /* Remove outline from nav links and dropdowns */
+        .navbar .nav-link,
+        .navbar .dropdown-toggle {
+            outline: none; /* Remove outline */
+            border: none; /* Remove border if any */
+        }
+
+            /* Ensure no outline on focus or active states */
+            .navbar .nav-link:focus,
+            .navbar .nav-link:active,
+            .navbar .dropdown-toggle:focus,
+            .navbar .dropdown-toggle:active {
+                outline: none; /* Ensure no outline on focus or active states */
+                box-shadow: none; /* Remove any box-shadow if present */
+            }
+
+        /* Additional rule to remove any default focus styles */
+        .navbar a {
+            text-decoration: none; /* Remove underline if present */
+            color: inherit; /* Ensure color is inherited */
+        }
+
+            .navbar a:focus {
+                outline: none; /* Remove focus outline */
+            }
 
         .dropdown-menu {
             display: none;
