@@ -5,6 +5,8 @@ namespace Edu_DB_ASP.Models;
 
 public partial class Instructor
 {
+    public int InstructorId { get; set; }
+
     public string? InstructorName { get; set; }
 
     public string? Email { get; set; }
@@ -12,8 +14,6 @@ public partial class Instructor
     public string? Qualifications { get; set; }
 
     public string PasswordHash { get; set; } = null!;
-
-    public int InstructorId { get; set; }
 
     public virtual ICollection<Expertise> Expertises { get; set; } = new List<Expertise>();
 

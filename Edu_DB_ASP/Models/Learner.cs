@@ -11,10 +11,6 @@ public partial class Learner
 
     public string? LastName { get; set; }
 
-    public DateTime? Birthdate { get; set; }
-
-    public int? Age { get; set; }
-
     public string? Gender { get; set; }
 
     public string? CountryOfOrigin { get; set; }
@@ -31,9 +27,7 @@ public partial class Learner
 
     public string? ExperienceLevel { get; set; }
 
-    public int UserId { get; set; }
-
-    public string Email { get; set; } = null!;
+    public string? Email { get; set; }
 
     public string PasswordHash { get; set; } = null!;
 

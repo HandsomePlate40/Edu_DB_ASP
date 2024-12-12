@@ -103,6 +103,10 @@ public partial class EduDbContext : DbContext
 
             entity.ToTable("Achievement");
 
+            entity.HasIndex(e => e.BadgeId, "IX_Achievement_BadgeID");
+
+            entity.HasIndex(e => e.LearnerId, "IX_Achievement_LearnerID");
+
             entity.Property(e => e.AchievementId).HasColumnName("AchievementID");
             entity.Property(e => e.AchievementDescription).IsUnicode(false);
             entity.Property(e => e.AchievementType)
@@ -136,6 +140,7 @@ public partial class EduDbContext : DbContext
                     {
                         j.HasKey("AchievementId", "BadgeId").HasName("PK__Awards__F6F2B2D7A26A5BB5");
                         j.ToTable("Awards");
+                        j.HasIndex(new[] { "BadgeId" }, "IX_Awards_BadgeID");
                         j.IndexerProperty<int>("AchievementId").HasColumnName("AchievementID");
                         j.IndexerProperty<int>("BadgeId").HasColumnName("BadgeID");
                     });
@@ -155,6 +160,7 @@ public partial class EduDbContext : DbContext
                     {
                         j.HasKey("AchievementId", "LearnerId").HasName("PK__Earns__91198F2FF40D9D23");
                         j.ToTable("Earns");
+                        j.HasIndex(new[] { "LearnerId" }, "IX_Earns_LearnerID");
                         j.IndexerProperty<int>("AchievementId").HasColumnName("AchievementID");
                         j.IndexerProperty<int>("LearnerId").HasColumnName("LearnerID");
                     });
@@ -178,6 +184,8 @@ public partial class EduDbContext : DbContext
         modelBuilder.Entity<Assessment>(entity =>
         {
             entity.HasKey(e => e.AssessmentId).HasName("PK__Assessme__3D2BF83E5A3CB530");
+
+            entity.HasIndex(e => e.ModuleId, "IX_Assessments_ModuleID");
 
             entity.Property(e => e.AssessmentId)
                 .ValueGeneratedNever()
@@ -232,6 +240,7 @@ public partial class EduDbContext : DbContext
                     {
                         j.HasKey("BadgeId", "LearnerId").HasName("PK__Takes__AF629CB3EB07A3C2");
                         j.ToTable("Takes");
+                        j.HasIndex(new[] { "LearnerId" }, "IX_Takes_LearnerID");
                         j.IndexerProperty<int>("BadgeId").HasColumnName("BadgeID");
                         j.IndexerProperty<int>("LearnerId").HasColumnName("LearnerID");
                     });
@@ -259,6 +268,8 @@ public partial class EduDbContext : DbContext
             entity.HasKey(e => e.ContentId).HasName("PK__ContentL__2907A87EC282FE42");
 
             entity.ToTable("ContentLibrary");
+
+            entity.HasIndex(e => e.CourseId, "IX_ContentLibrary_CourseID");
 
             entity.Property(e => e.ContentId).HasColumnName("ContentID");
             entity.Property(e => e.ContentType)
@@ -319,6 +330,10 @@ public partial class EduDbContext : DbContext
 
             entity.ToTable("CourseEnrollment");
 
+            entity.HasIndex(e => e.CourseId, "IX_CourseEnrollment_CourseID");
+
+            entity.HasIndex(e => e.LearnerId, "IX_CourseEnrollment_LearnerID");
+
             entity.Property(e => e.EnrollmentId).HasColumnName("EnrollmentID");
             entity.Property(e => e.LearnerId).HasColumnName("LearnerID");
             entity.Property(e => e.CourseId).HasColumnName("CourseID");
@@ -350,6 +365,7 @@ public partial class EduDbContext : DbContext
                     {
                         j.HasKey("EnrollmentId", "LearnerId", "CourseId", "SurveyId").HasName("PK__Tied__B611B1C446A51BE7");
                         j.ToTable("Tied");
+                        j.HasIndex(new[] { "SurveyId" }, "IX_Tied_SurveyID");
                         j.IndexerProperty<int>("EnrollmentId").HasColumnName("EnrollmentID");
                         j.IndexerProperty<int>("LearnerId").HasColumnName("LearnerID");
                         j.IndexerProperty<int>("CourseId").HasColumnName("CourseID");
@@ -362,6 +378,8 @@ public partial class EduDbContext : DbContext
             entity.HasKey(e => e.ForumId).HasName("PK__Discussi__E210AC4F7B9376C5");
 
             entity.ToTable("DiscussionForum");
+
+            entity.HasIndex(e => e.ModuleId, "IX_DiscussionForum_ModuleID");
 
             entity.Property(e => e.ForumId)
                 .ValueGeneratedNever()
@@ -388,6 +406,8 @@ public partial class EduDbContext : DbContext
             entity.HasKey(e => e.FeedbackId).HasName("PK__Emotiona__6A4BEDF6C079427F");
 
             entity.ToTable("EmotionalFeedback");
+
+            entity.HasIndex(e => e.LearnerId, "IX_EmotionalFeedback_LearnerID");
 
             entity.Property(e => e.FeedbackId).HasColumnName("FeedbackID");
             entity.Property(e => e.EmotionalState)
@@ -418,6 +438,7 @@ public partial class EduDbContext : DbContext
                     {
                         j.HasKey("FeedbackId", "InstructorId").HasName("PK__Review__C39BFD41DB9A3D21");
                         j.ToTable("Review");
+                        j.HasIndex(new[] { "InstructorId" }, "IX_Review_InstructorID");
                         j.IndexerProperty<int>("FeedbackId").HasColumnName("FeedbackID");
                         j.IndexerProperty<int>("InstructorId").HasColumnName("InstructorID");
                     });
@@ -426,6 +447,10 @@ public partial class EduDbContext : DbContext
         modelBuilder.Entity<Evaluate>(entity =>
         {
             entity.HasKey(e => new { e.CourseId, e.ModuleId, e.AssessmentId }).HasName("PK__Evaluate__94A71D07350C7833");
+
+            entity.HasIndex(e => e.AssessmentId, "IX_Evaluates_AssessmentID");
+
+            entity.HasIndex(e => e.ModuleId, "IX_Evaluates_ModuleID");
 
             entity.Property(e => e.CourseId).HasColumnName("CourseID");
             entity.Property(e => e.ModuleId).HasColumnName("ModuleID");
@@ -467,6 +492,10 @@ public partial class EduDbContext : DbContext
         modelBuilder.Entity<Express>(entity =>
         {
             entity.HasKey(e => new { e.LearnerId, e.ActivityId, e.FeedbackId }).HasName("PK__Expresse__949EFD6813931B30");
+
+            entity.HasIndex(e => e.ActivityId, "IX_Expresses_ActivityID");
+
+            entity.HasIndex(e => e.FeedbackId, "IX_Expresses_FeedbackID");
 
             entity.Property(e => e.LearnerId).HasColumnName("LearnerID");
             entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
@@ -537,6 +566,7 @@ public partial class EduDbContext : DbContext
                     {
                         j.HasKey("InstructorId", "CourseId").HasName("PK__Teach__F193DC63B5052AB2");
                         j.ToTable("Teach");
+                        j.HasIndex(new[] { "CourseId" }, "IX_Teach_CourseID");
                         j.IndexerProperty<int>("InstructorId").HasColumnName("InstructorID");
                         j.IndexerProperty<int>("CourseId").HasColumnName("CourseID");
                     });
@@ -547,6 +577,10 @@ public partial class EduDbContext : DbContext
             entity.HasKey(e => e.LogId).HasName("PK__Interact__5E5499A8BE8A5B86");
 
             entity.ToTable("InteractionLog");
+
+            entity.HasIndex(e => e.ActivityId, "IX_InteractionLog_ActivityID");
+
+            entity.HasIndex(e => e.LearnerId, "IX_InteractionLog_LearnerID");
 
             entity.Property(e => e.LogId)
                 .ValueGeneratedNever()
@@ -575,6 +609,8 @@ public partial class EduDbContext : DbContext
         modelBuilder.Entity<Join>(entity =>
         {
             entity.HasKey(e => new { e.LearnerId, e.ForumId }).HasName("PK__Joins__898AF63EBA3E703D");
+
+            entity.HasIndex(e => e.ForumId, "IX_Joins_ForumID");
 
             entity.Property(e => e.LearnerId).HasColumnName("LearnerID");
             entity.Property(e => e.ForumId).HasColumnName("ForumID");
@@ -610,6 +646,8 @@ public partial class EduDbContext : DbContext
         {
             entity.HasKey(e => new { e.LeaderboardId, e.LearnerId }).HasName("PK__Leaderbo__05221E2914A09FB2");
 
+            entity.HasIndex(e => e.LearnerId, "IX_LeaderboardRanks_LearnerID");
+
             entity.Property(e => e.LeaderboardId).HasColumnName("LeaderboardID");
             entity.Property(e => e.LearnerId).HasColumnName("LearnerID");
             entity.Property(e => e.LeaderboardRank1).HasColumnName("LeaderboardRank");
@@ -630,6 +668,10 @@ public partial class EduDbContext : DbContext
             entity.HasKey(e => new { e.LearnerId, e.LeaderboardId }).HasName("PK__Leaderbo__1C9E76E421B43CAB");
 
             entity.ToTable("LeaderboardStudentsCourse");
+
+            entity.HasIndex(e => e.CourseId, "IX_LeaderboardStudentsCourse_CourseID");
+
+            entity.HasIndex(e => e.LeaderboardId, "IX_LeaderboardStudentsCourse_LeaderboardID");
 
             entity.Property(e => e.LearnerId).HasColumnName("LearnerID");
             entity.Property(e => e.LeaderboardId).HasColumnName("LeaderboardID");
@@ -658,12 +700,6 @@ public partial class EduDbContext : DbContext
             entity.ToTable("Learner");
 
             entity.Property(e => e.LearnerId).HasColumnName("LearnerID");
-            entity.Property(e => e.Age)
-                .HasComputedColumnSql("(datepart(year,getdate())-datepart(year,[birthdate]))", false)
-                .HasColumnName("age");
-            entity.Property(e => e.Birthdate)
-                .HasColumnType("datetime")
-                .HasColumnName("birthdate");
             entity.Property(e => e.CountryOfOrigin)
                 .HasMaxLength(100)
                 .IsUnicode(false);
@@ -671,7 +707,9 @@ public partial class EduDbContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("cultural_background");
-            entity.Property(e => e.Email).HasMaxLength(255);
+            entity.Property(e => e.Email)
+                .HasMaxLength(255)
+                .IsUnicode(false);
             entity.Property(e => e.EmotionalProfile)
                 .HasMaxLength(255)
                 .IsUnicode(false);
@@ -716,6 +754,7 @@ public partial class EduDbContext : DbContext
                     {
                         j.HasKey("LearnerId", "NotificationId").HasName("PK__Receives__55A70E193D54808C");
                         j.ToTable("Receives");
+                        j.HasIndex(new[] { "NotificationId" }, "IX_Receives_NotificationID");
                         j.IndexerProperty<int>("LearnerId").HasColumnName("LearnerID");
                         j.IndexerProperty<int>("NotificationId").HasColumnName("NotificationID");
                     });
@@ -735,6 +774,7 @@ public partial class EduDbContext : DbContext
                     {
                         j.HasKey("LearnerId", "SurveyId").HasName("PK__Learners__ADFF7D039B217D05");
                         j.ToTable("LearnersSurvey");
+                        j.HasIndex(new[] { "SurveyId" }, "IX_LearnersSurvey_SurveyID");
                         j.IndexerProperty<int>("LearnerId").HasColumnName("LearnerID");
                         j.IndexerProperty<int>("SurveyId").HasColumnName("SurveyID");
                     });
@@ -762,6 +802,8 @@ public partial class EduDbContext : DbContext
 
             entity.ToTable("LearningActivity");
 
+            entity.HasIndex(e => e.ModuleId, "IX_LearningActivity_ModuleID");
+
             entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
             entity.Property(e => e.ActivityType)
                 .HasMaxLength(100)
@@ -779,6 +821,8 @@ public partial class EduDbContext : DbContext
             entity.HasKey(e => e.GoalId).HasName("PK__Learning__8A4FFF311BEAC4EC");
 
             entity.ToTable("LearningGoal");
+
+            entity.HasIndex(e => e.LearnerId, "IX_LearningGoal_LearnerID");
 
             entity.Property(e => e.GoalId)
                 .ValueGeneratedNever()
@@ -806,6 +850,8 @@ public partial class EduDbContext : DbContext
             entity.HasKey(e => e.PathId).HasName("PK__Learning__CD67DC39D4416DA8");
 
             entity.ToTable("LearningPath");
+
+            entity.HasIndex(e => e.GoalId, "IX_LearningPath_GoalID");
 
             entity.Property(e => e.PathId).HasColumnName("PathID");
             entity.Property(e => e.AdaptiveRules)
@@ -839,6 +885,7 @@ public partial class EduDbContext : DbContext
                     {
                         j.HasKey("PathId", "InstructorId").HasName("PK__Adapt__64B7CC8EF3FCDF0D");
                         j.ToTable("Adapt");
+                        j.HasIndex(new[] { "InstructorId" }, "IX_Adapt_InstructorID");
                         j.IndexerProperty<int>("PathId").HasColumnName("PathID");
                         j.IndexerProperty<int>("InstructorId").HasColumnName("InstructorID");
                     });
@@ -863,6 +910,8 @@ public partial class EduDbContext : DbContext
         modelBuilder.Entity<Module>(entity =>
         {
             entity.HasKey(e => e.ModuleId).HasName("PK__Modules__2B7477876BE6F7D6");
+
+            entity.HasIndex(e => e.CourseId, "IX_Modules_CourseID");
 
             entity.Property(e => e.ModuleId).HasColumnName("ModuleID");
             entity.Property(e => e.ContentType)
@@ -906,6 +955,12 @@ public partial class EduDbContext : DbContext
             entity.HasKey(e => new { e.CreationOrder, e.LearnerId }).HasName("PK__Personal__9984E276E73EC0E0");
 
             entity.ToTable("PersonalizationProfile");
+
+            entity.HasIndex(e => e.LearnerId, "IX_PersonalizationProfile_LearnerID");
+
+            entity.HasIndex(e => e.NotificationId, "IX_PersonalizationProfile_NotificationID");
+
+            entity.HasIndex(e => e.PathId, "IX_PersonalizationProfile_PathID");
 
             entity.Property(e => e.CreationOrder).ValueGeneratedOnAdd();
             entity.Property(e => e.LearnerId).HasColumnName("LearnerID");
@@ -974,6 +1029,7 @@ public partial class EduDbContext : DbContext
                     {
                         j.HasKey("QuestId", "LearnerId").HasName("PK__Partake__001B2504CA672BC5");
                         j.ToTable("Partake");
+                        j.HasIndex(new[] { "LearnerId" }, "IX_Partake_LearnerID");
                         j.IndexerProperty<int>("QuestId").HasColumnName("QuestID");
                         j.IndexerProperty<int>("LearnerId").HasColumnName("LearnerID");
                     });
@@ -993,6 +1049,7 @@ public partial class EduDbContext : DbContext
                     {
                         j.HasKey("QuestId", "RewardId").HasName("PK__Grants__3E449B92A94CEF25");
                         j.ToTable("Grants");
+                        j.HasIndex(new[] { "RewardId" }, "IX_Grants_RewardID");
                         j.IndexerProperty<int>("QuestId").HasColumnName("QuestID");
                         j.IndexerProperty<int>("RewardId").HasColumnName("RewardID");
                     });
@@ -1056,6 +1113,8 @@ public partial class EduDbContext : DbContext
 
             entity.ToTable("SkillProgression");
 
+            entity.HasIndex(e => e.LearnerId, "IX_SkillProgression_LearnerID");
+
             entity.Property(e => e.ProgressId)
                 .ValueGeneratedNever()
                 .HasColumnName("ProgressID");
@@ -1111,6 +1170,8 @@ public partial class EduDbContext : DbContext
             entity.HasKey(e => new { e.AssessmentId, e.LearnerId }).HasName("PK__TakenAss__8B5147F11953F770");
 
             entity.ToTable("TakenAssessment");
+
+            entity.HasIndex(e => e.LearnerId, "IX_TakenAssessment_LearnerID");
 
             entity.Property(e => e.AssessmentId).HasColumnName("AssessmentID");
             entity.Property(e => e.LearnerId).HasColumnName("LearnerID");

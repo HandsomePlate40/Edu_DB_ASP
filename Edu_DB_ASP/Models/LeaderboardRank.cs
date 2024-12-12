@@ -7,9 +7,9 @@ public partial class LeaderboardRank
 {
     public int LeaderboardId { get; set; }
 
-    public int LeaderboardRank1 { get; set; }
-
     public int LearnerId { get; set; }
+
+    public int LeaderboardRank1 { get; set; }
 
     public virtual Leaderboard Leaderboard { get; set; } = null!;
 

@@ -45,6 +45,22 @@ namespace Edu_DB_ASP.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Instructor",
+                columns: table => new
+                {
+                    InstructorID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    InstructorName = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
+                    Email = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
+                    Qualifications = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: true),
+                    PasswordHash = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Instruct__9D010B7B01C75B11", x => x.InstructorID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Leaderboard",
                 columns: table => new
                 {
@@ -55,6 +71,30 @@ namespace Edu_DB_ASP.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__Leaderbo__B358A1E686B80F17", x => x.LeaderboardID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Learner",
+                columns: table => new
+                {
+                    LearnerID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    first_name = table.Column<string>(type: "varchar(35)", unicode: false, maxLength: 35, nullable: true),
+                    last_name = table.Column<string>(type: "varchar(35)", unicode: false, maxLength: 35, nullable: true),
+                    gender = table.Column<string>(type: "varchar(6)", unicode: false, maxLength: 6, nullable: true),
+                    CountryOfOrigin = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
+                    cultural_background = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
+                    PersonalityTraits = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
+                    EmotionalProfile = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
+                    PhysicalHealth = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
+                    MentalHealth = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
+                    ExperienceLevel = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
+                    Email = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Learner__67ABFCFA1EEFDCD8", x => x.LearnerID);
                 });
 
             migrationBuilder.CreateTable(
@@ -118,21 +158,6 @@ namespace Edu_DB_ASP.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    UserId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.UserId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ContentLibrary",
                 columns: table => new
                 {
@@ -182,234 +207,6 @@ namespace Edu_DB_ASP.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Collaborative_Quests",
-                columns: table => new
-                {
-                    QuestID = table.Column<int>(type: "int", nullable: false),
-                    Max_Participants = table.Column<int>(type: "int", nullable: true),
-                    DeadLine = table.Column<DateTime>(type: "datetime", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Collabor__B6619ACBF03D3510", x => x.QuestID);
-                    table.ForeignKey(
-                        name: "FK__Collabora__Quest__7D439ABD",
-                        column: x => x.QuestID,
-                        principalTable: "Quests",
-                        principalColumn: "QuestID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "QuestReward",
-                columns: table => new
-                {
-                    QuestID = table.Column<int>(type: "int", nullable: false),
-                    Rewards = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__QuestRew__D749EC5578916AF7", x => new { x.QuestID, x.Rewards });
-                    table.ForeignKey(
-                        name: "FK__QuestRewa__Quest__00200768",
-                        column: x => x.QuestID,
-                        principalTable: "Quests",
-                        principalColumn: "QuestID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Skill_Mastery_Quests",
-                columns: table => new
-                {
-                    QuestID = table.Column<int>(type: "int", nullable: false),
-                    Skills = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Skill_Ma__B6619ACBBB199C12", x => x.QuestID);
-                    table.ForeignKey(
-                        name: "FK__Skill_Mas__Quest__7A672E12",
-                        column: x => x.QuestID,
-                        principalTable: "Quests",
-                        principalColumn: "QuestID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Grants",
-                columns: table => new
-                {
-                    QuestID = table.Column<int>(type: "int", nullable: false),
-                    RewardID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Grants__3E449B92A94CEF25", x => new { x.QuestID, x.RewardID });
-                    table.ForeignKey(
-                        name: "FK__Grants__QuestID__2EDAF651",
-                        column: x => x.QuestID,
-                        principalTable: "Quests",
-                        principalColumn: "QuestID");
-                    table.ForeignKey(
-                        name: "FK__Grants__RewardID__2FCF1A8A",
-                        column: x => x.RewardID,
-                        principalTable: "Reward",
-                        principalColumn: "RewardID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SurveyQuestions",
-                columns: table => new
-                {
-                    SurveyID = table.Column<int>(type: "int", nullable: false),
-                    Question = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__SurveyQu__23FB983B6909533D", x => new { x.SurveyID, x.Question });
-                    table.ForeignKey(
-                        name: "FK__SurveyQue__Surve__208CD6FA",
-                        column: x => x.SurveyID,
-                        principalTable: "Survey",
-                        principalColumn: "SurveyID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Instructor",
-                columns: table => new
-                {
-                    InstructorID = table.Column<int>(type: "int", nullable: false),
-                    InstructorName = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
-                    Email = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
-                    Qualifications = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Instruct__9D010B7BDE0D9400", x => x.InstructorID);
-                    table.ForeignKey(
-                        name: "FK_Instructor_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Learner",
-                columns: table => new
-                {
-                    LearnerID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    first_name = table.Column<string>(type: "varchar(35)", unicode: false, maxLength: 35, nullable: true),
-                    last_name = table.Column<string>(type: "varchar(35)", unicode: false, maxLength: 35, nullable: true),
-                    birthdate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    age = table.Column<int>(type: "int", nullable: true, computedColumnSql: "(datepart(year,getdate())-datepart(year,[birthdate]))", stored: false),
-                    gender = table.Column<string>(type: "varchar(6)", unicode: false, maxLength: 6, nullable: true),
-                    CountryOfOrigin = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
-                    cultural_background = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
-                    PersonalityTraits = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
-                    EmotionalProfile = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
-                    PhysicalHealth = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
-                    MentalHealth = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
-                    ExperienceLevel = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Learner__67ABFCFA1EEFDCD8", x => x.LearnerID);
-                    table.ForeignKey(
-                        name: "FK_Learner_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Assessments",
-                columns: table => new
-                {
-                    AssessmentID = table.Column<int>(type: "int", nullable: false),
-                    Title = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
-                    AssessmentDescription = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: true),
-                    GradingCriteria = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: true),
-                    Weightage = table.Column<decimal>(type: "decimal(5,2)", nullable: true),
-                    MaxScore = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    TotalMarks = table.Column<int>(type: "int", nullable: true),
-                    PassingMarks = table.Column<int>(type: "int", nullable: true),
-                    ModuleID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Assessme__3D2BF83E5A3CB530", x => x.AssessmentID);
-                    table.ForeignKey(
-                        name: "FK__Assessmen__Modul__07C12930",
-                        column: x => x.ModuleID,
-                        principalTable: "Modules",
-                        principalColumn: "ModuleID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DiscussionForum",
-                columns: table => new
-                {
-                    ForumID = table.Column<int>(type: "int", nullable: false),
-                    Title = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
-                    Description = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: true),
-                    LastActiveTimestamp = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
-                    ModuleID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Discussi__E210AC4F7B9376C5", x => x.ForumID);
-                    table.ForeignKey(
-                        name: "FK__Discussio__Modul__17036CC0",
-                        column: x => x.ModuleID,
-                        principalTable: "Modules",
-                        principalColumn: "ModuleID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "LearningActivity",
-                columns: table => new
-                {
-                    ActivityID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ActivityType = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
-                    MaxPoints = table.Column<decimal>(type: "decimal(5,2)", nullable: true),
-                    ModuleID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Learning__45F4A7F148FC20D3", x => x.ActivityID);
-                    table.ForeignKey(
-                        name: "FK__LearningA__Modul__5629CD9C",
-                        column: x => x.ModuleID,
-                        principalTable: "Modules",
-                        principalColumn: "ModuleID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TargetTraits",
-                columns: table => new
-                {
-                    ModuleID = table.Column<int>(type: "int", nullable: false),
-                    Trait = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__TargetTr__B51B9AB7C8818EC9", x => new { x.ModuleID, x.Trait });
-                    table.ForeignKey(
-                        name: "FK__TargetTra__Modul__534D60F1",
-                        column: x => x.ModuleID,
-                        principalTable: "Modules",
-                        principalColumn: "ModuleID");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Expertise",
                 columns: table => new
                 {
@@ -420,7 +217,7 @@ namespace Edu_DB_ASP.Migrations
                 {
                     table.PrimaryKey("PK__Expertis__2B5DADA429D76C0C", x => new { x.InstructorID, x.ExpertiseArea });
                     table.ForeignKey(
-                        name: "FK__Expertise__Instr__10566F31",
+                        name: "FK_Expertise_Instructor",
                         column: x => x.InstructorID,
                         principalTable: "Instructor",
                         principalColumn: "InstructorID");
@@ -437,15 +234,15 @@ namespace Edu_DB_ASP.Migrations
                 {
                     table.PrimaryKey("PK__Teach__F193DC63B5052AB2", x => new { x.InstructorID, x.CourseID });
                     table.ForeignKey(
+                        name: "FK_Teach_Instructor",
+                        column: x => x.InstructorID,
+                        principalTable: "Instructor",
+                        principalColumn: "InstructorID");
+                    table.ForeignKey(
                         name: "FK__Teach__CourseID__540C7B00",
                         column: x => x.CourseID,
                         principalTable: "Courses",
                         principalColumn: "CourseID");
-                    table.ForeignKey(
-                        name: "FK__Teach__Instructo__531856C7",
-                        column: x => x.InstructorID,
-                        principalTable: "Instructor",
-                        principalColumn: "InstructorID");
                 });
 
             migrationBuilder.CreateTable(
@@ -592,28 +389,6 @@ namespace Edu_DB_ASP.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "LearnersSurvey",
-                columns: table => new
-                {
-                    LearnerID = table.Column<int>(type: "int", nullable: false),
-                    SurveyID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Learners__ADFF7D039B217D05", x => new { x.LearnerID, x.SurveyID });
-                    table.ForeignKey(
-                        name: "FK__LearnersS__Learn__236943A5",
-                        column: x => x.LearnerID,
-                        principalTable: "Learner",
-                        principalColumn: "LearnerID");
-                    table.ForeignKey(
-                        name: "FK__LearnersS__Surve__245D67DE",
-                        column: x => x.SurveyID,
-                        principalTable: "Survey",
-                        principalColumn: "SurveyID");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "LearningGoal",
                 columns: table => new
                 {
@@ -650,50 +425,6 @@ namespace Edu_DB_ASP.Migrations
                         column: x => x.LearnerID,
                         principalTable: "Learner",
                         principalColumn: "LearnerID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Partake",
-                columns: table => new
-                {
-                    QuestID = table.Column<int>(type: "int", nullable: false),
-                    LearnerID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Partake__001B2504CA672BC5", x => new { x.QuestID, x.LearnerID });
-                    table.ForeignKey(
-                        name: "FK__Partake__Learner__339FAB6E",
-                        column: x => x.LearnerID,
-                        principalTable: "Learner",
-                        principalColumn: "LearnerID");
-                    table.ForeignKey(
-                        name: "FK__Partake__QuestID__32AB8735",
-                        column: x => x.QuestID,
-                        principalTable: "Quests",
-                        principalColumn: "QuestID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Receives",
-                columns: table => new
-                {
-                    LearnerID = table.Column<int>(type: "int", nullable: false),
-                    NotificationID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Receives__55A70E193D54808C", x => new { x.LearnerID, x.NotificationID });
-                    table.ForeignKey(
-                        name: "FK__Receives__Learne__4A8310C6",
-                        column: x => x.LearnerID,
-                        principalTable: "Learner",
-                        principalColumn: "LearnerID");
-                    table.ForeignKey(
-                        name: "FK__Receives__Notifi__4B7734FF",
-                        column: x => x.NotificationID,
-                        principalTable: "Notifications",
-                        principalColumn: "NotificationID");
                 });
 
             migrationBuilder.CreateTable(
@@ -735,6 +466,360 @@ namespace Edu_DB_ASP.Migrations
                         column: x => x.LearnerID,
                         principalTable: "Learner",
                         principalColumn: "LearnerID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Receives",
+                columns: table => new
+                {
+                    LearnerID = table.Column<int>(type: "int", nullable: false),
+                    NotificationID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Receives__55A70E193D54808C", x => new { x.LearnerID, x.NotificationID });
+                    table.ForeignKey(
+                        name: "FK__Receives__Learne__4A8310C6",
+                        column: x => x.LearnerID,
+                        principalTable: "Learner",
+                        principalColumn: "LearnerID");
+                    table.ForeignKey(
+                        name: "FK__Receives__Notifi__4B7734FF",
+                        column: x => x.NotificationID,
+                        principalTable: "Notifications",
+                        principalColumn: "NotificationID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Collaborative_Quests",
+                columns: table => new
+                {
+                    QuestID = table.Column<int>(type: "int", nullable: false),
+                    Max_Participants = table.Column<int>(type: "int", nullable: true),
+                    DeadLine = table.Column<DateTime>(type: "datetime", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Collabor__B6619ACBF03D3510", x => x.QuestID);
+                    table.ForeignKey(
+                        name: "FK__Collabora__Quest__7D439ABD",
+                        column: x => x.QuestID,
+                        principalTable: "Quests",
+                        principalColumn: "QuestID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Partake",
+                columns: table => new
+                {
+                    QuestID = table.Column<int>(type: "int", nullable: false),
+                    LearnerID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Partake__001B2504CA672BC5", x => new { x.QuestID, x.LearnerID });
+                    table.ForeignKey(
+                        name: "FK__Partake__Learner__339FAB6E",
+                        column: x => x.LearnerID,
+                        principalTable: "Learner",
+                        principalColumn: "LearnerID");
+                    table.ForeignKey(
+                        name: "FK__Partake__QuestID__32AB8735",
+                        column: x => x.QuestID,
+                        principalTable: "Quests",
+                        principalColumn: "QuestID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuestReward",
+                columns: table => new
+                {
+                    QuestID = table.Column<int>(type: "int", nullable: false),
+                    Rewards = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__QuestRew__D749EC5578916AF7", x => new { x.QuestID, x.Rewards });
+                    table.ForeignKey(
+                        name: "FK__QuestRewa__Quest__00200768",
+                        column: x => x.QuestID,
+                        principalTable: "Quests",
+                        principalColumn: "QuestID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Skill_Mastery_Quests",
+                columns: table => new
+                {
+                    QuestID = table.Column<int>(type: "int", nullable: false),
+                    Skills = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Skill_Ma__B6619ACBBB199C12", x => x.QuestID);
+                    table.ForeignKey(
+                        name: "FK__Skill_Mas__Quest__7A672E12",
+                        column: x => x.QuestID,
+                        principalTable: "Quests",
+                        principalColumn: "QuestID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Grants",
+                columns: table => new
+                {
+                    QuestID = table.Column<int>(type: "int", nullable: false),
+                    RewardID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Grants__3E449B92A94CEF25", x => new { x.QuestID, x.RewardID });
+                    table.ForeignKey(
+                        name: "FK__Grants__QuestID__2EDAF651",
+                        column: x => x.QuestID,
+                        principalTable: "Quests",
+                        principalColumn: "QuestID");
+                    table.ForeignKey(
+                        name: "FK__Grants__RewardID__2FCF1A8A",
+                        column: x => x.RewardID,
+                        principalTable: "Reward",
+                        principalColumn: "RewardID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LearnersSurvey",
+                columns: table => new
+                {
+                    LearnerID = table.Column<int>(type: "int", nullable: false),
+                    SurveyID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Learners__ADFF7D039B217D05", x => new { x.LearnerID, x.SurveyID });
+                    table.ForeignKey(
+                        name: "FK__LearnersS__Learn__236943A5",
+                        column: x => x.LearnerID,
+                        principalTable: "Learner",
+                        principalColumn: "LearnerID");
+                    table.ForeignKey(
+                        name: "FK__LearnersS__Surve__245D67DE",
+                        column: x => x.SurveyID,
+                        principalTable: "Survey",
+                        principalColumn: "SurveyID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SurveyQuestions",
+                columns: table => new
+                {
+                    SurveyID = table.Column<int>(type: "int", nullable: false),
+                    Question = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__SurveyQu__23FB983B6909533D", x => new { x.SurveyID, x.Question });
+                    table.ForeignKey(
+                        name: "FK__SurveyQue__Surve__208CD6FA",
+                        column: x => x.SurveyID,
+                        principalTable: "Survey",
+                        principalColumn: "SurveyID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Assessments",
+                columns: table => new
+                {
+                    AssessmentID = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
+                    AssessmentDescription = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: true),
+                    GradingCriteria = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: true),
+                    Weightage = table.Column<decimal>(type: "decimal(5,2)", nullable: true),
+                    MaxScore = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
+                    TotalMarks = table.Column<int>(type: "int", nullable: true),
+                    PassingMarks = table.Column<int>(type: "int", nullable: true),
+                    ModuleID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Assessme__3D2BF83E5A3CB530", x => x.AssessmentID);
+                    table.ForeignKey(
+                        name: "FK__Assessmen__Modul__07C12930",
+                        column: x => x.ModuleID,
+                        principalTable: "Modules",
+                        principalColumn: "ModuleID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DiscussionForum",
+                columns: table => new
+                {
+                    ForumID = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: true),
+                    Description = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: true),
+                    LastActiveTimestamp = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
+                    ModuleID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Discussi__E210AC4F7B9376C5", x => x.ForumID);
+                    table.ForeignKey(
+                        name: "FK__Discussio__Modul__17036CC0",
+                        column: x => x.ModuleID,
+                        principalTable: "Modules",
+                        principalColumn: "ModuleID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LearningActivity",
+                columns: table => new
+                {
+                    ActivityID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ActivityType = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
+                    MaxPoints = table.Column<decimal>(type: "decimal(5,2)", nullable: true),
+                    ModuleID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Learning__45F4A7F148FC20D3", x => x.ActivityID);
+                    table.ForeignKey(
+                        name: "FK__LearningA__Modul__5629CD9C",
+                        column: x => x.ModuleID,
+                        principalTable: "Modules",
+                        principalColumn: "ModuleID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TargetTraits",
+                columns: table => new
+                {
+                    ModuleID = table.Column<int>(type: "int", nullable: false),
+                    Trait = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__TargetTr__B51B9AB7C8818EC9", x => new { x.ModuleID, x.Trait });
+                    table.ForeignKey(
+                        name: "FK__TargetTra__Modul__534D60F1",
+                        column: x => x.ModuleID,
+                        principalTable: "Modules",
+                        principalColumn: "ModuleID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Awards",
+                columns: table => new
+                {
+                    AchievementID = table.Column<int>(type: "int", nullable: false),
+                    BadgeID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Awards__F6F2B2D7A26A5BB5", x => new { x.AchievementID, x.BadgeID });
+                    table.ForeignKey(
+                        name: "FK__Awards__Achievem__2B0A656D",
+                        column: x => x.AchievementID,
+                        principalTable: "Achievement",
+                        principalColumn: "AchievementID");
+                    table.ForeignKey(
+                        name: "FK__Awards__BadgeID__2BFE89A6",
+                        column: x => x.BadgeID,
+                        principalTable: "Badges",
+                        principalColumn: "BadgeID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Earns",
+                columns: table => new
+                {
+                    AchievementID = table.Column<int>(type: "int", nullable: false),
+                    LearnerID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Earns__91198F2FF40D9D23", x => new { x.AchievementID, x.LearnerID });
+                    table.ForeignKey(
+                        name: "FK__Earns__Achieveme__2739D489",
+                        column: x => x.AchievementID,
+                        principalTable: "Achievement",
+                        principalColumn: "AchievementID");
+                    table.ForeignKey(
+                        name: "FK__Earns__LearnerID__282DF8C2",
+                        column: x => x.LearnerID,
+                        principalTable: "Learner",
+                        principalColumn: "LearnerID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tied",
+                columns: table => new
+                {
+                    EnrollmentID = table.Column<int>(type: "int", nullable: false),
+                    LearnerID = table.Column<int>(type: "int", nullable: false),
+                    CourseID = table.Column<int>(type: "int", nullable: false),
+                    SurveyID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Tied__B611B1C446A51BE7", x => new { x.EnrollmentID, x.LearnerID, x.CourseID, x.SurveyID });
+                    table.ForeignKey(
+                        name: "FK__Tied__3E1D39E1",
+                        columns: x => new { x.EnrollmentID, x.LearnerID, x.CourseID },
+                        principalTable: "CourseEnrollment",
+                        principalColumns: new[] { "EnrollmentID", "LearnerID", "CourseID" });
+                    table.ForeignKey(
+                        name: "FK__Tied__SurveyID__3F115E1A",
+                        column: x => x.SurveyID,
+                        principalTable: "Survey",
+                        principalColumn: "SurveyID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Review",
+                columns: table => new
+                {
+                    FeedbackID = table.Column<int>(type: "int", nullable: false),
+                    InstructorID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Review__C39BFD41DB9A3D21", x => new { x.FeedbackID, x.InstructorID });
+                    table.ForeignKey(
+                        name: "FK_Review_Instructor",
+                        column: x => x.InstructorID,
+                        principalTable: "Instructor",
+                        principalColumn: "InstructorID");
+                    table.ForeignKey(
+                        name: "FK__Review__Feedback__46B27FE2",
+                        column: x => x.FeedbackID,
+                        principalTable: "EmotionalFeedback",
+                        principalColumn: "FeedbackID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LearningPath",
+                columns: table => new
+                {
+                    PathID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CompletionStatus = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: true),
+                    LearningPathDescription = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: true),
+                    AdaptiveRules = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: true),
+                    GoalID = table.Column<int>(type: "int", nullable: false),
+                    CreationOrder = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Learning__CD67DC39D4416DA8", x => x.PathID);
+                    table.ForeignKey(
+                        name: "FK__LearningP__GoalI__45F365D3",
+                        column: x => x.GoalID,
+                        principalTable: "LearningGoal",
+                        principalColumn: "GoalID");
                 });
 
             migrationBuilder.CreateTable(
@@ -829,100 +914,6 @@ namespace Edu_DB_ASP.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "InteractionLog",
-                columns: table => new
-                {
-                    LogID = table.Column<int>(type: "int", nullable: false),
-                    Timestamp = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
-                    ActionType = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
-                    Duration = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
-                    ActivityID = table.Column<int>(type: "int", nullable: false),
-                    LearnerID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Interact__5E5499A8BE8A5B86", x => x.LogID);
-                    table.ForeignKey(
-                        name: "FK__Interacti__Activ__70DDC3D8",
-                        column: x => x.ActivityID,
-                        principalTable: "LearningActivity",
-                        principalColumn: "ActivityID");
-                    table.ForeignKey(
-                        name: "FK__Interacti__Learn__71D1E811",
-                        column: x => x.LearnerID,
-                        principalTable: "Learner",
-                        principalColumn: "LearnerID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Awards",
-                columns: table => new
-                {
-                    AchievementID = table.Column<int>(type: "int", nullable: false),
-                    BadgeID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Awards__F6F2B2D7A26A5BB5", x => new { x.AchievementID, x.BadgeID });
-                    table.ForeignKey(
-                        name: "FK__Awards__Achievem__2B0A656D",
-                        column: x => x.AchievementID,
-                        principalTable: "Achievement",
-                        principalColumn: "AchievementID");
-                    table.ForeignKey(
-                        name: "FK__Awards__BadgeID__2BFE89A6",
-                        column: x => x.BadgeID,
-                        principalTable: "Badges",
-                        principalColumn: "BadgeID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Earns",
-                columns: table => new
-                {
-                    AchievementID = table.Column<int>(type: "int", nullable: false),
-                    LearnerID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Earns__91198F2FF40D9D23", x => new { x.AchievementID, x.LearnerID });
-                    table.ForeignKey(
-                        name: "FK__Earns__Achieveme__2739D489",
-                        column: x => x.AchievementID,
-                        principalTable: "Achievement",
-                        principalColumn: "AchievementID");
-                    table.ForeignKey(
-                        name: "FK__Earns__LearnerID__282DF8C2",
-                        column: x => x.LearnerID,
-                        principalTable: "Learner",
-                        principalColumn: "LearnerID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Tied",
-                columns: table => new
-                {
-                    EnrollmentID = table.Column<int>(type: "int", nullable: false),
-                    LearnerID = table.Column<int>(type: "int", nullable: false),
-                    CourseID = table.Column<int>(type: "int", nullable: false),
-                    SurveyID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Tied__B611B1C446A51BE7", x => new { x.EnrollmentID, x.LearnerID, x.CourseID, x.SurveyID });
-                    table.ForeignKey(
-                        name: "FK__Tied__3E1D39E1",
-                        columns: x => new { x.EnrollmentID, x.LearnerID, x.CourseID },
-                        principalTable: "CourseEnrollment",
-                        principalColumns: new[] { "EnrollmentID", "LearnerID", "CourseID" });
-                    table.ForeignKey(
-                        name: "FK__Tied__SurveyID__3F115E1A",
-                        column: x => x.SurveyID,
-                        principalTable: "Survey",
-                        principalColumn: "SurveyID");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Expresses",
                 columns: table => new
                 {
@@ -951,47 +942,29 @@ namespace Edu_DB_ASP.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Review",
+                name: "InteractionLog",
                 columns: table => new
                 {
-                    FeedbackID = table.Column<int>(type: "int", nullable: false),
-                    InstructorID = table.Column<int>(type: "int", nullable: false)
+                    LogID = table.Column<int>(type: "int", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())"),
+                    ActionType = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
+                    Duration = table.Column<decimal>(type: "decimal(10,2)", nullable: true),
+                    ActivityID = table.Column<int>(type: "int", nullable: false),
+                    LearnerID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Review__C39BFD41DB9A3D21", x => new { x.FeedbackID, x.InstructorID });
+                    table.PrimaryKey("PK__Interact__5E5499A8BE8A5B86", x => x.LogID);
                     table.ForeignKey(
-                        name: "FK__Review__Feedback__46B27FE2",
-                        column: x => x.FeedbackID,
-                        principalTable: "EmotionalFeedback",
-                        principalColumn: "FeedbackID");
+                        name: "FK__Interacti__Activ__70DDC3D8",
+                        column: x => x.ActivityID,
+                        principalTable: "LearningActivity",
+                        principalColumn: "ActivityID");
                     table.ForeignKey(
-                        name: "FK__Review__Instruct__47A6A41B",
-                        column: x => x.InstructorID,
-                        principalTable: "Instructor",
-                        principalColumn: "InstructorID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "LearningPath",
-                columns: table => new
-                {
-                    PathID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CompletionStatus = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: true),
-                    LearningPathDescription = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: true),
-                    AdaptiveRules = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: true),
-                    GoalID = table.Column<int>(type: "int", nullable: false),
-                    CreationOrder = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Learning__CD67DC39D4416DA8", x => x.PathID);
-                    table.ForeignKey(
-                        name: "FK__LearningP__GoalI__45F365D3",
-                        column: x => x.GoalID,
-                        principalTable: "LearningGoal",
-                        principalColumn: "GoalID");
+                        name: "FK__Interacti__Learn__71D1E811",
+                        column: x => x.LearnerID,
+                        principalTable: "Learner",
+                        principalColumn: "LearnerID");
                 });
 
             migrationBuilder.CreateTable(
@@ -1005,7 +978,7 @@ namespace Edu_DB_ASP.Migrations
                 {
                     table.PrimaryKey("PK__Adapt__64B7CC8EF3FCDF0D", x => new { x.PathID, x.InstructorID });
                     table.ForeignKey(
-                        name: "FK__Adapt__Instructo__3B40CD36",
+                        name: "FK_Adapt_Instructor",
                         column: x => x.InstructorID,
                         principalTable: "Instructor",
                         principalColumn: "InstructorID");
@@ -1149,11 +1122,6 @@ namespace Edu_DB_ASP.Migrations
                 column: "RewardID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Instructor_UserId",
-                table: "Instructor",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_InteractionLog_ActivityID",
                 table: "InteractionLog",
                 column: "ActivityID");
@@ -1182,11 +1150,6 @@ namespace Edu_DB_ASP.Migrations
                 name: "IX_LeaderboardStudentsCourse_LeaderboardID",
                 table: "LeaderboardStudentsCourse",
                 column: "LeaderboardID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Learner_UserId",
-                table: "Learner",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LearnersSurvey_SurveyID",
@@ -1418,9 +1381,6 @@ namespace Edu_DB_ASP.Migrations
 
             migrationBuilder.DropTable(
                 name: "Learner");
-
-            migrationBuilder.DropTable(
-                name: "Users");
         }
     }
 }

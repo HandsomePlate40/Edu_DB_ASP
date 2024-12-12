@@ -81,7 +81,7 @@ namespace Edu_DB_ASP.Controllers.Account
                         {
                             FirstName = model.FirstName,
                             LastName = model.LastName,
-                            Birthdate = model.BirthDate,
+                           // Birthdate = model.BirthDate,
                             Gender = model.Gender,
                             CountryOfOrigin = model.CountryOfOrigin,
                             Email = model.Email,

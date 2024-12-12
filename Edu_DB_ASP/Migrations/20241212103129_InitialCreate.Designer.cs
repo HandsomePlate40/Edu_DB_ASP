@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Edu_DB_ASP.Migrations
 {
     [DbContext(typeof(EduDbContext))]
-    [Migration("20241211160507_InitialIdentitySetup")]
-    partial class InitialIdentitySetup
+    [Migration("20241212103129_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -518,8 +518,11 @@ namespace Edu_DB_ASP.Migrations
             modelBuilder.Entity("Edu_DB_ASP.Models.Instructor", b =>
                 {
                     b.Property<int>("InstructorId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("InstructorID");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InstructorId"));
 
                     b.Property<string>("Email")
                         .HasMaxLength(255)
@@ -531,13 +534,18 @@ namespace Edu_DB_ASP.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<string>("Qualifications")
                         .HasMaxLength(500)
                         .IsUnicode(false)
                         .HasColumnType("varchar(500)");
 
                     b.HasKey("InstructorId")
-                        .HasName("PK__Instruct__9D010B7BDE0D9400");
+                        .HasName("PK__Instruct__9D010B7B01C75B11");
 
                     b.ToTable("Instructor", (string)null);
                 });
@@ -675,16 +683,6 @@ namespace Edu_DB_ASP.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LearnerId"));
 
-                    b.Property<int?>("Age")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("int")
-                        .HasColumnName("age")
-                        .HasComputedColumnSql("(datepart(year,getdate())-datepart(year,[birthdate]))", false);
-
-                    b.Property<DateTime?>("Birthdate")
-                        .HasColumnType("datetime")
-                        .HasColumnName("birthdate");
-
                     b.Property<string>("CountryOfOrigin")
                         .HasMaxLength(100)
                         .IsUnicode(false)
@@ -695,6 +693,12 @@ namespace Edu_DB_ASP.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)")
                         .HasColumnName("cultural_background");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("EmotionalProfile")
                         .HasMaxLength(255)
@@ -728,6 +732,11 @@ namespace Edu_DB_ASP.Migrations
                         .HasMaxLength(255)
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("PersonalityTraits")
                         .HasMaxLength(255)
@@ -1378,7 +1387,7 @@ namespace Edu_DB_ASP.Migrations
                         .WithMany()
                         .HasForeignKey("InstructorId")
                         .IsRequired()
-                        .HasConstraintName("FK__Adapt__Instructo__3B40CD36");
+                        .HasConstraintName("FK_Adapt_Instructor");
 
                     b.HasOne("Edu_DB_ASP.Models.LearningPath", null)
                         .WithMany()
@@ -1557,7 +1566,7 @@ namespace Edu_DB_ASP.Migrations
                         .WithMany("Expertises")
                         .HasForeignKey("InstructorId")
                         .IsRequired()
-                        .HasConstraintName("FK__Expertise__Instr__10566F31");
+                        .HasConstraintName("FK_Expertise_Instructor");
 
                     b.Navigation("Instructor");
                 });
@@ -1925,7 +1934,7 @@ namespace Edu_DB_ASP.Migrations
                         .WithMany()
                         .HasForeignKey("InstructorId")
                         .IsRequired()
-                        .HasConstraintName("FK__Review__Instruct__47A6A41B");
+                        .HasConstraintName("FK_Review_Instructor");
                 });
 
             modelBuilder.Entity("Take", b =>
@@ -1955,7 +1964,7 @@ namespace Edu_DB_ASP.Migrations
                         .WithMany()
                         .HasForeignKey("InstructorId")
                         .IsRequired()
-                        .HasConstraintName("FK__Teach__Instructo__531856C7");
+                        .HasConstraintName("FK_Teach_Instructor");
                 });
 
             modelBuilder.Entity("Tied", b =>
