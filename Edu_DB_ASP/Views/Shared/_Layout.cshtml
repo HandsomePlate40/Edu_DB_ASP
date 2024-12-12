@@ -30,10 +30,11 @@
 
         .nav-item {
             margin-right: 10px;
+            position: relative; /* Position relative for dropdown positioning */
         }
 
         .nav-link {
-            border-radius: 20px;
+            border-radius: 50px;
             padding: 10px 20px;
             background-color: #3b4252; /* Catppuccin Mocha secondary color */
             transition: background-color 0.3s;
@@ -47,6 +48,34 @@
             display: flex;
             flex-direction: row;
         }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 120%;
+            left: -5px;
+            z-index: 1000;
+            background-color: #1e1e2e;
+            border-radius: 20px;
+            padding: 0;
+        }
+
+        .nav-item:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 10px 20px;
+            color: #cdd6f4 !important;
+            text-decoration: none;
+            border-radius: 20px;
+        }
+
+            .dropdown-item:hover {
+                background-color: #4c566a;
+                border-radius: 20px;
+            }
     </style>
 </head>
 <body>
@@ -62,17 +91,19 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="GetStarted">Get Started</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#">Menu</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="LearnerLogin">Login</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="GetStarted">Get Started</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -85,7 +116,6 @@
         </div>
     </footer>
 
-    <script src="~/js/site.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

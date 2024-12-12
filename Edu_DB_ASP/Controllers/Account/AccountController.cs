@@ -30,7 +30,7 @@ namespace Edu_DB_ASP.Controllers.Account
                 // Create session or cookie
                 HttpContext.Session.SetString("UserEmail", learner.Email);
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Profile", "Account");
             }
 
             ModelState.AddModelError("", "Invalid login attempt.");
@@ -53,7 +53,7 @@ namespace Edu_DB_ASP.Controllers.Account
                 // Create session or cookie
                 HttpContext.Session.SetString("UserEmail", instructor.Email);
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Profile", "Account");
             }
 
             ModelState.AddModelError("", "Invalid login attempt.");
@@ -151,5 +151,68 @@ namespace Edu_DB_ASP.Controllers.Account
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult Profile()
+        {
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (email == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var learner = _context.Learners.SingleOrDefault(u => u.Email == email);
+            if (learner == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            return View(learner);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadProfilePicture(IFormFile profilePicture)
+        {
+            if (profilePicture != null && profilePicture.Length > 0)
+            {
+                var email = HttpContext.Session.GetString("UserEmail");
+                if (email == null)
+                {
+                    return RedirectToAction("Login");
+                }
+
+                var learner = _context.Learners.SingleOrDefault(u => u.Email == email);
+                if (learner == null)
+                {
+                    return RedirectToAction("Login");
+                }
+
+                var directoryPath = Path.Combine("wwwroot", "images");
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                var filePath = Path.Combine(directoryPath, profilePicture.FileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await profilePicture.CopyToAsync(stream);
+                }
+
+                learner.ProfilePictureUrl = $"/images/{profilePicture.FileName}";
+                _context.Update(learner);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Profile");
+            }
+
+            return RedirectToAction("Profile");
+        }
+
+       
     }
 }
+    
+
+

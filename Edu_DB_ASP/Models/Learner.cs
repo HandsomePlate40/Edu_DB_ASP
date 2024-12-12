@@ -31,6 +31,8 @@ public partial class Learner
 
     public string PasswordHash { get; set; } = null!;
 
+    public string ProfilePictureUrl { get; set; } = string.Empty; // Add this property
+
     public virtual ICollection<Achievement> Achievements { get; set; } = new List<Achievement>();
 
     public virtual ICollection<CourseEnrollment> CourseEnrollments { get; set; } = new List<CourseEnrollment>();

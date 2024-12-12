@@ -2,37 +2,57 @@
     ViewData["Title"] = "Welcome to 'TEMP NAME'";
 }
 
+
 <div class="jumbotron text-center" style="background-color: var(--mantle); color: var(--text); padding: 2rem; border-radius: 24px;">
-    <h1 class="display-4" style="color: var(--blue);">Welcome to Edu_DB_ASP</h1>
-    <p class="lead" style="color: var(--subtext0);">Your gateway to a world of knowledge and learning.</p>
+    <h1 class="display-4" style="font-size: 40px; text-align: center; color: var(--blue);">Welcome to 5 Bytes</h1>
+    <p class="lead" style="text-align: center; style="color: var(--subtext0);">Your gateway to a world of knowledge and learning.</p>
     <hr class="my-4" style="border-color: var(--overlay1);">
-    <p style="color: var(--subtext1);">Explore our wide range of courses and start your learning journey today.</p>
-    <a class="btn btn-primary btn-lg" href="@Url.Action("Index", "Courses")" role="button">Browse Courses</a>
+    <p style="text-align: center; style="color: var(--subtext1);">Explore our wide range of courses and start your learning journey today.</p>
+    <a class="custom-button" href="@Url.Action("Index", "Courses")" role="button">Browse Courses</a>
 </div>
+
+<style>
+    .custom-button {
+        display: inline-block;
+        padding: 10px 20px;
+        color: #ffffff;
+        background-color: #1e1e2e;
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 18px;
+        transition: background-color 0.3s;
+    }
+
+        .custom-button:hover {
+            background-color: #4c366a;
+        }
+</style>
+
 
 <div class="container text-center">
     <div class="row d-flex justify-content-center">
         <div class="col-md-4 d-flex justify-content-center">
-            <div class="card mb-4 shadow-sm" style="background-color: var(--surface0); color: var(--text); border-radius: 24px;">
-                <div class="card-body text-center">
-                    <h5 class="card-title" style="color: var(--green); font-size: 1.5rem;">Interactive Learning</h5>
-                    <p class="card-text" style="color: var(--subtext0); font-size: 1.25rem;">Engage with interactive content and hands-on activities to enhance your learning experience.</p>
+            <div class="card mb-4 custom-shadow" style="background-color: var(--surface0); color: var(--text); border-radius: 24px;">
+                <div class="card-body text-center" style="padding: 2rem;">
+                    <h1 class="card-title" style="text-align: center; color: var(--green); font-size: 1.5rem; margin-left: -1200px">Interactive Learning</h1>
+                    <p class="card-text" style="color: var(--subtext0); font-size: 1.25rem; margin: 0;">Engage with interactive content and hands-on activities to enhance your learning experience.</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4 d-flex justify-content-center">
-            <div class="card mb-4 shadow-sm" style="background-color: var(--surface0); color: var(--text); border-radius: 24px;">
-                <div class="card-body text-center">
-                    <h5 class="card-title" style="color: var(--yellow); font-size: 1.5rem;">Expert Instructors</h5>
-                    <p class="card-text" style="color: var(--subtext0); font-size: 1.25rem;">Learn from industry experts and experienced educators who are passionate about teaching.</p>
+            <div class="card mb-4 custom-shadow" style="background-color: var(--surface0); color: var(--text); border-radius: 24px;">
+                <div class="card-body text-center" style="padding: 2rem;">
+                    <h1 class="card-title" style="text-align: center; color: var(--yellow); font-size: 1.5rem; margin-left: -1200px">Expert Instructors</h1>
+                    <p class="card-text" style="color: var(--subtext0); font-size: 1.25rem; margin: 0;">Learn from industry experts and experienced educators who are passionate about teaching.</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4 d-flex justify-content-center">
-            <div class="card mb-4 shadow-sm" style="background-color: var(--surface0); color: var(--text); border-radius: 24px;">
-                <div class="card-body text-center">
-                    <h5 class="card-title" style="color: var(--peach); font-size: 1.5rem;">Flexible Schedule</h5>
-                    <p class="card-text" style="color: var(--subtext0); font-size: 1.25rem;">Study at your own pace with flexible course schedules that fit your busy lifestyle.</p>
+            <div class="card mb-4 custom-shadow" style="background-color: var(--surface0); color: var(--text); border-radius: 24px;">
+                <div class="card-body text-center" style="padding: 2rem;">
+                    <h1 class="card-title" style="text-align: center; color: var(--peach); font-size: 1.5rem; margin-left: -1200px">Flexible Schedule</h1>
+                    <p class="card-text" style="color: var(--subtext0); font-size: 1.25rem; margin: 0;">Study at your own pace with flexible course schedules that fit your busy lifestyle.</p>
                 </div>
             </div>
         </div>

@@ -744,6 +744,10 @@ namespace Edu_DB_ASP.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("ProfilePictureUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("LearnerId")
                         .HasName("PK__Learner__67ABFCFA1EEFDCD8");
 
