@@ -1,40 +1,122 @@
 ﻿@model RegisterViewModelInstructor
 
-<form asp-action="RegisterInstructor" method="post">
-    <div>
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email"></span>
+<h2 class="text-center">RegisterInstructor</h2>
+
+<form asp-action="RegisterInstructor" method="post" class="register-form">
+    <div class="form-group">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control form-input" />
+        <span asp-validation-for="Email" class="text-danger"></span>
     </div>
-    <div>
-        <label asp-for="Password"></label>
-        <input asp-for="Password" type="password" class="form-control" />
-        <span asp-validation-for="Password"></span>
+
+    <div class="form-group">
+        <label asp-for="Password" class="form-label"></label>
+        <input asp-for="Password" type="password" class="form-control form-input" />
+        <span asp-validation-for="Password" class="text-danger"></span>
     </div>
-    <div>
-        <label asp-for="FirstName"></label>
-        <input asp-for="FirstName" class="form-control" />
-        <span asp-validation-for="FirstName"></span>
+
+    <div class="form-group">
+        <label asp-for="FirstName" class="form-label"></label>
+        <input asp-for="FirstName" class="form-control form-input" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
     </div>
-    <div>
-        <label asp-for="LastName"></label>
-        <input asp-for="LastName" class="form-control" />
-        <span asp-validation-for="LastName"></span>
+
+    <div class="form-group">
+        <label asp-for="LastName" class="form-label"></label>
+        <input asp-for="LastName" class="form-control form-input" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
     </div>
-    <div>
-        <label asp-for="Gender"></label>
-        <input asp-for="Gender" class="form-control" />
-        <span asp-validation-for="Gender"></span>
+
+    <div class="form-group">
+        <label asp-for="Gender" class="form-label"></label>
+        <input asp-for="Gender" class="form-control form-input" />
+        <span asp-validation-for="Gender" class="text-danger"></span>
     </div>
-    <div>
-        <label asp-for="CountryOfOrigin"></label>
-        <input asp-for="CountryOfOrigin" class="form-control" />
-        <span asp-validation-for="CountryOfOrigin"></span>
+
+    <div class="form-group">
+        <label asp-for="CountryOfOrigin" class="form-label"></label>
+        <input asp-for="CountryOfOrigin" class="form-control form-input" />
+        <span asp-validation-for="CountryOfOrigin" class="text-danger"></span>
     </div>
-    <div id="qualifications-section" class="hidden">
-        <label asp-for="Qualifications"></label>
-        <input asp-for="Qualifications" class="form-control" />
-        <span asp-validation-for="Qualifications"></span>
+
+    <!-- Additional Qualifications Input -->
+    <div class="form-group">
+        <label asp-for="Qualifications" class="form-label"></label>
+        <input asp-for="Qualifications" class="form-control form-input" />
+        <span asp-validation-for="Qualifications" class="text-danger"></span>
     </div>
-    <button type="Submit" class="btn btn-primary">Register</button>
+
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary btn-lg">Register</button>
+    </div>
 </form>
+
+<style>
+    /* Center the form on the page */
+    .register-form {
+        max-width: 500px;
+        margin: 50px auto; /* Center the form horizontally */
+        padding: 30px;
+        background-color: #2e3440; /* Dark background */
+        border-radius: 15px;
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+        font-family: 'Roboto', sans-serif;
+        padding-right: 30px; /* Add extra padding to the right for a bigger look */
+    }
+
+    /* Center the heading */
+    h2.text-center {
+        text-align: center;
+        font-size: 2.5rem;
+        color: #f5c2e7; /* Light accent color */
+        margin-bottom: 30px; /* Spacing below the title */
+    }
+
+    /* Label Styling */
+    .form-label {
+        display: block;
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: #e0e0e0; /* Lighter text color */
+        margin-bottom: 8px; /* Space between label and input */
+    }
+
+    /* Input Styling */
+    .form-control.form-input {
+        font-size: 1.1rem;
+        padding: 10px;
+        margin-bottom: 20px; /* Space between inputs */
+        border-radius: 8px;
+        border: 1px solid #3b4252; /* Border color */
+        background-color: #3b4252; /* Input background color */
+        color: #e0e0e0; /* Text color */
+        width: 100%; /* Make inputs take full width */
+    }
+
+        .form-control.form-input:focus {
+            border-color: #81a1c1; /* Light blue focus color */
+            background-color: #434c5e; /* Darker background on focus */
+        }
+
+    /* Validation Error Styling */
+    .text-danger {
+        color: #f5c2e7; /* Error text color */
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+
+    /* Button Styling */
+    .btn-lg {
+        padding: 15px 40px;
+        font-size: 1.2rem;
+        border-radius: 10px;
+        width: 100%;
+        background-color: #81a1c1; /* Light blue button */
+        color: #2e3440; /* Button text color */
+    }
+
+        .btn-lg:hover {
+            background-color: #5e81ac; /* Hover color */
+        }
+
+</style>
