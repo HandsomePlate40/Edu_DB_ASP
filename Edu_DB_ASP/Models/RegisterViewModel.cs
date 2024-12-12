@@ -13,9 +13,6 @@ namespace Edu_DB_ASP.Models
         public string Password { get; set; }
 
         [Required]
-        public string Role { get; set; } // Learner or Instructor
-
-        [Required]
         public string FirstName { get; set; }
 
         [Required]
@@ -27,9 +24,6 @@ namespace Edu_DB_ASP.Models
 
        // [Required]
         public string CountryOfOrigin { get; set; }
-
-        // Optional for instructors
-        public string Qualifications { get; set; }
     }
 
 

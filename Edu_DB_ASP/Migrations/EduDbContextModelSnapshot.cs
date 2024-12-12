@@ -35,7 +35,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("PathId", "InstructorId")
                         .HasName("PK__Adapt__64B7CC8EF3FCDF0D");
 
-                    b.HasIndex("InstructorId");
+                    b.HasIndex(new[] { "InstructorId" }, "IX_Adapt_InstructorID");
 
                     b.ToTable("Adapt", (string)null);
                 });
@@ -53,7 +53,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("AchievementId", "BadgeId")
                         .HasName("PK__Awards__F6F2B2D7A26A5BB5");
 
-                    b.HasIndex("BadgeId");
+                    b.HasIndex(new[] { "BadgeId" }, "IX_Awards_BadgeID");
 
                     b.ToTable("Awards", (string)null);
                 });
@@ -71,7 +71,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("AchievementId", "LearnerId")
                         .HasName("PK__Earns__91198F2FF40D9D23");
 
-                    b.HasIndex("LearnerId");
+                    b.HasIndex(new[] { "LearnerId" }, "IX_Earns_LearnerID");
 
                     b.ToTable("Earns", (string)null);
                 });
@@ -109,9 +109,9 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("AchievementId")
                         .HasName("PK__Achievem__276330E0200B5C44");
 
-                    b.HasIndex("BadgeId");
+                    b.HasIndex(new[] { "BadgeId" }, "IX_Achievement_BadgeID");
 
-                    b.HasIndex("LearnerId");
+                    b.HasIndex(new[] { "LearnerId" }, "IX_Achievement_LearnerID");
 
                     b.ToTable("Achievement", (string)null);
                 });
@@ -173,7 +173,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("AssessmentId")
                         .HasName("PK__Assessme__3D2BF83E5A3CB530");
 
-                    b.HasIndex("ModuleId");
+                    b.HasIndex(new[] { "ModuleId" }, "IX_Assessments_ModuleID");
 
                     b.ToTable("Assessments");
                 });
@@ -283,7 +283,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("ContentId")
                         .HasName("PK__ContentL__2907A87EC282FE42");
 
-                    b.HasIndex("CourseId");
+                    b.HasIndex(new[] { "CourseId" }, "IX_ContentLibrary_CourseID");
 
                     b.ToTable("ContentLibrary", (string)null);
                 });
@@ -355,9 +355,9 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("EnrollmentId", "LearnerId", "CourseId")
                         .HasName("PK__CourseEn__4FDBE545C4B4E420");
 
-                    b.HasIndex("CourseId");
+                    b.HasIndex(new[] { "CourseId" }, "IX_CourseEnrollment_CourseID");
 
-                    b.HasIndex("LearnerId");
+                    b.HasIndex(new[] { "LearnerId" }, "IX_CourseEnrollment_LearnerID");
 
                     b.ToTable("CourseEnrollment", (string)null);
                 });
@@ -390,7 +390,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("ForumId")
                         .HasName("PK__Discussi__E210AC4F7B9376C5");
 
-                    b.HasIndex("ModuleId");
+                    b.HasIndex(new[] { "ModuleId" }, "IX_DiscussionForum_ModuleID");
 
                     b.ToTable("DiscussionForum", (string)null);
                 });
@@ -421,7 +421,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("FeedbackId")
                         .HasName("PK__Emotiona__6A4BEDF6C079427F");
 
-                    b.HasIndex("LearnerId");
+                    b.HasIndex(new[] { "LearnerId" }, "IX_EmotionalFeedback_LearnerID");
 
                     b.ToTable("EmotionalFeedback", (string)null);
                 });
@@ -443,9 +443,9 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("CourseId", "ModuleId", "AssessmentId")
                         .HasName("PK__Evaluate__94A71D07350C7833");
 
-                    b.HasIndex("AssessmentId");
+                    b.HasIndex(new[] { "AssessmentId" }, "IX_Evaluates_AssessmentID");
 
-                    b.HasIndex("ModuleId");
+                    b.HasIndex(new[] { "ModuleId" }, "IX_Evaluates_ModuleID");
 
                     b.ToTable("Evaluates");
                 });
@@ -484,9 +484,9 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("LearnerId", "ActivityId", "FeedbackId")
                         .HasName("PK__Expresse__949EFD6813931B30");
 
-                    b.HasIndex("ActivityId");
+                    b.HasIndex(new[] { "ActivityId" }, "IX_Expresses_ActivityID");
 
-                    b.HasIndex("FeedbackId");
+                    b.HasIndex(new[] { "FeedbackId" }, "IX_Expresses_FeedbackID");
 
                     b.ToTable("Expresses");
                 });
@@ -577,9 +577,9 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("LogId")
                         .HasName("PK__Interact__5E5499A8BE8A5B86");
 
-                    b.HasIndex("ActivityId");
+                    b.HasIndex(new[] { "ActivityId" }, "IX_InteractionLog_ActivityID");
 
-                    b.HasIndex("LearnerId");
+                    b.HasIndex(new[] { "LearnerId" }, "IX_InteractionLog_LearnerID");
 
                     b.ToTable("InteractionLog", (string)null);
                 });
@@ -600,7 +600,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("LearnerId", "ForumId")
                         .HasName("PK__Joins__898AF63EBA3E703D");
 
-                    b.HasIndex("ForumId");
+                    b.HasIndex(new[] { "ForumId" }, "IX_Joins_ForumID");
 
                     b.ToTable("Joins");
                 });
@@ -642,7 +642,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("LeaderboardId", "LearnerId")
                         .HasName("PK__Leaderbo__05221E2914A09FB2");
 
-                    b.HasIndex("LearnerId");
+                    b.HasIndex(new[] { "LearnerId" }, "IX_LeaderboardRanks_LearnerID");
 
                     b.ToTable("LeaderboardRanks");
                 });
@@ -664,9 +664,9 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("LearnerId", "LeaderboardId")
                         .HasName("PK__Leaderbo__1C9E76E421B43CAB");
 
-                    b.HasIndex("CourseId");
+                    b.HasIndex(new[] { "CourseId" }, "IX_LeaderboardStudentsCourse_CourseID");
 
-                    b.HasIndex("LeaderboardId");
+                    b.HasIndex(new[] { "LeaderboardId" }, "IX_LeaderboardStudentsCourse_LeaderboardID");
 
                     b.ToTable("LeaderboardStudentsCourse", (string)null);
                 });
@@ -692,7 +692,6 @@ namespace Edu_DB_ASP.Migrations
                         .HasColumnName("cultural_background");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
@@ -794,7 +793,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("ActivityId")
                         .HasName("PK__Learning__45F4A7F148FC20D3");
 
-                    b.HasIndex("ModuleId");
+                    b.HasIndex(new[] { "ModuleId" }, "IX_LearningActivity_ModuleID");
 
                     b.ToTable("LearningActivity", (string)null);
                 });
@@ -830,7 +829,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("GoalId")
                         .HasName("PK__Learning__8A4FFF311BEAC4EC");
 
-                    b.HasIndex("LearnerId");
+                    b.HasIndex(new[] { "LearnerId" }, "IX_LearningGoal_LearnerID");
 
                     b.ToTable("LearningGoal", (string)null);
                 });
@@ -869,7 +868,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("PathId")
                         .HasName("PK__Learning__CD67DC39D4416DA8");
 
-                    b.HasIndex("GoalId");
+                    b.HasIndex(new[] { "GoalId" }, "IX_LearningPath_GoalID");
 
                     b.ToTable("LearningPath", (string)null);
                 });
@@ -930,7 +929,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("ModuleId")
                         .HasName("PK__Modules__2B7477876BE6F7D6");
 
-                    b.HasIndex("CourseId");
+                    b.HasIndex(new[] { "CourseId" }, "IX_Modules_CourseID");
 
                     b.ToTable("Modules");
                 });
@@ -1011,11 +1010,11 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("CreationOrder", "LearnerId")
                         .HasName("PK__Personal__9984E276E73EC0E0");
 
-                    b.HasIndex("LearnerId");
+                    b.HasIndex(new[] { "LearnerId" }, "IX_PersonalizationProfile_LearnerID");
 
-                    b.HasIndex("NotificationId");
+                    b.HasIndex(new[] { "NotificationId" }, "IX_PersonalizationProfile_NotificationID");
 
-                    b.HasIndex("PathId");
+                    b.HasIndex(new[] { "PathId" }, "IX_PersonalizationProfile_PathID");
 
                     b.ToTable("PersonalizationProfile", (string)null);
                 });
@@ -1144,7 +1143,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("ProgressId")
                         .HasName("PK__SkillPro__BAE29C85DEE3B5F7");
 
-                    b.HasIndex("LearnerId");
+                    b.HasIndex(new[] { "LearnerId" }, "IX_SkillProgression_LearnerID");
 
                     b.ToTable("SkillProgression", (string)null);
                 });
@@ -1204,7 +1203,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("AssessmentId", "LearnerId")
                         .HasName("PK__TakenAss__8B5147F11953F770");
 
-                    b.HasIndex("LearnerId");
+                    b.HasIndex(new[] { "LearnerId" }, "IX_TakenAssessment_LearnerID");
 
                     b.ToTable("TakenAssessment", (string)null);
                 });
@@ -1239,7 +1238,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("QuestId", "RewardId")
                         .HasName("PK__Grants__3E449B92A94CEF25");
 
-                    b.HasIndex("RewardId");
+                    b.HasIndex(new[] { "RewardId" }, "IX_Grants_RewardID");
 
                     b.ToTable("Grants", (string)null);
                 });
@@ -1257,7 +1256,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("LearnerId", "SurveyId")
                         .HasName("PK__Learners__ADFF7D039B217D05");
 
-                    b.HasIndex("SurveyId");
+                    b.HasIndex(new[] { "SurveyId" }, "IX_LearnersSurvey_SurveyID");
 
                     b.ToTable("LearnersSurvey", (string)null);
                 });
@@ -1275,7 +1274,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("QuestId", "LearnerId")
                         .HasName("PK__Partake__001B2504CA672BC5");
 
-                    b.HasIndex("LearnerId");
+                    b.HasIndex(new[] { "LearnerId" }, "IX_Partake_LearnerID");
 
                     b.ToTable("Partake", (string)null);
                 });
@@ -1293,7 +1292,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("LearnerId", "NotificationId")
                         .HasName("PK__Receives__55A70E193D54808C");
 
-                    b.HasIndex("NotificationId");
+                    b.HasIndex(new[] { "NotificationId" }, "IX_Receives_NotificationID");
 
                     b.ToTable("Receives", (string)null);
                 });
@@ -1311,7 +1310,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("FeedbackId", "InstructorId")
                         .HasName("PK__Review__C39BFD41DB9A3D21");
 
-                    b.HasIndex("InstructorId");
+                    b.HasIndex(new[] { "InstructorId" }, "IX_Review_InstructorID");
 
                     b.ToTable("Review", (string)null);
                 });
@@ -1329,7 +1328,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("BadgeId", "LearnerId")
                         .HasName("PK__Takes__AF629CB3EB07A3C2");
 
-                    b.HasIndex("LearnerId");
+                    b.HasIndex(new[] { "LearnerId" }, "IX_Takes_LearnerID");
 
                     b.ToTable("Takes", (string)null);
                 });
@@ -1347,7 +1346,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("InstructorId", "CourseId")
                         .HasName("PK__Teach__F193DC63B5052AB2");
 
-                    b.HasIndex("CourseId");
+                    b.HasIndex(new[] { "CourseId" }, "IX_Teach_CourseID");
 
                     b.ToTable("Teach", (string)null);
                 });
@@ -1373,7 +1372,7 @@ namespace Edu_DB_ASP.Migrations
                     b.HasKey("EnrollmentId", "LearnerId", "CourseId", "SurveyId")
                         .HasName("PK__Tied__B611B1C446A51BE7");
 
-                    b.HasIndex("SurveyId");
+                    b.HasIndex(new[] { "SurveyId" }, "IX_Tied_SurveyID");
 
                     b.ToTable("Tied", (string)null);
                 });

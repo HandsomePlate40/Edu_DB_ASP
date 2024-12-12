@@ -1,7 +1,7 @@
 ﻿@model LoginViewModel
 
 <h2>Login</h2>
-<form asp-action="Login" method="post">
+<form asp-action="InstructorLogin" method="post">
     <div>
         <label asp-for="Email"></label>
         <input asp-for="Email" />
@@ -11,14 +11,6 @@
         <label asp-for="Password"></label>
         <input asp-for="Password" type="password" />
         <span asp-validation-for="Password"></span>
-    </div>
-    <div>
-        <label asp-for="Role"></label>
-        <select asp-for="Role" class="form-control">
-            <option value="Learner">Learner</option>
-            <option value="Instructor">Instructor</option>
-        </select>
-        <span asp-validation-for="Role"></span>
     </div>
     <button type="submit">Login</button>
 </form>

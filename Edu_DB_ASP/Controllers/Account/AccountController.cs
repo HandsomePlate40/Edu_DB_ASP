@@ -1,10 +1,7 @@
 ﻿using Edu_DB_ASP.Models;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
-using System.Text;
-
 
 namespace Edu_DB_ASP.Controllers.Account
 {
@@ -18,94 +15,78 @@ namespace Edu_DB_ASP.Controllers.Account
         }
 
         [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-     
-       public IActionResult Login(LoginViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                if(model.Role == "Learner"){
-
-                    var Learner = _context.Learners.SingleOrDefault(u => u.Email == model.Email);
-
-                    if (Learner != null && VerifyPassword(model.Password, Learner.PasswordHash))
-                    {
-                        // Create session or cookie
-                        HttpContext.Session.SetString("UserEmail", Learner.Email);
-
-                        return RedirectToAction("Index", "Home");
-                    }
-
-                }else if (model.Role == "Instructor")
-                {
-
-                    var Instructor = _context.Instructors.SingleOrDefault(u => u.Email == model.Email);
-
-                    if (Instructor != null && VerifyPassword(model.Password, Instructor.PasswordHash))
-                    {
-                        // Create session or cookie
-                        HttpContext.Session.SetString("UserEmail", Instructor.Email);
-
-                        return RedirectToAction("Index", "Home");//redirect to login-registe page
-                    }
-                }
-
-                ModelState.AddModelError("", "Invalid login attempt.");
-            }
-
-            return View(model);
-        } 
-
-        [HttpGet]
-        public IActionResult Register()
+        public IActionResult LearnerLogin()
         {
             return View();
         }
 
         [HttpPost]
-        [Route("Account/Register")]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public IActionResult LearnerLogin(LoginViewModel model)
+        {
+            var learner = _context.Learners.SingleOrDefault(u => u.Email == model.Email);
+
+            if (learner != null && VerifyPassword(model.Password, learner.PasswordHash))
+            {
+                // Create session or cookie
+                HttpContext.Session.SetString("UserEmail", learner.Email);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            ModelState.AddModelError("", "Invalid login attempt.");
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult InstructorLogin()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult InstructorLogin(LoginViewModel model)
+        {
+            var instructor = _context.Instructors.SingleOrDefault(u => u.Email == model.Email);
+
+            if (instructor != null && VerifyPassword(model.Password, instructor.PasswordHash))
+            {
+                // Create session or cookie
+                HttpContext.Session.SetString("UserEmail", instructor.Email);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            ModelState.AddModelError("", "Invalid login attempt.");
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult RegisterLearner()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterLearner(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    if (model.Role == "Learner")
+                    var hashedPassword = HashPassword(model.Password);
+                    var learner = new Learner
                     {
-                        var hashedPassword = HashPassword(model.Password);
-                        var learner = new Learner
-                        {
-                            FirstName = model.FirstName,
-                            LastName = model.LastName,
-                           // Birthdate = model.BirthDate,
-                            Gender = model.Gender,
-                            CountryOfOrigin = model.CountryOfOrigin,
-                            Email = model.Email,
-                            PasswordHash = hashedPassword // Implement secure hashing
-                        };
-                        _context.Learners.Add(learner);
-                        _context.SaveChanges();
-                    }
-                    else if (model.Role == "Instructor")
-                    {
-                        var hashedPassword = HashPassword(model.Password);
-                        var instructor = new Instructor
-                        {
-                            InstructorName = $"{model.FirstName} {model.LastName}",
-                            Qualifications = model.Qualifications,
-                            Email = model.Email,
-                            PasswordHash = hashedPassword // Implement secure hashing
-                        };
-                        _context.Instructors.Add(instructor);
-                        _context.SaveChanges();
-                    }
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        Gender = model.Gender,
+                        CountryOfOrigin = model.CountryOfOrigin,
+                        Email = model.Email,
+                        PasswordHash = hashedPassword
+                    };
+                    _context.Learners.Add(learner);
+                    await _context.SaveChangesAsync();
 
-                    
-                    return RedirectToAction("Login");
+                    return RedirectToAction("LearnerLogin");
                 }
                 catch (Exception ex)
                 {
@@ -116,6 +97,40 @@ namespace Edu_DB_ASP.Controllers.Account
             return View(model);
         }
 
+        [HttpGet]
+        public IActionResult RegisterInstructor()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterInstructor(RegisterViewModelInstructor model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var hashedPassword = HashPassword(model.Password);
+                    var instructor = new Instructor
+                    {
+                        InstructorName = $"{model.FirstName} {model.LastName}",
+                        Qualifications = model.Qualifications,
+                        Email = model.Email,
+                        PasswordHash = hashedPassword
+                    };
+                    _context.Instructors.Add(instructor);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("InstructorLogin");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", $"An error occurred: {ex.Message}");
+                }
+            }
+
+            return View(model);
+        }
 
         private string HashPassword(string password)
         {
@@ -129,6 +144,12 @@ namespace Edu_DB_ASP.Controllers.Account
         {
             var hash = HashPassword(password);
             return hash == hashedPassword;
+        }
+
+        [HttpGet]
+        public IActionResult GetStarted()
+        {
+            return View();
         }
     }
 }

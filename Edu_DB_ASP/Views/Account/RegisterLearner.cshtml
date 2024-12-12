@@ -1,0 +1,35 @@
+﻿   @model RegisterViewModel
+
+<form asp-action="RegisterLearner" method="post">
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <label asp-for="Password"></label>
+        <input asp-for="Password" type="password" class="form-control" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div>
+        <label asp-for="FirstName"></label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName"></span>
+    </div>
+    <div>
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName"></span>
+    </div>
+    <div>
+        <label asp-for="Gender"></label>
+        <input asp-for="Gender" class="form-control" />
+        <span asp-validation-for="Gender"></span>
+    </div>
+    <div>
+        <label asp-for="CountryOfOrigin"></label>
+        <input asp-for="CountryOfOrigin" class="form-control" />
+        <span asp-validation-for="CountryOfOrigin"></span>
+    </div>
+    <button type="Submit" class="btn btn-primary">Register</button>
+</form>

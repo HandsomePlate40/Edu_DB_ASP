@@ -11,11 +11,6 @@ namespace Edu_DB_ASP.Models
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-
-        [Required]
-        public string Role { get; set; } // Learner or Instructor
-
-
     }
 
 }
