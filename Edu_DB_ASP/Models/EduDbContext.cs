@@ -91,6 +91,8 @@ public partial class EduDbContext : DbContext
 
     public virtual DbSet<TargetTrait> TargetTraits { get; set; }
 
+    public virtual DbSet<Admin> Admins { get; set; } 
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=edu_DB;Trusted_Connection=True;");
@@ -165,6 +167,32 @@ public partial class EduDbContext : DbContext
                         j.IndexerProperty<int>("LearnerId").HasColumnName("LearnerID");
                     });
         });
+
+        modelBuilder.Entity<Admin>(entity =>
+        {
+            entity.HasKey(e => e.AdminId).HasName("PK__Admin__719FE4E8");
+
+            entity.ToTable("Admin");
+
+            entity.Property(e => e.AdminId).HasColumnName("AdminID");
+            entity.Property(e => e.Email)
+                .HasMaxLength(255)
+                .IsUnicode(false);
+
+            entity.HasIndex(e => e.Email).IsUnique(); 
+
+            entity.Property(e => e.FirstName)
+                .HasMaxLength(35)
+                .IsUnicode(false);
+            entity.Property(e => e.LastName)
+                .HasMaxLength(35)
+                .IsUnicode(false);
+            entity.Property(e => e.PasswordHash).HasMaxLength(255);
+            entity.Property(e => e.ProfilePictureUrl)
+                .HasMaxLength(500)
+                .IsUnicode(false);
+        });
+
 
         modelBuilder.Entity<ActivityInstruction>(entity =>
         {
@@ -543,6 +571,9 @@ public partial class EduDbContext : DbContext
             entity.Property(e => e.Email)
                 .HasMaxLength(255)
                 .IsUnicode(false);
+
+            entity.HasIndex(e => e.Email).IsUnique(); 
+
             entity.Property(e => e.InstructorName)
                 .HasMaxLength(255)
                 .IsUnicode(false);
@@ -571,6 +602,7 @@ public partial class EduDbContext : DbContext
                         j.IndexerProperty<int>("CourseId").HasColumnName("CourseID");
                     });
         });
+
 
         modelBuilder.Entity<InteractionLog>(entity =>
         {
@@ -738,6 +770,8 @@ public partial class EduDbContext : DbContext
             entity.Property(e => e.PhysicalHealth)
                 .HasMaxLength(255)
                 .IsUnicode(false);
+
+            entity.HasIndex(e => e.Email).IsUnique(); 
 
             entity.HasMany(d => d.Notifications).WithMany(p => p.Learners)
                 .UsingEntity<Dictionary<string, object>>(

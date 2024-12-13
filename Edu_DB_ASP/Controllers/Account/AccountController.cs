@@ -19,7 +19,6 @@ namespace Edu_DB_ASP.Controllers.Account
         {
             return View();
         }
-
         [HttpPost]
         public IActionResult LearnerLogin(LoginViewModel model)
         {
@@ -27,15 +26,15 @@ namespace Edu_DB_ASP.Controllers.Account
 
             if (learner != null && VerifyPassword(model.Password, learner.PasswordHash))
             {
-                // Create session or cookie
                 HttpContext.Session.SetString("UserEmail", learner.Email);
 
                 return RedirectToAction("Profile", "Account");
             }
 
-            ModelState.AddModelError("", "Invalid login attempt.");
+            ModelState.AddModelError("", "Invalid email or password.");
             return View(model);
         }
+
 
         [HttpGet]
         public IActionResult InstructorLogin()
@@ -210,7 +209,12 @@ namespace Edu_DB_ASP.Controllers.Account
             return RedirectToAction("Profile");
         }
 
-       
+        [HttpGet]
+        public IActionResult LoginRoleSelection()
+        {
+            return View();
+        }
+
     }
 }
     

@@ -8,8 +8,13 @@
     <link rel="stylesheet" href="~/css/catppuccin-mocha.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <style>
+        /* Navbar Styling */
         .navbar {
             background-color: #1e1e2e; /* Catppuccin Mocha base color */
+            padding: 10px 20px; /* Ensure padding for consistent alignment */
+            position: relative;
+            z-index: 10;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .navbar-brand, .nav-link {
@@ -49,41 +54,17 @@
             flex-direction: row;
         }
 
-        /* Remove outline from nav links and dropdowns */
-        .navbar .nav-link,
-        .navbar .dropdown-toggle {
-            outline: none; /* Remove outline */
-            border: none; /* Remove border if any */
-        }
-
-            /* Ensure no outline on focus or active states */
-            .navbar .nav-link:focus,
-            .navbar .nav-link:active,
-            .navbar .dropdown-toggle:focus,
-            .navbar .dropdown-toggle:active {
-                outline: none; /* Ensure no outline on focus or active states */
-                box-shadow: none; /* Remove any box-shadow if present */
-            }
-
-        /* Additional rule to remove any default focus styles */
-        .navbar a {
-            text-decoration: none; /* Remove underline if present */
-            color: inherit; /* Ensure color is inherited */
-        }
-
-            .navbar a:focus {
-                outline: none; /* Remove focus outline */
-            }
-
+        /* Dropdown Styling */
         .dropdown-menu {
             display: none;
             position: absolute;
-            top: 120%;
-            left: -5px;
+            top: 100%;
+            left: 0;
             z-index: 1000;
             background-color: #1e1e2e;
-            border-radius: 20px;
-            padding: 0;
+            border-radius: 10px;
+            padding: 5px 0;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         .nav-item:hover .dropdown-menu {
@@ -95,13 +76,33 @@
             padding: 10px 20px;
             color: #cdd6f4 !important;
             text-decoration: none;
-            border-radius: 20px;
+            border-radius: 10px;
         }
 
             .dropdown-item:hover {
                 background-color: #4c566a;
-                border-radius: 20px;
             }
+
+        /* Main Content Spacing */
+        main {
+            margin-top: 100px; /* Ensure space below navbar */
+        }
+
+        footer {
+            background-color: #1e1e2e;
+            color: #cdd6f4;
+            text-align: center;
+            padding: 15px 0;
+        }
+
+            footer a {
+                color: #f5c2e7;
+                text-decoration: none;
+            }
+
+                footer a:hover {
+                    text-decoration: underline;
+                }
     </style>
 </head>
 <body>
@@ -120,7 +121,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#">Menu</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="LearnerLogin">Login</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="LoginRoleSelection">Login</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="GetStarted">Get Started</a>
                             </div>
                         </li>

@@ -133,6 +133,36 @@ namespace Edu_DB_ASP.Migrations
                     b.ToTable("ActivityInstructions");
                 });
 
+            modelBuilder.Entity("Edu_DB_ASP.Models.Admin", b =>
+                {
+                    b.Property<int>("AdminId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdminId"));
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfilePictureUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AdminId");
+
+                    b.ToTable("Admins");
+                });
+
             modelBuilder.Entity("Edu_DB_ASP.Models.Assessment", b =>
                 {
                     b.Property<int>("AssessmentId")
@@ -750,6 +780,10 @@ namespace Edu_DB_ASP.Migrations
 
                     b.HasKey("LearnerId")
                         .HasName("PK__Learner__67ABFCFA1EEFDCD8");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
 
                     b.ToTable("Learner", (string)null);
                 });
