@@ -50,11 +50,6 @@
             transform: scale(1);
         }
 
-    .container {
-        text-align: center;
-        margin-top: 50px;
-    }
-
     .button-container {
         display: flex;
         justify-content: center;
@@ -69,7 +64,7 @@
 </style>
 
 <div class="container">
-    <h1>How will you be joining us?</h1>
+    <h1 style="text-align: center">How will you be joining us?</h1>
     <div class="button-container">
         <button onclick="location.href='@Url.Action("RegisterLearner", "Account")'">
             <span class="text">Learner</span>
