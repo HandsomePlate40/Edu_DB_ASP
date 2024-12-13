@@ -1,6 +1,6 @@
 ﻿@model Edu_DB_ASP.Models.RegisterViewModel
 
-<h2 class="text-center">Welcome!</h2>
+<h2 class="text-center">REGISTERATION</h2>
 
 <form asp-action="RegisterLearner" method="post" class="register-form">
     <div class="form-group">
@@ -47,71 +47,82 @@
 
 
 <style>
-    /* Center the form on the page */
     .register-form {
-        max-width: 500px;
-        margin: 50px auto; /* Center the form horizontally */
-        padding: 30px;
-        background-color: #2e3440; /* Dark background */
+        max-width: 400px;
+        margin: 50px auto; /* to center the form horizontally */
+        padding: 15px;
+        background-color: #2e3440; 
         border-radius: 15px;
         box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
         font-family: 'Roboto', sans-serif;
-        padding-right: 30px; /* Add extra padding to the right for a bigger look */
+        padding-right: 35px; /* adds extra padding to the right for a bigger look */
     }
 
     /* Center the heading */
     h2.text-center {
         text-align: center;
-        font-size: 2.5rem;
-        color: #f5c2e7; /* Light accent color */
-        margin-bottom: 30px; /* Spacing below the title */
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        color: #cdd6f4;
     }
 
     /* Label Styling */
     .form-label {
         display: block;
         font-size: 1.2rem;
+        margin-left: 7px;
         font-weight: 500;
-        color: #e0e0e0; /* Lighter text color */
-        margin-bottom: 8px; /* Space between label and input */
+        color: #e0e0e0; 
+        margin-bottom: 4px; /* to adjust the space between label and input */
+    }
+
+    /* Input Groups */
+    .form-group {
+        margin-bottom: 15px;
     }
 
     /* Input Styling */
     .form-control.form-input {
-        font-size: 1.1rem;
-        padding: 10px;
-        margin-bottom: 20px; /* Space between inputs */
-        border-radius: 8px;
-        border: 1px solid #3b4252; /* Border color */
-        background-color: #3b4252; /* Input background color */
-        color: #e0e0e0; /* Text color */
-        width: 100%; /* Make inputs take full width */
+        width: 100%;
+        padding: 5px;
+        margin-left: 5px;
+        border: 1px solid #4c566a; /* Border color */
+        border-radius: 5px;
+        background-color: #3b4252; 
+        color: #cdd6f4; /* text color */
+        font-size: 1em;
     }
 
         .form-control.form-input:focus {
-            border-color: #81a1c1; /* Light blue focus color */
-            background-color: #434c5e; /* Darker background on focus */
+            border-color: #88c0d0; 
+            outline: none;
+            box-shadow: 0 0 5px rgba(136, 192, 208, 0.5);
         }
 
     /* Validation Error Styling */
     .text-danger {
-        color: #f5c2e7; /* Error text color */
+        color: #f5c2e7; 
         font-size: 0.9rem;
         margin-top: 5px;
     }
 
     /* Button Styling */
     .btn-lg {
-        padding: 15px 40px;
-        font-size: 1.2rem;
-        border-radius: 10px;
         width: 100%;
-        background-color: #81a1c1; /* Light blue button */
-        color: #2e3440; /* Button text color */
+        padding: 10px;
+        margin-left: 10px;
+        background-color: #88c0d0;
+        color: #2e3440; 
+        border: none;
+        border-radius: 5px;
+        font-size: 1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
     }
 
         .btn-lg:hover {
-            background-color: #5e81ac; /* Hover color */
+            background-color: #5e81ac;
         }
 
     }

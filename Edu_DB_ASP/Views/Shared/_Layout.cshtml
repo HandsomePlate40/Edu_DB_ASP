@@ -8,12 +8,14 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/catppuccin-mocha.css" />
     <style>
+
         /* Navbar Styling */
         .navbar {
             background-color: #000000; /* to set navbar background color */
             padding: 10px 20px; /* Ensure padding for consistent alignment */
             position: relative;
             z-index: 10;
+            height 80px;
             box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
             width: 100%; /* Ensure navbar takes full width */
         }
@@ -22,9 +24,9 @@
             color: #cdd6f4 !important; /* Catppuccin Mocha text color */
         }
 
-        .navbar-brand:hover, .nav-link:hover {
-            color: #f5c2e7 !important; /* Catppuccin Mocha accent color */
-        }
+            .navbar-brand:hover, .nav-link:hover {
+                color: #f5c2e7 !important; /* Catppuccin Mocha accent color */
+            }
 
         .navbar-toggler {
             border-color: #cdd6f4; /* Catppuccin Mocha text color */
@@ -46,9 +48,9 @@
             transition: background-color 0.3s;
         }
 
-        .nav-link:hover {
-            background-color: #4c566a; /* Catppuccin Mocha hover color */
-        }
+            .nav-link:hover {
+                background-color: #4c566a; /* Catppuccin Mocha hover color */
+            }
 
         .navbar-nav {
             display: flex;
@@ -59,8 +61,8 @@
         .dropdown-menu {
             display: none;
             position: absolute;
-            top: 100%;
-            left: 0;
+            top: 150%;
+            left: -5px;
             z-index: 1000;
             background-color: #1e1e2e;
             border-radius: 10px;
@@ -80,9 +82,9 @@
             border-radius: 10px;
         }
 
-        .dropdown-item:hover {
-            background-color: #4c566a;
-        }
+            .dropdown-item:hover {
+                background-color: #4c566a;
+            }
 
         /* Main Content Spacing */
         main {
@@ -96,18 +98,18 @@
             padding: 15px 0;
         }
 
-        footer a {
-            color: #f5c2e7;
-            text-decoration: none;
-        }
+            footer a {
+                color: #f5c2e7;
+                text-decoration: none;
+            }
 
-        footer a:hover {
-            text-decoration: underline;
-        }
+                footer a:hover {
+                    text-decoration: underline;
+                }
     </style>
 </head>
 <body>
-    <header style="background-color: #000000; width: 100%; text-align: center;"> 
+    <header style="background-color: #000000; width: 100%; text-align: center;">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
             <div class="container">
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
@@ -134,11 +136,12 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - 5 Bytes - <a asp-area="" asp-controller="Account" asp-action="GetStarted">Join Us!</a>
-        </div>
-    </footer>
+    <footer class="border-top footer text-muted" style="text-align: right; border-radius: 10px;">
+    <div class="container">
+        &copy; 2024 - 5 Bytes - <a asp-area="" asp-controller="Account" asp-action="GetStarted">Join Us!</a>
+    </div>
+</footer>
+
 
     @RenderSection("Scripts", required: false)
 </body>
