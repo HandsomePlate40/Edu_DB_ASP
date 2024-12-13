@@ -1,6 +1,6 @@
 ﻿@model LoginViewModel
 
-<h2 class="form-title">Login</h2>
+<h2 class="form-title">Welcome Back!</h2>
 <form asp-action="InstructorLogin" method="post" class="login-form">
     <div class="form-group">
         <label asp-for="Email" class="form-label"></label>
@@ -14,6 +14,17 @@
     </div>
 
     <button type="submit" class="form-button">Login</button>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="form-error">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <p>@error.ErrorMessage</p>
+            }
+        </div>
+    }
+
 </form>
 <style>
     /* Form Container Styling */

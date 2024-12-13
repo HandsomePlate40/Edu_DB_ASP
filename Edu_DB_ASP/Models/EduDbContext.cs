@@ -172,7 +172,7 @@ public partial class EduDbContext : DbContext
         {
             entity.HasKey(e => e.AdminId).HasName("PK__Admin__719FE4E8");
 
-            entity.ToTable("Admin");
+            entity.ToTable("Admins");
 
             entity.Property(e => e.AdminId).HasColumnName("AdminID");
             entity.Property(e => e.Email)

@@ -50,13 +50,18 @@
             transform: scale(1);
         }
 
-
     .container {
         text-align: center;
-        margin-top: 50px; 
+        margin-top: 50px;
     }
 
     .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .admin-container {
         display: flex;
         justify-content: center;
         gap: 20px;
@@ -72,5 +77,14 @@
         <button onclick="location.href='@Url.Action("InstructorLogin", "Account")'">
             <span class="text">Instructor</span>
         </button>
+    </div>
+    <h2>Admin?</h2>
+    <div class="admin-container">
+
+        <div class="button-container">
+            <button onclick="location.href='@Url.Action("AdminLogin", "Account")'">
+                <span class="text">Admin</span>
+            </button>
+        </div>
     </div>
 </div>
