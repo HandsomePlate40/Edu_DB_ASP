@@ -1,8 +1,8 @@
-﻿@model RegisterViewModelInstructor
+﻿@model RegisterViewModelAdmin
 
 <h2 class="text-center">Get Started!</h2>
 
-<form asp-action="RegisterInstructor" method="post" class="register-form">
+<form asp-action="RegisterAdmin" method="post" class="register-form">
     <div class="form-group">
         <label asp-for="Email" class="form-label"></label>
         <input asp-for="Email" class="form-control form-input" />
@@ -27,29 +27,23 @@
         <span asp-validation-for="LastName" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="Gender" class="form-label"></label>
-        <input asp-for="Gender" class="form-control form-input" />
-        <span asp-validation-for="Gender" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="CountryOfOrigin" class="form-label"></label>
-        <input asp-for="CountryOfOrigin" class="form-control form-input" />
-        <span asp-validation-for="CountryOfOrigin" class="text-danger"></span>
-    </div>
-
-    <!-- Additional Qualifications Input -->
-    <div class="form-group">
-        <label asp-for="Qualifications" class="form-label"></label>
-        <input asp-for="Qualifications" class="form-control form-input" />
-        <span asp-validation-for="Qualifications" class="text-danger"></span>
-    </div>
-
     <div class="text-center">
         <button type="submit" class="btn btn-primary btn-lg">Register</button>
     </div>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="form-error">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <p>@error.ErrorMessage</p>
+            }
+        </div>
+    }
+
 </form>
+
+
 
 <style>
     /* Center the form on the page */
@@ -119,4 +113,5 @@
             background-color: #5e81ac; /* Hover color */
         }
 
+    }
 </style>

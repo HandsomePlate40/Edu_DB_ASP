@@ -55,7 +55,7 @@ namespace Edu_DB_ASP.Controllers.Account
                 return RedirectToAction("Profile", "Account");
             }
 
-            ModelState.AddModelError("", "Invalid login attempt.");
+            ModelState.AddModelError("", "Invalid email or password."); ;
             return View(model);
         }
 
@@ -72,6 +72,12 @@ namespace Edu_DB_ASP.Controllers.Account
             {
                 try
                 {
+                    if (_context.Learners.Any(a => a.Email == model.Email))
+                    {
+                        ModelState.AddModelError("Email", "A User with this email already exists.");
+                        return View(model);
+                    }
+
                     var hashedPassword = HashPassword(model.Password);
                     var learner = new Learner
                     {
@@ -109,6 +115,11 @@ namespace Edu_DB_ASP.Controllers.Account
             {
                 try
                 {
+                    if (_context.Instructors.Any(a => a.Email == model.Email))
+                    {
+                        ModelState.AddModelError("Email", "An Instructor with this email already exists.");
+                        return View(model);
+                    }
                     var hashedPassword = HashPassword(model.Password);
                     var instructor = new Instructor
                     {
@@ -213,6 +224,72 @@ namespace Edu_DB_ASP.Controllers.Account
         public IActionResult LoginRoleSelection()
         {
             return View();
+        }
+
+
+        [HttpGet]
+        public IActionResult RegisterAdmin()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RegisterAdmin(RegisterViewModelAdmin model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (_context.Admins.Any(a => a.Email == model.Email))
+                    {
+                        ModelState.AddModelError("Email", "An admin with this email already exists.");
+                        return View(model);
+                    }
+
+                    var hashedPassword = HashPassword(model.Password);
+                    var admin = new Admin
+                    {
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        Email = model.Email,
+                        PasswordHash = hashedPassword
+                    };
+                    _context.Admins.Add(admin);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("AdminLogin");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", $"An error occurred: {ex.Message}");
+                }
+            }
+            
+            return View(model);
+        }
+
+
+        [HttpGet]
+        public IActionResult AdminLogin()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AdminLogin(LoginViewModel model)
+        {
+            var admin = _context.Admins.SingleOrDefault(u => u.Email == model.Email);
+
+            if (admin != null && VerifyPassword(model.Password, admin.PasswordHash))
+            {
+                // Create session or cookie
+                HttpContext.Session.SetString("UserEmail", admin.Email);
+
+                return RedirectToAction("Profile", "Account");
+            }
+
+            ModelState.AddModelError("", "Invalid email or password."); ;
+            return View(model);
         }
 
     }
