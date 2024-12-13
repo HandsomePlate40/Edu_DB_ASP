@@ -5,11 +5,13 @@
 
 <div class="jumbotron text-center" style="background-color: var(--mantle); color: var(--text); padding: 2rem; border-radius: 24px;">
     <h1 class="display-4" style="font-size: 40px; text-align: center; color: var(--blue);">Welcome to 5 Bytes</h1>
-    <p class="lead" style="text-align: center; style="color: var(--subtext0);">Your gateway to a world of knowledge and learning.</p>
+    <p class="lead" style="text-align: center; color: var(--subtext0);">Your gateway to a world of knowledge and learning.</p>
     <hr class="my-4" style="border-color: var(--overlay1);">
-    <p style="text-align: center; style="color: var(--subtext1);">Explore our wide range of courses and start your learning journey today.</p>
-    <a class="custom-button" href="@Url.Action("Index", "Courses")" role="button">Browse Courses</a>
+    <p style="text-align: center; color: var(--subtext1);">Explore our wide range of courses and start your learning journey today.</p>
+    <a class="custom-button" asp-controller="Course" asp-action="Course" role="button">Browse Courses</a>
+
 </div>
+
 
 <style>
     .custom-button {
