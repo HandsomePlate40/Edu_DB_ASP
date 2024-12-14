@@ -581,6 +581,11 @@ namespace Edu_DB_ASP.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<string>("ProfilePictureUrl")
+                        .HasMaxLength(500)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(500)");
+
                     b.Property<string>("Qualifications")
                         .HasMaxLength(500)
                         .IsUnicode(false)

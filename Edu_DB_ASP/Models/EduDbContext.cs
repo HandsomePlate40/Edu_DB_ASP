@@ -560,7 +560,6 @@ public partial class EduDbContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__HealthConditions__4D94879B");
         });
-
         modelBuilder.Entity<Instructor>(entity =>
         {
             entity.HasKey(e => e.InstructorId).HasName("PK__Instruct__9D010B7B01C75B11");
@@ -572,7 +571,7 @@ public partial class EduDbContext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false);
 
-            entity.HasIndex(e => e.Email).IsUnique(); 
+            entity.HasIndex(e => e.Email).IsUnique();
 
             entity.Property(e => e.InstructorName)
                 .HasMaxLength(255)
@@ -581,6 +580,9 @@ public partial class EduDbContext : DbContext
             entity.Property(e => e.Qualifications)
                 .HasMaxLength(500)
                 .IsUnicode(false);
+            entity.Property(e => e.ProfilePictureUrl)
+                .HasMaxLength(500)
+                .IsUnicode(false); // Add this line
 
             entity.HasMany(d => d.Courses).WithMany(p => p.Instructors)
                 .UsingEntity<Dictionary<string, object>>(
@@ -602,6 +604,7 @@ public partial class EduDbContext : DbContext
                         j.IndexerProperty<int>("CourseId").HasColumnName("CourseID");
                     });
         });
+
 
 
         modelBuilder.Entity<InteractionLog>(entity =>

@@ -15,6 +15,8 @@ public partial class Instructor
 
     public string PasswordHash { get; set; } = null!;
 
+    public string? ProfilePictureUrl { get; set; }
+
     public virtual ICollection<Expertise> Expertises { get; set; } = new List<Expertise>();
 
     public virtual ICollection<Course> Courses { get; set; } = new List<Course>();
