@@ -495,6 +495,48 @@ namespace Edu_DB_ASP.Controllers.Account
             }
         }
 
+        [HttpGet]
+        public IActionResult LearnerIndex()
+        {
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (email == null)
+            {
+                return RedirectToAction("LearnerLogin");
+            }
+
+            var learner = _context.Learners.SingleOrDefault(u => u.Email == email);
+            if (learner == null)
+            {
+                return RedirectToAction("LearnerLogin");
+            }
+
+            return View(learner);
+        }
+
+        [HttpGet]
+        public IActionResult PersonalizationProfileIndex()
+        {
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (email == null)
+            {
+                return RedirectToAction("LearnerLogin");
+            }
+
+            var learner = _context.Learners.SingleOrDefault(u => u.Email == email);
+            if (learner == null)
+            {
+                return RedirectToAction("LearnerLogin");
+            }
+
+            var personalizationProfiles = _context.PersonalizationProfiles
+                .Where(p => p.LearnerId == learner.LearnerId)
+                .ToList();
+            return View(personalizationProfiles);
+        }
+
+
+
+
     }
 }
     

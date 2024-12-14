@@ -21,8 +21,21 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
         // GET: Learners
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Learners.ToListAsync());
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (email == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var learner = await _context.Learners.SingleOrDefaultAsync(u => u.Email == email);
+            if (learner == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            return View(learner);
         }
+
 
         // GET: Learners/Details/5
         public async Task<IActionResult> Details(int? id)

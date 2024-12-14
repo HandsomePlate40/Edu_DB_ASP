@@ -1,0 +1,57 @@
+﻿@model Edu_DB_ASP.Models.PersonalizationProfile
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>PersonalizationProfile</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CreationOrder" />
+            <input type="hidden" asp-for="LearnerId" />
+            <div class="form-group">
+                <label asp-for="PersonalityType" class="control-label"></label>
+                <input asp-for="PersonalityType" class="form-control" />
+                <span asp-validation-for="PersonalityType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmotionalState" class="control-label"></label>
+                <input asp-for="EmotionalState" class="form-control" />
+                <span asp-validation-for="EmotionalState" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AccessibilityPreferences" class="control-label"></label>
+                <input asp-for="AccessibilityPreferences" class="form-control" />
+                <span asp-validation-for="AccessibilityPreferences" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PreferredContentTypes" class="control-label"></label>
+                <input asp-for="PreferredContentTypes" class="form-control" />
+                <span asp-validation-for="PreferredContentTypes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NotificationId" class="control-label"></label>
+                <select asp-for="NotificationId" class="form-control" asp-items="ViewBag.NotificationId"></select>
+                <span asp-validation-for="NotificationId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PathId" class="control-label"></label>
+                <select asp-for="PathId" class="form-control" asp-items="ViewBag.PathId"></select>
+                <span asp-validation-for="PathId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
