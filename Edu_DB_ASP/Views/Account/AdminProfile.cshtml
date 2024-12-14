@@ -1,0 +1,209 @@
+﻿@model Edu_DB_ASP.Models.Admin
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Profile</title>
+    <!-- Styles -->
+    <style>
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            background: #1E1E2E; /* base */
+            color: #D9E0EE; /* text */
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+            padding: 2rem;
+            background: #181825; /* mantle */
+            border-bottom: 1px solid #313244; /* surface0 */
+            position: relative;
+        }
+
+        .profile-pic-form {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin-right: 1.5rem;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .profile-image {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #313244; /* surface0 */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+            .profile-image img {
+                width: 100%;
+                height: auto;
+                object-fit: cover;
+                border-radius: 50%;
+            }
+
+        /* Hidden label appears on hover */
+        .profile-upload-label {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            color: #D9E0EE;
+            font-size: 0.9rem;
+            font-weight: 500;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s;
+            cursor: pointer;
+            display: flex;
+        }
+
+        .profile-image:hover .profile-upload-label {
+            opacity: 1;
+        }
+
+        .profile-upload-label:hover {
+            background: rgba(0,0,0,0.6);
+        }
+
+        .profile-upload-label input[type="file"] {
+            display: none;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+            .profile-info h1 {
+                margin: 0;
+                font-size: 1.5rem;
+                color: #D9E0EE; /* text */
+            }
+
+            .profile-info p {
+                margin: 0.5rem 0 0;
+                color: #BAC2DE; /* subtext1 */
+            }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        h2 {
+            color: #D9E0EE;
+            border-bottom: 2px solid #313244; /* surface0 */
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #181825; /* mantle */
+        }
+
+            table thead {
+                background: #313244; /* surface0 */
+            }
+
+                table thead th {
+                    text-align: left;
+                    padding: 0.75rem;
+                    color: #D9E0EE; /* text */
+                    font-weight: 600;
+                    border-bottom: 1px solid #45475A; /* surface1 */
+                }
+
+            table tbody tr {
+                border-bottom: 1px solid #313244; /* surface0 */
+            }
+
+                table tbody tr:hover {
+                    background: #252535; /* slightly lighter for hover */
+                }
+
+            table tbody td {
+                padding: 0.75rem;
+                color: #A6ADC8; /* subtext0 */
+            }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+        }
+
+            .tag.active {
+                background: #A6E3A1; /* green */
+                color: #1E1E2E; /* base */
+            }
+
+            .tag.archived {
+                background: #F8BD96; /* peach */
+                color: #1E1E2E; /* base */
+            }
+
+        .table-section {
+            margin-bottom: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Profile Header Section -->
+    <div class="profile-container">
+        <!-- Profile Image and Upload Functionality -->
+        <div class="profile-pic-form">
+            <div class="profile-image">
+                <img src="@Model.ProfilePictureUrl" alt="Admin Profile Picture" id="profileImg" />
+
+                <label class="profile-upload-label">
+                    Change Profile Picture
+                    <input type="file" id="profilePicture" name="profilePicture" accept="image/*" onchange="uploadProfilePicture()" />
+                </label>
+            </div>
+        </div>
+
+        <div class="profile-info">
+            <h1>@Model.FirstName @Model.LastName</h1>
+            <p>@Model.Email</p>
+        </div>
+    </div>
+
+    <!-- Hidden Form to Submit Uploaded File -->
+    <form id="uploadForm" asp-action="UploadAdminProfilePicture" method="post" enctype="multipart/form-data" style="display:none;">
+        <input type="file" id="hiddenProfilePicture" name="profilePicture" />
+    </form>
+
+    <!-- Scripts -->
+    <script>
+        function uploadProfilePicture() {
+            var fileInput = document.getElementById('profilePicture');
+            var hiddenFileInput = document.getElementById('hiddenProfilePicture');
+            var form = document.getElementById('uploadForm');
+
+            hiddenFileInput.files = fileInput.files;
+            form.submit();
+        }
+    </script>
+
+</body>
+</html>

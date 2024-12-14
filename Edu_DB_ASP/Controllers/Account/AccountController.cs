@@ -28,7 +28,7 @@ namespace Edu_DB_ASP.Controllers.Account
             {
                 HttpContext.Session.SetString("UserEmail", learner.Email);
 
-                return RedirectToAction("Profile", "Account");
+                return RedirectToAction("LearnerProfile", "Account");
             }
 
             ModelState.AddModelError("", "Invalid email or password.");
@@ -52,7 +52,7 @@ namespace Edu_DB_ASP.Controllers.Account
                 // Create session or cookie
                 HttpContext.Session.SetString("UserEmail", instructor.Email);
 
-                return RedirectToAction("Profile", "Account");
+                return RedirectToAction("InstructorProfile", "Account");
             }
 
             ModelState.AddModelError("", "Invalid email or password."); ;
@@ -163,7 +163,7 @@ namespace Edu_DB_ASP.Controllers.Account
         }
 
         [HttpGet]
-        public IActionResult Profile()
+        public IActionResult LearnerProfile()
         {
             var email = HttpContext.Session.GetString("UserEmail");
             if (email == null)
@@ -217,7 +217,7 @@ namespace Edu_DB_ASP.Controllers.Account
                     _context.Learners.Update(learner);
                     await _context.SaveChangesAsync();
 
-                    return RedirectToAction("Profile");
+                    return RedirectToAction("LearnerProfile");
                 }
 
                 // If no file selected
@@ -226,11 +226,11 @@ namespace Edu_DB_ASP.Controllers.Account
                 if (noEmail != null)
                 {
                     var noPicLearner = _context.Learners.SingleOrDefault(u => u.Email == noEmail);
-                    return View("Profile", noPicLearner);
+                    return View("LearnerProfile", noPicLearner);
                 }
                 else
                 {
-                    return RedirectToAction("Login");
+                    return RedirectToAction("LearnerLogin");
                 }
             }
             catch (Exception ex)
@@ -242,11 +242,11 @@ namespace Edu_DB_ASP.Controllers.Account
                 if (email != null)
                 {
                     var learner = _context.Learners.SingleOrDefault(u => u.Email == email);
-                    return View("Profile", learner);
+                    return View("LearnerProfile", learner);
                 }
                 else
                 {
-                    return RedirectToAction("Login");
+                    return RedirectToAction("LearnerLogin");
                 }
             }
         }
@@ -316,11 +316,183 @@ namespace Edu_DB_ASP.Controllers.Account
                 // Create session or cookie
                 HttpContext.Session.SetString("UserEmail", admin.Email);
 
-                return RedirectToAction("Profile", "Account");
+                return RedirectToAction("AdminProfile", "Account");
             }
 
             ModelState.AddModelError("", "Invalid email or password."); ;
             return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult InstructorProfile()
+        {
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (email == null)
+            {
+                return RedirectToAction("InstructorLogin");
+            }
+
+            var instructor = _context.Instructors.SingleOrDefault(u => u.Email == email);
+            if (instructor == null)
+            {
+                return RedirectToAction("InstructorLogin");
+            }
+
+            return View(instructor);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadInstructorProfilePicture(IFormFile profilePicture)
+        {
+            try
+            {
+                if (profilePicture != null && profilePicture.Length > 0)
+                {
+                    var email = HttpContext.Session.GetString("UserEmail");
+                    if (email == null)
+                    {
+                        return RedirectToAction("InstructorLogin");
+                    }
+
+                    var instructor = _context.Instructors.SingleOrDefault(u => u.Email == email);
+                    if (instructor == null)
+                    {
+                        return RedirectToAction("InstructorLogin");
+                    }
+
+                    var directoryPath = Path.Combine("wwwroot", "images");
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
+
+                    var filePath = Path.Combine(directoryPath, profilePicture.FileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await profilePicture.CopyToAsync(stream);
+                    }
+
+                    instructor.ProfilePictureUrl = $"/images/{profilePicture.FileName}";
+                    _context.Instructors.Update(instructor);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("InstructorProfile");
+                }
+
+                ViewBag.ErrorMessage = "No profile picture was selected. Please choose a file and try again.";
+                var noEmail = HttpContext.Session.GetString("UserEmail");
+                if (noEmail != null)
+                {
+                    var noPicInstructor = _context.Instructors.SingleOrDefault(u => u.Email == noEmail);
+                    return View("InstructorProfile", noPicInstructor);
+                }
+                else
+                {
+                    return RedirectToAction("InstructorLogin");
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = $"An error occurred while uploading the profile picture: {ex.Message}";
+
+                var email = HttpContext.Session.GetString("UserEmail");
+                if (email != null)
+                {
+                    var instructor = _context.Instructors.SingleOrDefault(u => u.Email == email);
+                    return View("InstructorProfile", instructor);
+                }
+                else
+                {
+                    return RedirectToAction("InstructorLogin");
+                }
+            }
+        }
+
+        [HttpGet]
+        public IActionResult AdminProfile()
+        {
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (email == null)
+            {
+                return RedirectToAction("AdminLogin");
+            }
+
+            var admin = _context.Admins.SingleOrDefault(u => u.Email == email);
+            if (admin == null)
+            {
+                return RedirectToAction("AdminLogin");
+            }
+
+            return View(admin);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadAdminProfilePicture(IFormFile profilePicture)
+        {
+            try
+            {
+                if (profilePicture != null && profilePicture.Length > 0)
+                {
+                    var email = HttpContext.Session.GetString("UserEmail");
+                    if (email == null)
+                    {
+                        return RedirectToAction("AdminLogin");
+                    }
+
+                    var admin = _context.Admins.SingleOrDefault(u => u.Email == email);
+                    if (admin == null)
+                    {
+                        return RedirectToAction("AdminLogin");
+                    }
+
+                    var directoryPath = Path.Combine("wwwroot", "images");
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
+
+                    var filePath = Path.Combine(directoryPath, profilePicture.FileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await profilePicture.CopyToAsync(stream);
+                    }
+
+                    admin.ProfilePictureUrl = $"/images/{profilePicture.FileName}";
+                    _context.Admins.Update(admin);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("AdminProfile");
+                }
+
+                ViewBag.ErrorMessage = "No profile picture was selected. Please choose a file and try again.";
+                var noEmail = HttpContext.Session.GetString("UserEmail");
+                if (noEmail != null)
+                {
+                    var noPicAdmin = _context.Admins.SingleOrDefault(u => u.Email == noEmail);
+                    return View("AdminProfile", noPicAdmin);
+                }
+                else
+                {
+                    return RedirectToAction("AdminLogin");
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = $"An error occurred while uploading the profile picture: {ex.Message}";
+
+                var email = HttpContext.Session.GetString("UserEmail");
+                if (email != null)
+                {
+                    var admin = _context.Admins.SingleOrDefault(u => u.Email == email);
+                    return View("AdminProfile", admin);
+                }
+                else
+                {
+                    return RedirectToAction("AdminLogin");
+                }
+            }
         }
 
     }
