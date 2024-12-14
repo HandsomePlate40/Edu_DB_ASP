@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Edu_DB_ASP/Migrations/20241212103129_InitialCreate.Designer.cs
+/Edu_DB_ASP/Migrations/20241212103129_InitialCreate.cs
+/Edu_DB_ASP/Migrations/20241213095616_InitialCreate.cs
+/Edu_DB_ASP/Migrations/20241213095616_InitialCreate.Designer.cs

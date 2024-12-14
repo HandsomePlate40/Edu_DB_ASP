@@ -168,13 +168,13 @@ namespace Edu_DB_ASP.Controllers.Account
             var email = HttpContext.Session.GetString("UserEmail");
             if (email == null)
             {
-                return RedirectToAction("Login");
+                return RedirectToAction("LearnerLogin");
             }
 
             var learner = _context.Learners.SingleOrDefault(u => u.Email == email);
             if (learner == null)
             {
-                return RedirectToAction("Login");
+                return RedirectToAction("LearnerLogin");
             }
 
             return View(learner);
@@ -183,41 +183,72 @@ namespace Edu_DB_ASP.Controllers.Account
         [HttpPost]
         public async Task<IActionResult> UploadProfilePicture(IFormFile profilePicture)
         {
-            if (profilePicture != null && profilePicture.Length > 0)
+            try
             {
-                var email = HttpContext.Session.GetString("UserEmail");
-                if (email == null)
+                if (profilePicture != null && profilePicture.Length > 0)
+                {
+                    var email = HttpContext.Session.GetString("UserEmail");
+                    if (email == null)
+                    {
+                        return RedirectToAction("LearnerLogin");
+                    }
+
+                    var learner = _context.Learners.SingleOrDefault(u => u.Email == email);
+                    if (learner == null)
+                    {
+                        return RedirectToAction("LearnerLogin");
+                    }
+
+                    var directoryPath = Path.Combine("wwwroot", "images");
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
+
+                    var filePath = Path.Combine(directoryPath, profilePicture.FileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await profilePicture.CopyToAsync(stream);
+                    }
+
+                    learner.ProfilePictureUrl = $"/images/{profilePicture.FileName}";
+                    // If learner is already tracked, no need to explicitly call Update
+                    _context.Learners.Update(learner);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Profile");
+                }
+
+                // If no file selected
+                ViewBag.ErrorMessage = "No profile picture was selected. Please choose a file and try again.";
+                var noEmail = HttpContext.Session.GetString("UserEmail");
+                if (noEmail != null)
+                {
+                    var noPicLearner = _context.Learners.SingleOrDefault(u => u.Email == noEmail);
+                    return View("Profile", noPicLearner);
+                }
+                else
                 {
                     return RedirectToAction("Login");
                 }
-
-                var learner = _context.Learners.SingleOrDefault(u => u.Email == email);
-                if (learner == null)
-                {
-                    return RedirectToAction("Login");
-                }
-
-                var directoryPath = Path.Combine("wwwroot", "images");
-                if (!Directory.Exists(directoryPath))
-                {
-                    Directory.CreateDirectory(directoryPath);
-                }
-
-                var filePath = Path.Combine(directoryPath, profilePicture.FileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await profilePicture.CopyToAsync(stream);
-                }
-
-                learner.ProfilePictureUrl = $"/images/{profilePicture.FileName}";
-                _context.Update(learner);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("Profile");
             }
+            catch (Exception ex)
+            {
+                // If there is an error, pass it to the view
+                ViewBag.ErrorMessage = $"An error occurred while uploading the profile picture: {ex.Message}";
 
-            return RedirectToAction("Profile");
+                var email = HttpContext.Session.GetString("UserEmail");
+                if (email != null)
+                {
+                    var learner = _context.Learners.SingleOrDefault(u => u.Email == email);
+                    return View("Profile", learner);
+                }
+                else
+                {
+                    return RedirectToAction("Login");
+                }
+            }
         }
 
         [HttpGet]
