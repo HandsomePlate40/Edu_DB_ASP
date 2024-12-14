@@ -1,0 +1,90 @@
+﻿@model Edu_DB_ASP.Models.Learner
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Learner</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <input asp-for="Gender" class="form-control" />
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CountryOfOrigin" class="control-label"></label>
+                <input asp-for="CountryOfOrigin" class="form-control" />
+                <span asp-validation-for="CountryOfOrigin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CulturalBackground" class="control-label"></label>
+                <input asp-for="CulturalBackground" class="form-control" />
+                <span asp-validation-for="CulturalBackground" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PersonalityTraits" class="control-label"></label>
+                <input asp-for="PersonalityTraits" class="form-control" />
+                <span asp-validation-for="PersonalityTraits" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmotionalProfile" class="control-label"></label>
+                <input asp-for="EmotionalProfile" class="form-control" />
+                <span asp-validation-for="EmotionalProfile" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhysicalHealth" class="control-label"></label>
+                <input asp-for="PhysicalHealth" class="form-control" />
+                <span asp-validation-for="PhysicalHealth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MentalHealth" class="control-label"></label>
+                <input asp-for="MentalHealth" class="form-control" />
+                <span asp-validation-for="MentalHealth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExperienceLevel" class="control-label"></label>
+                <input asp-for="ExperienceLevel" class="form-control" />
+                <span asp-validation-for="ExperienceLevel" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PasswordHash" class="control-label"></label>
+                <input asp-for="PasswordHash" class="form-control" />
+                <span asp-validation-for="PasswordHash" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProfilePictureUrl" class="control-label"></label>
+                <input asp-for="ProfilePictureUrl" class="form-control" />
+                <span asp-validation-for="ProfilePictureUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
