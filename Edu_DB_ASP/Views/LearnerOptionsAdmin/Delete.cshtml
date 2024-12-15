@@ -4,96 +4,136 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+<h2 class="text-center">DELETE LEARNER</h2>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Learner</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Gender)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Gender)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CountryOfOrigin)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CountryOfOrigin)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CulturalBackground)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CulturalBackground)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PersonalityTraits)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PersonalityTraits)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EmotionalProfile)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EmotionalProfile)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhysicalHealth)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhysicalHealth)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MentalHealth)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MentalHealth)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ExperienceLevel)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ExperienceLevel)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PasswordHash)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PasswordHash)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProfilePictureUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProfilePictureUrl)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="LearnerId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+<h3 class="text-center">Are you sure you want to delete this?</h3>
+<div class="row">
+    <div class="col-md-4">
+        <div class="delete-confirmation register-form">
+            <h1 style="text-align: center">Learner Details</h1>
+            <hr />
+            <div class="form-group">
+                <span class="form-label">@Html.DisplayNameFor(model => model.FirstName):</span>
+                <span>@Html.DisplayFor(model => model.FirstName)</span>
+            </div>
+            <div class="form-group">
+                <span class="form-label">@Html.DisplayNameFor(model => model.LastName):</span>
+                <span>@Html.DisplayFor(model => model.LastName)</span>
+            </div>
+            <div class="form-group">
+                <span class="form-label">@Html.DisplayNameFor(model => model.Gender):</span>
+                <span>@Html.DisplayFor(model => model.Gender)</span>
+            </div>
+            <div class="form-group">
+                <span class="form-label">@Html.DisplayNameFor(model => model.CountryOfOrigin):</span>
+                <span>@Html.DisplayFor(model => model.CountryOfOrigin)</span>
+            </div>
+            <div class="form-group">
+                <span class="form-label">@Html.DisplayNameFor(model => model.CulturalBackground):</span>
+                <span>@Html.DisplayFor(model => model.CulturalBackground)</span>
+            </div>
+            <div class="form-group">
+                <span class="form-label">@Html.DisplayNameFor(model => model.PersonalityTraits):</span>
+                <span>@Html.DisplayFor(model => model.PersonalityTraits)</span>
+            </div>
+            <div class="form-group">
+                <span class="form-label">@Html.DisplayNameFor(model => model.EmotionalProfile):</span>
+                <span>@Html.DisplayFor(model => model.EmotionalProfile)</span>
+            </div>
+            <div class="form-group">
+                <span class="form-label">@Html.DisplayNameFor(model => model.PhysicalHealth):</span>
+                <span>@Html.DisplayFor(model => model.PhysicalHealth)</span>
+            </div>
+            <div class="form-group">
+                <span class="form-label">@Html.DisplayNameFor(model => model.MentalHealth):</span>
+                <span>@Html.DisplayFor(model => model.MentalHealth)</span>
+            </div>
+            <div class="form-group">
+                <span class="form-label">@Html.DisplayNameFor(model => model.ExperienceLevel):</span>
+                <span>@Html.DisplayFor(model => model.ExperienceLevel)</span>
+            </div>
+            <div class="form-group">
+                <span class="form-label">@Html.DisplayNameFor(model => model.Email):</span>
+                <span>@Html.DisplayFor(model => model.Email)</span>
+            </div>
+
+            <!-- Delete Form -->
+            <form asp-action="Delete" method="post" style='text-align: center;'>
+                <input type="hidden" asp-for="LearnerId" />
+
+                <!-- Delete Button -->
+                <input type='submit' value='Delete' class='btn btn-danger btn-lg' /> |
+                <!-- Back to List Link -->
+                <a asp-action='Index' class='btn btn-secondary btn-lg'>Back to List</a>
+            </form>
+
+        </div>
+    </div>
+
 </div>
+
+<style>
+    .register-form {
+        max-width: 310px;
+        margin: 50px auto; /* to center the form horizontally */
+        padding: 15px;
+        background-color: #2e3440;
+        border-radius: 15px;
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+        font-family: 'Roboto', sans-serif;
+        padding-right: 35px; /* adds extra padding to the right for a bigger look */
+    }
+
+    /* Center the heading */
+    h2.text-center, h3.text-center {
+        text-align: center;
+        color: #cdd6f4;
+    }
+
+    /* Label Styling */
+    .form-label {
+        display: inline-block; /* Align labels and values inline */
+        font-size: 1.2rem;
+        margin-right: 10px; /* Space between label and value */
+        font-weight: 500;
+        color: #e0e0e0;
+    }
+
+    /* Input Groups */
+    .form-group {
+        margin-bottom: 5px;
+    }
+
+    /* Button Styling */
+    .btn-lg {
+        width: auto; /* Adjust width for buttons */
+        padding: 10px;
+        margin-top: 15px; /* Space above buttons */
+        border-radius: 5px;
+        font-size: 1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-danger {
+        background-color: #bf616a; /* Danger button color */
+        border-color: #bf616a;
+        color: white; /* Text color for button */
+    }
+
+        .btn-danger:hover {
+            background-color: #a05257; /* Darker shade on hover */
+        }
+
+    .btn-secondary {
+        background-color: #88c0d0; /* Secondary button color */
+        border-color: #88c0d0;
+        color: #2e3440;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5e81ac; /* Darker shade on hover */
+        }
+</style>
+
