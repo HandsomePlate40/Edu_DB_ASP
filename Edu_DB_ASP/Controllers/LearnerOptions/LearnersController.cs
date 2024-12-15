@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Edu_DB_ASP.Models;
-
+using Microsoft.Data.SqlClient;
 namespace Edu_DB_ASP.Controllers.LearnerOptions
 {
     public class LearnersController : Controller
@@ -164,6 +164,71 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
         private bool LearnerExists(int id)
         {
             return _context.Learners.Any(e => e.LearnerId == id);
+        }
+        
+        public async Task<IActionResult> JoinQuest(int questId)
+        {
+            var learnerEmail = HttpContext.Session.GetString("UserEmail");
+            if (learnerEmail == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var learner = await _context.Learners.SingleOrDefaultAsync(u => u.Email == learnerEmail);
+            if (learner == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var learnerId = learner.LearnerId;
+
+            var sql = "EXEC JoinQuest @LearnerID, @QuestID";
+            var parameters = new[]
+            {
+                new SqlParameter("@LearnerID", learnerId),
+                new SqlParameter("@QuestID", questId)
+            };
+
+            await _context.Database.ExecuteSqlRawAsync(sql, parameters);
+
+            return RedirectToAction("JoinCollabQuest");
+        }
+    
+        public async Task<IActionResult> AvailableQuests()
+        {
+            var quests = await _context.CollaborativeQuests
+                .Select(q => new CollaborativeQuest
+                {
+                    QuestId = q.QuestId,
+                    MaxParticipants = q.MaxParticipants,
+                    DeadLine = q.DeadLine,
+                    Quest = q.Quest,
+                })
+                .ToListAsync();
+
+            return View(quests);
+        }
+        
+        public async Task<IActionResult> JoinCollabQuest()
+        {
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (userRole != "Learner")
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var quests = await _context.Quests
+                .Where(q => q.QuestType == "Collaborative_Quest")
+                .Select(q => new CollaborativeQuest
+                {
+                    QuestId = q.QuestId,
+                    MaxParticipants = q.CollaborativeQuest.MaxParticipants,
+                    DeadLine = q.CollaborativeQuest.DeadLine,
+                    Quest = q
+                })
+                .ToListAsync();
+
+            return View(quests);
         }
     }
 }

@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Edu_DB_ASP.Models.CollaborativeQuest>
+
+@{
+    ViewData["Title"] = "Available Collaborative Quests";
+}
+
+<h2>Available Collaborative Quests</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Quest Title</th>
+        <th>Description</th>
+        <th>Max Participants</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var quest in Model)
+    {
+        <tr>
+            <td>@quest.Quest.Title</td>
+            <td>@quest.Quest.QuestDescription</td>
+            <td>@quest.MaxParticipants</td>
+            <td>
+                <form asp-action="JoinQuest" method="post">
+                    <input type="hidden" name="questId" value="@quest.QuestId" />
+                    <button type="submit" class="btn btn-primary">Join</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

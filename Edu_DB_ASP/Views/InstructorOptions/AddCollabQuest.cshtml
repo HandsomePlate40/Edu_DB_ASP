@@ -1,0 +1,44 @@
+﻿@model CollaborativeQuestViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Collaborative Quest</title>
+</head>
+<body>
+<div>
+    <h2>Add Collaborative Quest</h2>
+    <form asp-action="AddCollabQuest" method="post">
+        <div>
+            <label for="Title">Title</label>
+            <input type="text" id="Title" name="Title" required />
+        </div>
+        <div>
+            <label for="Description">Description</label>
+            <input type="text" id="Description" name="Description" required />
+        </div>
+        <div>
+            <label for="DifficultyLevel">Difficulty Level</label>
+            <input type="text" id="DifficultyLevel" name="DifficultyLevel" required />
+        </div>
+        <div>
+            <label for="Criteria">Criteria</label>
+            <input type="text" id="Criteria" name="Criteria" required />
+        </div>
+        <div>
+            <label for="MaxParticipants">Max Number of Participants</label>
+            <input type="number" id="MaxParticipants" name="MaxParticipants" required />
+        </div>
+        <div>
+            <label for="Deadline">Deadline</label>
+            <input type="datetime-local" id="Deadline" name="Deadline" required />
+        </div>
+        <button type="submit">Add Quest</button>
+    </form>
+</div>
+</body>
+</html>
