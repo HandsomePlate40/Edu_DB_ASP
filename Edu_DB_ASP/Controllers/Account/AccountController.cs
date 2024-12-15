@@ -19,21 +19,34 @@ namespace Edu_DB_ASP.Controllers.Account
         {
             return View();
         }
-        [HttpPost]
-        public IActionResult LearnerLogin(LoginViewModel model)
+        
+        [HttpGet]
+        public IActionResult Profile()
         {
-            var learner = _context.Learners.SingleOrDefault(u => u.Email == model.Email);
-
-            if (learner != null && VerifyPassword(model.Password, learner.PasswordHash))
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (email == null)
             {
-                HttpContext.Session.SetString("UserEmail", learner.Email);
-
-                return RedirectToAction("LearnerProfile", "Account");
+                return RedirectToAction("LoginRoleSelection");
             }
 
-            ModelState.AddModelError("", "Invalid email or password.");
-            return View(model);
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (userRole == "Learner")
+            {
+                return RedirectToAction("LearnerProfile");
+            }
+            else if (userRole == "Instructor")
+            {
+                return RedirectToAction("InstructorProfile");
+            }
+            else if (userRole == "Admin")
+            {
+                return RedirectToAction("AdminProfile");
+            }
+
+            return RedirectToAction("LoginRoleSelection");
         }
+        
+ 
 
 
         [HttpGet]
@@ -42,22 +55,6 @@ namespace Edu_DB_ASP.Controllers.Account
             return View();
         }
 
-        [HttpPost]
-        public IActionResult InstructorLogin(LoginViewModel model)
-        {
-            var instructor = _context.Instructors.SingleOrDefault(u => u.Email == model.Email);
-
-            if (instructor != null && VerifyPassword(model.Password, instructor.PasswordHash))
-            {
-                // Create session or cookie
-                HttpContext.Session.SetString("UserEmail", instructor.Email);
-
-                return RedirectToAction("InstructorProfile", "Account");
-            }
-
-            ModelState.AddModelError("", "Invalid email or password."); ;
-            return View(model);
-        }
 
         [HttpGet]
         public IActionResult RegisterLearner()
@@ -306,23 +303,6 @@ namespace Edu_DB_ASP.Controllers.Account
             return View();
         }
 
-        [HttpPost]
-        public IActionResult AdminLogin(LoginViewModel model)
-        {
-            var admin = _context.Admins.SingleOrDefault(u => u.Email == model.Email);
-
-            if (admin != null && VerifyPassword(model.Password, admin.PasswordHash))
-            {
-                // Create session or cookie
-                HttpContext.Session.SetString("UserEmail", admin.Email);
-
-                return RedirectToAction("AdminProfile", "Account");
-            }
-
-            ModelState.AddModelError("", "Invalid email or password."); ;
-            return View(model);
-        }
-
         [HttpGet]
         public IActionResult InstructorProfile()
         {
@@ -535,7 +515,56 @@ namespace Edu_DB_ASP.Controllers.Account
         }
 
 
+        [HttpPost]
+        public IActionResult LearnerLogin(LoginViewModel model)
+        {
+            var learner = _context.Learners.SingleOrDefault(u => u.Email == model.Email);
 
+            if (learner != null && VerifyPassword(model.Password, learner.PasswordHash))
+            {
+                HttpContext.Session.SetString("UserEmail", learner.Email);
+                HttpContext.Session.SetString("UserRole", "Learner");
+
+                return RedirectToAction("LearnerProfile", "Account");
+            }
+
+            ModelState.AddModelError("", "Invalid email or password.");
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult InstructorLogin(LoginViewModel model)
+        {
+            var instructor = _context.Instructors.SingleOrDefault(u => u.Email == model.Email);
+
+            if (instructor != null && VerifyPassword(model.Password, instructor.PasswordHash))
+            {
+                HttpContext.Session.SetString("UserEmail", instructor.Email);
+                HttpContext.Session.SetString("UserRole", "Instructor");
+
+                return RedirectToAction("InstructorProfile", "Account");
+            }
+
+            ModelState.AddModelError("", "Invalid email or password.");
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult AdminLogin(LoginViewModel model)
+        {
+            var admin = _context.Admins.SingleOrDefault(u => u.Email == model.Email);
+
+            if (admin != null && VerifyPassword(model.Password, admin.PasswordHash))
+            {
+                HttpContext.Session.SetString("UserEmail", admin.Email);
+                HttpContext.Session.SetString("UserRole", "Admin");
+
+                return RedirectToAction("AdminProfile", "Account");
+            }
+
+            ModelState.AddModelError("", "Invalid email or password.");
+            return View(model);
+        }
 
     }
 }

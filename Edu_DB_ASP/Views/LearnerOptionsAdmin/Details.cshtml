@@ -53,12 +53,13 @@
             <div class="form-group">
                 <span class="form-label">@Html.DisplayNameFor(model => model.Email):</span>
                 <span>@Html.DisplayFor(model => model.Email)</span>
+            </div> <!-- End of form-group -->
 
             <!-- Buttons inside the squircle -->
             <div style='text-align: center; margin-top: 20px;'>
                 <a asp-action="Edit" asp-route-id="@Model?.LearnerId" class='btn btn-primary btn-lg'>Edit</a> |
                 <a asp-action="Index" class='btn btn-secondary btn-lg'>Back to List</a>
-            </div>
+            </div> <!-- End of button container -->
 
         </div> <!-- End of details-view -->
     </div> <!-- End of col-md-4 -->
@@ -114,10 +115,10 @@
         color: #2e3440;
     }
 
-        .btn-primary:hover {
-            background-color: #5e81ac; /* Darker shade on hover */
-            transform: scale(1.05); /* Slightly enlarge on hover */
-        }
+    .btn-primary:hover {
+        background-color: #5e81ac; /* Darker shade on hover */
+        transform: scale(1.05); /* Slightly enlarge on hover */
+    }
 
     .btn-secondary {
         background-color: #4c566a; /* Secondary button color */
@@ -125,9 +126,8 @@
         color: #cdd6f4;
     }
 
-        .btn-secondary:hover {
-            background-color: #3b4252; /* Darker shade on hover */
-            transform: scale(1.05); /* Slightly enlarge on hover */
-        }
+    .btn-secondary:hover {
+        background-color: #3b4252; /* Darker shade on hover */
+        transform: scale(1.05); /* Slightly enlarge on hover */
+    }
 </style>
-

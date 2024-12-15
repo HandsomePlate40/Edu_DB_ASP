@@ -8,142 +8,278 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/catppuccin-mocha.css" />
     <style>
+        :root {
+            --background-color: #11111b; /* Catppuccin Mocha background */
+            --nav-background-color: #0c0c13; /* Darker navbar color */
+        }
+
+        body {
+            background-color: #11111B;
+            font-family: 'Roboto', sans-serif;
+            transition: margin-left 0.5s; /* For animating content when sidenav opens */
+            overflow-x: hidden; /* Prevent horizontal scrollbar */
+        }
 
         /* Navbar Styling */
         .navbar {
-            background-color: #000000; /* to set navbar background color */
-            padding: 10px 20px; /* Ensure padding for consistent alignment */
-            position: relative;
-            z-index: 10;
-            height 80px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-            width: 100%; /* Ensure navbar takes full width */
+            background-color: #11111B;
+            padding: 0.5rem 1rem;
+            width: 100%;
+            display: flex; /* Use flexbox for horizontal alignment */
+            align-items: center; /* Align items vertically */
+            justify-content: space-between; /* Space out brand and button container */
+            border-bottom-left-radius: 25px;
+            border-bottom-right-radius: 25px;
         }
 
-        .navbar-brand, .nav-link {
-            color: #cdd6f4 !important; /* Catppuccin Mocha text color */
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--lavender);
+            text-decoration: none;
+            display: flex;
+            align-items: center; /* Vertically center icon and text */
         }
 
-            .navbar-brand:hover, .nav-link:hover {
-                color: #f5c2e7 !important; /* Catppuccin Mocha accent color */
-            }
-
-        .navbar-toggler {
-            border-color: #cdd6f4; /* Catppuccin Mocha text color */
+        .navbar-brand i {
+            margin-right: 0.5rem; /* Space between icon and text */
         }
 
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='%23cdd6f4' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        .nav-container {
+            display: flex; /* Keep buttons horizontal on navbar */
+            align-items: center;
+            margin-right: 2rem; /* Adjust margin as needed */
         }
-
-        .nav-item {
-            margin-right: 25px;
-            position: relative; /* Position relative for dropdown positioning */
-        }
-
-        .nav-link {
-            border-radius: 50px;
-            padding: 10px 20px;
-            background-color: #1e1e2e; /* Catppuccin Mocha secondary color */
-            transition: background-color 0.3s;
-        }
-
-            .nav-link:hover {
-                background-color: #4c566a; /* Catppuccin Mocha hover color */
-            }
 
         .navbar-nav {
-            display: flex;
-            flex-direction: row;
+            display: flex; /* For horizontal alignment on navbar */
+            list-style: none; /* Remove list markers */
+            padding: 0;
+            margin: 0; /* Remove default margin */
         }
 
-        /* Dropdown Styling */
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 150%;
-            left: -5px;
-            z-index: 1000;
-            background-color: #1e1e2e;
-            border-radius: 10px;
-            padding: 5px 0;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .nav-item:hover .dropdown-menu {
-            display: block;
-        }
-
-        .dropdown-item {
-            display: block;
-            padding: 10px 20px;
-            color: #cdd6f4 !important;
+        .navbar .nav-link {
+            color: var(--text);
+            font-weight: 500;
+            border-radius: 24px;
+            padding: 0.5rem 1.5rem;
+            background-color: transparent;
+            transition: background-color 0.3s, color 0.3s;
+            margin: 0 0.25rem; /* Adjust margin for button spacing */
             text-decoration: none;
-            border-radius: 10px;
+            display: flex; /* For icon and text alignment */
+            align-items: center; /* Center vertically */
         }
 
-            .dropdown-item:hover {
-                background-color: #4c566a;
-            }
+        .navbar .nav-link:hover {
+            background-color: var(--surface0);
+            color: var(--lavender);
+        }
+
+        .navbar i {
+            margin-right: 0.5rem; /* Space between icon and text */
+        }
+
+        /* Side Navigation (Sidenav) Styling */
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 2;
+            top: 0;
+            left: 0;
+            background-color: #11111B;
+            overflow-x: hidden;
+            transition: 0.5s; /* Sidenav open/close transition */
+            padding-top: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 36px;
+            color: var(--text);
+            text-decoration: none;
+            z-index: 3;
+        }
+
+        .sidenav .navbar-nav {
+            width: 100%;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .sidenav .nav-link {
+            padding: 0.5rem 1.5rem;
+            text-decoration: none;
+            font-size: 18px;
+            color: var(--text);
+            display: block;
+            transition: background-color 0.3s, color 0.3s;
+            border-radius: 24px;
+            width: 90%;
+        }
+
+        .sidenav .nav-item {
+            width: 100%;
+            text-align: left;
+            margin-left: 1rem;
+        }
+
+        .sidenav a:hover {
+            background-color: var(--surface0);
+            color: var(--lavender);
+        }
+
+        /* Hamburger Menu Button */
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: transparent; /* Transparent background */
+            color: var(--text);
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            z-index: 3;
+        }
+
+        .openbtn:hover {
+            background-color: var(--surface0); /* Background on hover */
+        }
+
+        /* Main Content Styling */
+        .main-content {
+            padding: 1rem;
+            transition: margin-left 0.5s; /* Animate content shift */
+            z-index: 1;
+        }
+
+        /* Body styling when menu is open */
+        body.sidenav-open .main-content {
+            margin-left: 250px; /* Shift content when sidenav is open */
+        }
+
+        body.sidenav-open {
+            margin-left: 250px; /* Push content to the right when sidenav is open */
+        }
 
         footer {
-            background-color: #1e1e2e;
-            color: #cdd6f4;
-            display: flex; 
-            justify-content: flex-end;
-            align-items: flex-end; 
-            height: 80px; 
-            padding: 15px 10px; 
-            border-radius: 10px;
+            background-color: #11111B;
+            color: var(--text);
+            padding: 1rem;
+            text-align: center;
         }
 
-            footer a {
-                color: #f5c2e7; /* to change the color of "Join us" in the footer */
-                text-decoration: none;
-            }
+        footer a {
+            color: var(--sky);
+            text-decoration: none;
+        }
 
-                footer a:hover {
-                    text-decoration: underline;
-                }
+        footer a:hover {
+            text-decoration: underline;
+        }
 
+        .brand-openbtn-container {
+            display: flex; /* Align brand and openbtn vertically */
+            align-items: center; /* Center vertically */
+            margin-left: 1rem; /* Adjust margin as needed */
+        }
     </style>
 </head>
 <body>
-    <header style="background-color: #000000; width: 100%; text-align: center;">
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
-            <div class="container">
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#">Menu</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="LoginRoleSelection">Login</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="GetStarted">Get Started</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-   
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+<nav class="navbar">
+    <div class="brand-openbtn-container">
+        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+            <i class="fas fa-graduation-cap"></i> 5 Bytes
+        </a>
+        <button class="openbtn" onclick="openNav()">☰</button>
     </div>
-    
-    <br /> 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - 5 Bytes - <a asp-area="" asp-controller="Account" asp-action="GetStarted">Join Us!</a>
-        </div>
-    </footer>
 
+    <div class="nav-container">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="LoginRoleSelection">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="GetStarted">
+                    <i class="fas fa-rocket"></i> Get Started
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Profile">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
 
-    @RenderSection("Scripts", required: false)
+<!-- Side Navigation (Hidden by default) -->
+<div class="sidenav" id="mySidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                <i class="fas fa-home"></i> Home
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="LoginRoleSelection">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="GetStarted">
+                <i class="fas fa-rocket"></i> Get Started
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Profile">
+                <i class="fas fa-user"></i> Profile
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="container main-content">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="border-top">
+    <div class="container">
+        © 2024 - 5 Bytes - <a asp-area="" asp-controller="Account" asp-action="GetStarted">Join Us!</a>
+    </div>
+</footer>
+
+<script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+        document.body.classList.add("sidenav-open");
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        document.body.classList.remove("sidenav-open");
+    }
+</script>
+<!-- These scripts must be after your body content or in your JS file -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/553d74237a.js" crossorigin="anonymous"></script>
+@RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -4,82 +4,57 @@
 }
 
 <style>
-    button {
-        align-items: center;
-        background-image: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
-        border: 0;
-        border-radius: 8px;
-        box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
-        box-sizing: border-box;
-        color: #ffffff;
-        display: flex;
-        font-size: 18px;
-        justify-content: center;
-        line-height: 1em;
-        max-width: 100%;
-        min-width: 140px;
-        padding: 3px;
+    :root {
+        --button-background-color: var(--surface0); /* Background color */
+        --button-text-color: var(--text); /* Text color */
+        --button-hover-background-color: var(--lavender); /* Background color on hover */
+        --button-hover-text-color: var(--nav-background-color); /* Text color on hover */
+    }
+
+    .btn-primary {
+        background-color: var(--button-background-color);
+        color: var(--button-text-color);
+        border: none;
+        border-radius: 24px; /* Consistent with navbar buttons */
+        padding: 0.5rem 1.5rem;
         text-decoration: none;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-        white-space: nowrap;
-        cursor: pointer;
-        transition: all 0.3s;
+        display: inline-flex; /* Align icon and text */
+        align-items: center; /* Vertically center */
+        justify-content: center; /* Horizontally center */
+        font-weight: 500;
+        transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+        margin: 0.5rem;
+        width: 200px; /* Set a fixed width for consistency */
     }
 
-        button:active,
-        button:hover {
-            outline: 0;
-        }
-
-        button span {
-            background-color: rgb(5, 6, 45);
-            padding: 1px 50px;
-            border-radius: 6px;
-            width: 100%;
-            height: 100%;
-            transition: 300ms;
-        }
-
-        button:hover span {
-            background: none;
-        }
-
-        button:active {
-            transform: scale(1);
-        }
-
-    .button-container {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
+    .btn-primary:hover {
+        background-color: var(--button-hover-background-color);
+        color: var(--button-hover-text-color);
     }
 
-    .admin-container {
+    .container {
         display: flex;
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
         gap: 20px;
+        margin-top: 3rem;
     }
 </style>
 
 <div class="container">
     <h1 style="text-align: center">How will you be joining us?</h1>
     <div class="button-container">
-        <button onclick="location.href='@Url.Action("RegisterLearner", "Account")'">
-            <span class="text">Learner</span>
-        </button>
-        <button onclick="location.href='@Url.Action("RegisterInstructor", "Account")'">
-            <span class="text">Instructor</span>
-        </button>
+        <a class="btn-primary" href="@Url.Action("RegisterLearner", "Account")">
+            Learner
+        </a>
+        <a class="btn-primary" href="@Url.Action("RegisterInstructor", "Account")">
+            Instructor
+        </a>
     </div>
-<br />
-    <div class="admin-container">
-        
-        <div class="button-container">
-            <button onclick="location.href='@Url.Action("RegisterAdmin", "Account")'">
-                <span class="text">Admin</span>
-            </button>
-        </div>
+    <div class="button-container">
+        <a class="btn-primary" href="@Url.Action("RegisterAdmin", "Account")">
+            Admin
+        </a>
     </div>
 </div>

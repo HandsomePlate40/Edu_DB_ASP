@@ -1,61 +1,127 @@
-﻿@{
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
     ViewData["Title"] = "Welcome to 5 Bytes";
 }
 
+<section class="hero">
+    <div class="hero-content text-center">
+        <h1 class="hero-title">Welcome to 5 Bytes!</h1>
+        <p class="hero-subtitle">Your gateway to a world of knowledge and learning.</p>
+        <a class="btn-primary" asp-controller="Course" asp-action="Course">Browse Courses</a>
+    </div>
+</section>
 
-<div class="jumbotron text-center" style="background-color: var(--mantle); color: var(--text); padding: 2rem; border-radius: 24px;">
-    <h1 class="display-4" style="font-size: 40px; text-align: center; color: var(--blue);">Welcome to 5 Bytes!</h1>
-    <p class="lead" style="text-align: center; color: var(--subtext0);">Your gateway to a world of knowledge and learning.</p>
-    <hr class="my-4" style="border-color: var(--overlay1);">
-    <p style="text-align: center; color: var(--subtext1);">Explore our wide range of courses and start your learning journey today.</p>
-    <a class="custom-button" asp-controller="Course" asp-action="Course" role="button">Browse Courses</a>
-</div>
-
-
-<style>
-    .custom-button {
-        display: inline-block;
-        padding: 10px 20px;
-        color: #ffffff;
-        background-color: #1e1e2e;
-        border: none;
-        border-radius: 8px;
-        text-decoration: none;
-        font-size: 18px;
-        transition: background-color 0.3s;
-    }
-
-    .custom-button:hover {
-        background-color: #4c366a;
-    }
-</style>
-
-
-<div class="container text-center">
-    <div class="row d-flex justify-content-center">
-        <div class="col-md-4 d-flex justify-content-center">
-            <div class="card mb-4 custom-shadow" style="background-color: var(--surface0); color: var(--text); border-radius: 24px;">
-                <div class="card-body text-center" style="padding: 2rem;">
-                    <h1 class="card-title" style="text-align: center; color: var(--green); font-size: 1.5rem; margin-left: -1200px">Interactive Learning</h1>
-                    <p class="card-text" style="color: var(--subtext0); font-size: 1.25rem; margin: 0;">Engage with interactive content and hands-on activities to enhance your learning experience.</p>
+<section class="features">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <i class="feature-icon fas fa-laptop-code" style="color: var(--green);"></i>
+                    <h2 class="feature-title">Interactive Learning</h2>
+                    <p class="feature-description">Engage with interactive content and hands-on activities.</p>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4 d-flex justify-content-center">
-            <div class="card mb-4 custom-shadow" style="background-color: var(--surface0); color: var(--text); border-radius: 24px;">
-                <div class="card-body text-center" style="padding: 2rem;">
-                    <h1 class="card-title" style="text-align: center; color: var(--yellow); font-size: 1.5rem; margin-left: -1200px">Expert Instructors</h1>
-                    <p class="card-text" style="color: var(--subtext0); font-size: 1.25rem; margin: 0;">Learn from industry experts and experienced educators who are passionate about teaching.</p>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <i class="feature-icon fas fa-chalkboard-teacher" style="color: var(--yellow);"></i>
+                    <h2 class="feature-title">Expert Instructors</h2>
+                    <p class="feature-description">Learn from industry experts and experienced educators.</p>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4 d-flex justify-content-center">
-            <div class="card mb-4 custom-shadow" style="background-color: var(--surface0); color: var(--text); border-radius: 24px;">
-                <div class="card-body text-center" style="padding: 2rem;">
-                    <h1 class="card-title" style="text-align: center; color: var(--peach); font-size: 1.5rem; margin-left: -1200px">Flexible Schedule</h1>
-                    <p class="card-text" style="color: var(--subtext0); font-size: 1.25rem; margin: 0;">Study at your own pace with flexible course schedules that fit your busy lifestyle.</p>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <i class="feature-icon far fa-calendar-alt" style="color: var(--peach);"></i>
+                    <h2 class="feature-title">Flexible Schedule</h2>
+                    <p class="feature-description">Study at your own pace with flexible course schedules.</p>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<style>
+    :root {
+        --background-color: #11111b; /* Catppuccin Mocha background */
+    }
+
+    body {
+        background-color: #11111B;
+        color: var(--text);
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .hero {
+        background: url("https://4kwallpapers.com/images/walls/thumbs_3t/19118.png") no-repeat center center; /* Replace 'your-image-file.jpg' with the actual file name */
+        background-size: cover;
+        padding: 4rem 2rem;
+        margin-bottom: 2rem;
+        color: #efdede;
+        border-radius: 24px;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #ffffff;
+    }
+
+    .hero-subtitle {
+        font-size: 1.5rem;
+        color: var(--flamingo);
+        margin-bottom: 2rem;
+    }
+
+    .btn-primary {
+        display: inline-block;
+        padding: 1rem 2rem;
+        background-color: var(--mauve);
+        color: var(--text);
+        border: none;
+        border-radius: 24px;
+        text-decoration: none;
+        font-size: 1.2rem;
+        transition: background-color 0.3s;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--maroon);
+        color: var(--text)
+    }
+
+    .features {
+        padding: 2rem 0;
+    }
+
+    .feature-card {
+        background-color: var(--surface0);
+        padding: 2rem;
+        margin-bottom: 1rem;
+        border-radius: 24px;
+        text-align: center;
+        transition: transform 0.3s;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: var(--sky);
+    }
+
+    .feature-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--text);
+    }
+
+    .feature-description {
+        font-size: 1.1rem;
+        color: var(--subtext0);
+    }
+</style>
