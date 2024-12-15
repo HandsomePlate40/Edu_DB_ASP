@@ -177,10 +177,15 @@
         footer a {
             color: var(--sky);
             text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 24px; /* Squircle effect */
+            transition: background-color 0.3s, color 0.3s;
         }
 
         footer a:hover {
-            text-decoration: underline;
+            background-color: var(--surface0);
+            color: var(--lavender);
+            text-decoration: none; /* Ensure no underline on hover */
         }
 
         .brand-openbtn-container {
