@@ -1,0 +1,171 @@
+@model Edu_DB_ASP.Models.Course
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<style>
+    :root {
+        --ctp-mocha-rosewater: #f5e0dc;
+        --ctp-mocha-flamingo: #f2cdcd;
+        --ctp-mocha-pink: #f5c2e7;
+        --ctp-mocha-mauve: #cba6f7;
+        --ctp-mocha-red: #f38ba8;
+        --ctp-mocha-maroon: #eba0ac;
+        --ctp-mocha-peach: #fab387;
+        --ctp-mocha-yellow: #f9e2af;
+        --ctp-mocha-green: #a6e3a1;
+        --ctp-mocha-teal: #94e2d5;
+        --ctp-mocha-sky: #89dceb;
+        --ctp-mocha-sapphire: #74c7ec;
+        --ctp-mocha-blue: #89b4fa;
+        --ctp-mocha-lavender: #b4befe;
+        --ctp-mocha-text: #cdd6f4;
+        --ctp-mocha-subtext1: #bac2de;
+        --ctp-mocha-subtext0: #a6adc8;
+        --ctp-mocha-overlay2: #9399b2;
+        --ctp-mocha-overlay1: #7f849c;
+        --ctp-mocha-overlay0: #6c7086;
+        --ctp-mocha-surface2: #585b70;
+        --ctp-mocha-surface1: #45475a;
+        --ctp-mocha-surface0: #313244;
+        --ctp-mocha-crust: #181825;
+        --ctp-mocha-mantle: #1e1e2e;
+        --ctp-mocha-base: #11111b;
+    }
+
+    body {
+        background-color: var(--ctp-mocha-base);
+        color: var(--ctp-mocha-text);
+        font-family: sans-serif;
+    }
+
+    h1, h4 {
+        color: var(--ctp-mocha-lavender);
+        text-align: center;
+    }
+
+    .form-container {
+        background-color: var(--ctp-mocha-surface0);
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        margin: 2rem auto;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .control-label {
+        color: var(--ctp-mocha-subtext0);
+        font-weight: 600;
+    }
+
+    .form-control {
+        background-color: var(--ctp-mocha-surface2);
+        color: var(--ctp-mocha-text);
+        border: 1px solid var(--ctp-mocha-overlay0);
+        border-radius: 5px;
+        padding: 0.5rem;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--ctp-mocha-blue);
+        box-shadow: 0 0 5px var(--ctp-mocha-blue);
+    }
+
+    .text-danger {
+        color: var(--ctp-mocha-red);
+    }
+
+    .btn-primary {
+        background-color: var(--ctp-mocha-blue);
+        color: var(--ctp-mocha-base);
+        border: none;
+        border-radius: 20px;
+        padding: 0.6rem 1.6rem;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background-color 0.3s, color 0.3s;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--ctp-mocha-lavender);
+        color: var(--ctp-mocha-base);
+    }
+
+    .back-to-list {
+        margin-top: 1rem;
+        text-align: center;
+    }
+
+    .back-to-list a {
+        color: var(--ctp-mocha-blue);
+        text-decoration: none;
+    }
+
+    .back-to-list a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<h1>Create</h1>
+
+<h4>Course</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <div class="form-container">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="CourseId" class="control-label"></label>
+                    <input asp-for="CourseId" class="form-control" />
+                    <span asp-validation-for="CourseId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CourseDescription" class="control-label"></label>
+                    <input asp-for="CourseDescription" class="form-control" />
+                    <span asp-validation-for="CourseDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DifficultyLevel" class="control-label"></label>
+                    <input asp-for="DifficultyLevel" class="form-control" />
+                    <span asp-validation-for="DifficultyLevel" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Prerequisites" class="control-label"></label>
+                    <input asp-for="Prerequisites" class="form-control" />
+                    <span asp-validation-for="Prerequisites" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CreditPoints" class="control-label"></label>
+                    <input asp-for="CreditPoints" class="form-control" />
+                    <span asp-validation-for="CreditPoints" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LearningObjectives" class="control-label"></label>
+                    <input asp-for="LearningObjectives" class="form-control" />
+                    <span asp-validation-for="LearningObjectives" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="back-to-list">
+    <a asp-action="Index">Back to List</a>
+</div>

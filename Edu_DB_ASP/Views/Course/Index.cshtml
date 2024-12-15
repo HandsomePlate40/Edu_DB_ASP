@@ -1,0 +1,190 @@
+@model IEnumerable<Edu_DB_ASP.Models.Course>
+
+@{
+    ViewData["Title"] = "Courses";
+}
+
+<style>
+    :root {
+        --ctp-mocha-rosewater: #f5e0dc;
+        --ctp-mocha-flamingo: #f2cdcd;
+        --ctp-mocha-pink: #f5c2e7;
+        --ctp-mocha-mauve: #cba6f7;
+        --ctp-mocha-red: #f38ba8;
+        --ctp-mocha-maroon: #eba0ac;
+        --ctp-mocha-peach: #fab387;
+        --ctp-mocha-yellow: #f9e2af;
+        --ctp-mocha-green: #a6e3a1;
+        --ctp-mocha-teal: #94e2d5;
+        --ctp-mocha-sky: #89dceb;
+        --ctp-mocha-sapphire: #74c7ec;
+        --ctp-mocha-blue: #89b4fa;
+        --ctp-mocha-lavender: #b4befe;
+        --ctp-mocha-text: #cdd6f4;
+        --ctp-mocha-subtext1: #bac2de;
+        --ctp-mocha-subtext0: #a6adc8;
+        --ctp-mocha-overlay2: #9399b2;
+        --ctp-mocha-overlay1: #7f849c;
+        --ctp-mocha-overlay0: #6c7086;
+        --ctp-mocha-surface2: #585b70;
+        --ctp-mocha-surface1: #45475a;
+        --ctp-mocha-surface0: #313244;
+        --ctp-mocha-crust: #181825;
+        --ctp-mocha-mantle: #1e1e2e;
+        --ctp-mocha-base: #11111b;
+    }
+
+    body {
+        background-color: var(--ctp-mocha-base);
+        color: var(--ctp-mocha-text);
+        font-family: sans-serif;
+    }
+
+    .table-container {
+        border-radius: 15px;
+        overflow: hidden;
+        margin: 2rem auto;
+        width: 95%; /* Adjust width as needed */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table-container table {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 0.75rem;
+        color: var(--ctp-mocha-subtext1);
+    }
+
+    thead th {
+        background-color: var(--ctp-mocha-crust);
+        color: var(--ctp-mocha-lavender);
+        font-weight: 600;
+        border-bottom: 2px solid var(--ctp-mocha-overlay0);
+    }
+
+    tbody td {
+        background-color: var(--ctp-mocha-surface0);
+        border-bottom: 1px solid var(--ctp-mocha-overlay0);
+    }
+
+    tbody tr:nth-child(even) td {
+        background-color: var(--ctp-mocha-surface1);
+    }
+
+    h1 {
+        margin-top: 2rem;
+        color: var(--ctp-mocha-lavender);
+        text-align: center;
+    }
+
+    /* Button Styles */
+    .btn {
+        background-color: var(--ctp-mocha-blue);
+        color: var(--ctp-mocha-base);
+        border: none;
+        border-radius: 20px;
+        padding: 0.6rem 1.6rem;
+        text-decoration: none;
+        display: inline-block;
+        font-weight: 500;
+        transition: background-color 0.3s, color 0.3s;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        margin-right: 0.5rem; /* Add spacing between buttons */
+    }
+
+    .btn:hover {
+        background-color: var(--ctp-mocha-lavender);
+        color: var(--ctp-mocha-base);
+    }
+
+    /* Link Styles within Buttons (for Edit, Details, Delete) */
+    .btn-link {
+        color: var(--ctp-mocha-base);
+        text-decoration: none; /* Remove underline from links */
+        display: block; /* Make the link fill the button */
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Style for "Create New" link */
+    .create-link {
+        display: block;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+</style>
+
+<h1>Check out our Courses!</h1>
+
+<p class="create-link">
+    <a asp-action="Create" class="btn">Create New</a>
+</p>
+
+<div class="table-container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DifficultyLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prerequisites)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreditPoints)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LearningObjectives)
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DifficultyLevel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Prerequisites)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreditPoints)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LearningObjectives)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CourseId" class="btn btn-link">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.CourseId" class="btn btn-link">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.CourseId" class="btn btn-link">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
