@@ -1,44 +1,44 @@
 ﻿@model IEnumerable<Edu_DB_ASP.Models.PersonalizationProfile>
 
 @{
-	ViewData["Title"] = "Personalization Profile";
+    ViewData["Title"] = "Personalization Profile";
 }
 
 <h1>Personalization Profile</h1>
 
 <p>
-	<a asp-action="Create">Create New</a>
+    <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
-	<thead>
-	<tr>
-		<th>@Html.DisplayNameFor(model => model.PersonalityType)</th>
-		<th>@Html.DisplayNameFor(model => model.EmotionalState)</th>
-		<th>@Html.DisplayNameFor(model => model.AccessibilityPreferences)</th>
-		<th>@Html.DisplayNameFor(model => model.PreferredContentTypes)</th>
-		<th>@Html.DisplayNameFor(model => model.Learner.LearnerId)</th>
-		<th>@Html.DisplayNameFor(model => model.Notification.NotificationId)</th>
-		<th>@Html.DisplayNameFor(model => model.Path.PathId)</th>
-		<th></th>
-	</tr>
-	</thead>
-	<tbody>
-	@foreach (var item in Model)
-	{
-		<tr>
-			<td>@Html.DisplayFor(modelItem => item.PersonalityType)</td>
-			<td>@Html.DisplayFor(modelItem => item.EmotionalState)</td>
-			<td>@Html.DisplayFor(modelItem => item.AccessibilityPreferences)</td>
-			<td>@Html.DisplayFor(modelItem => item.PreferredContentTypes)</td>
-			<td>@Html.DisplayFor(modelItem => item.Learner.LearnerId)</td>
-			<td>@Html.DisplayFor(modelItem => item.Notification.NotificationId)</td>
-			<td>@Html.DisplayFor(modelItem => item.Path.PathId)</td>
-			<td>
-				<a asp-action="Edit" asp-controller="PersonalizationProfiles" asp-route-id1="@item.CreationOrder" asp-route-id2="@item.LearnerId">Edit</a> |
-				<a asp-action="Details" asp-route-id="@item.LearnerId">Details</a> |
-				<a asp-action="Delete" asp-route-id="@item.LearnerId">Delete</a>
-			</td>
-		</tr>
-	}
-	</tbody>
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.PersonalityType)</th>
+            <th>@Html.DisplayNameFor(model => model.EmotionalState)</th>
+            <th>@Html.DisplayNameFor(model => model.AccessibilityPreferences)</th>
+            <th>@Html.DisplayNameFor(model => model.PreferredContentTypes)</th>
+            <th>@Html.DisplayNameFor(model => model.Learner.LearnerId)</th>
+            <th>@Html.DisplayNameFor(model => model.Notification.NotificationId)</th>
+            <th>@Html.DisplayNameFor(model => model.Path.PathId)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.PersonalityType)</td>
+                <td>@Html.DisplayFor(modelItem => item.EmotionalState)</td>
+                <td>@Html.DisplayFor(modelItem => item.AccessibilityPreferences)</td>
+                <td>@Html.DisplayFor(modelItem => item.PreferredContentTypes)</td>
+                <td>@Html.DisplayFor(modelItem => item.Learner.LearnerId)</td>
+                <td>@Html.DisplayFor(modelItem => item.Notification.NotificationId)</td>
+                <td>@Html.DisplayFor(modelItem => item.Path.PathId)</td>
+                <td>
+                    <a asp-action="Edit" asp-controller="PersonalizationProfiles" asp-route-id1="@item.CreationOrder" asp-route-id2="@item.LearnerId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.LearnerId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.LearnerId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>

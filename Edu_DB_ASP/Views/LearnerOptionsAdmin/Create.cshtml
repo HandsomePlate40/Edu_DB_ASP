@@ -67,13 +67,6 @@
                 <span asp-validation-for='Email' class='text-danger'></span>
             </div>
 
-            <!-- Optional: Profile Picture URL -->
-            <div class='form-group'>
-                <label asp-for='ProfilePictureUrl' class='form-label'></label>
-                <input asp-for='ProfilePictureUrl' type='url' placeholder='http://example.com/image.jpg' class='form-control form-input' />
-                <span asp-validation-for='ProfilePictureUrl' class='text-danger'></span>
-            </div>
-
             <!-- Submit Button -->
             <div class='text-center'>
                 <input type='submit' value='Create' class='btn btn-primary btn-lg' />
@@ -82,9 +75,9 @@
         </form>
     </div>
 
-    <!-- Back to List Link -->
-    <div style='margin-top: 20px;'>
-        <a href="@Url.Action("Index")">Back to List</a>
+    <div style='margin-top: 20px; text-align: center;'>
+        <!-- Changed to a button style -->
+        <a href="@Url.Action("Index")" class='btn btn-secondary btn-lg'>Back to List</a>
     </div>
 
 </div>
@@ -136,11 +129,11 @@
         font-size: 1em;
     }
 
-    .form-control.form-input:focus {
-        border-color: #88c0d0;
-        outline: none;
-        box-shadow: 0 0 5px rgba(136, 192, 208, 0.5);
-    }
+        .form-control.form-input:focus {
+            border-color: #88c0d0;
+            outline: none;
+            box-shadow: 0 0 5px rgba(136, 192, 208, 0.5);
+        }
 
     /* Validation Error Styling */
     .text-danger {
@@ -164,8 +157,7 @@
         transition: background-color 0.3s;
     }
 
-    .btn-lg:hover {
-        background-color: #5e81ac;
-    }
+        .btn-lg:hover {
+            background-color: #5e81ac;
+        }
 </style>
-
