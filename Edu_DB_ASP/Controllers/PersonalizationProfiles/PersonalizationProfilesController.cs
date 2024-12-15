@@ -115,63 +115,62 @@ namespace Edu_DB_ASP.Controllers.PersonalizationProfiles
             return View(personalizationProfile);
         }
 
-[HttpPost]
-[ValidateAntiForgeryToken]
-[Route("PersonalizationProfiles/Edit/{id1}/{id2}")]
-public async Task<IActionResult> Edit(int id1, int id2, [Bind("CreationOrder,PersonalityType,EmotionalState,AccessibilityPreferences,PreferredContentTypes")] PersonalizationProfile profile)
-{
-    if (id1 != profile.CreationOrder || id2 != profile.LearnerId)
-    {
-        return NotFound();
-    }
-
-    var email = HttpContext.Session.GetString("UserEmail");
-    if (email == null)
-    {
-        return RedirectToAction("LearnerLogin", "Account");
-    }
-
-    var learner = await _context.Learners.SingleOrDefaultAsync(u => u.Email == email);
-    if (learner == null)
-    {
-        return RedirectToAction("LearnerLogin", "Account");
-    }
-
-    if (ModelState.IsValid)
-    {
-        try
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("PersonalizationProfiles/Edit/{id1}/{id2}")]
+        public async Task<IActionResult> Edit(int id1, int id2, [Bind("CreationOrder,PersonalityType,EmotionalState,AccessibilityPreferences,PreferredContentTypes")] PersonalizationProfile profile)
         {
-            var learnerId = learner.LearnerId;
-            var profileId = profile.CreationOrder;
-            var preferredContentType = profile.PreferredContentTypes;
-            var emotionalState = profile.EmotionalState;
-            var personalityType = profile.PersonalityType;
+            if (id1 != profile.CreationOrder || id2 != profile.LearnerId) //ISSUE HERE
+            {
+                return NotFound();
+            }
 
-            await _context.Database.ExecuteSqlRawAsync(
-                "EXEC ProfileUpdate @LearnerID = {0}, @ProfileID = {1}, @PreferredContentType = {2}, @EmotionalState = {3}, @PersonalityType = {4}",
-                learnerId, profileId, preferredContentType, emotionalState, personalityType);
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (email == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
 
-            return RedirectToAction(nameof(Index));
+            var learner = await _context.Learners.SingleOrDefaultAsync(u => u.Email == email);
+            if (learner == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var learnerId = learner.LearnerId;
+                    var profileId = profile.CreationOrder;
+                    var preferredContentType = profile.PreferredContentTypes;
+                    var emotionalState = profile.EmotionalState;
+                    var personalityType = profile.PersonalityType;
+
+                    await _context.Database.ExecuteSqlRawAsync(
+                        "EXEC ProfileUpdate @LearnerID = {0}, @ProfileID = {1}, @PreferredContentType = {2}, @EmotionalState = {3}, @PersonalityType = {4}",
+                        learnerId, profileId, preferredContentType, emotionalState, personalityType);
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred while updating the profile: " + ex.Message);
+                }
+            }
+            else
+            {
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine("Model error: " + error.ErrorMessage);
+                }
+            }
+
+            ViewData["LearnerId"] = new SelectList(_context.Learners, "LearnerId", "LearnerId", profile.LearnerId);
+            return View(profile);
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine("An error occurred while updating the profile: " + ex.Message);
-           // ModelState.AddModelError(string.Empty, "An error occurred while updating the profile: " + ex.Message);
-        }
-    }
-    else
-    {
-        foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-        {
-            Console.WriteLine("Model error: " + error.ErrorMessage);
-            //ModelState.AddModelError(string.Empty, error.ErrorMessage);
-        }
-    }
-
-    ViewData["LearnerId"] = new SelectList(_context.Learners, "LearnerId", "LearnerId", profile.LearnerId);
-    return View(profile);
-}
-
+        
+        
         private bool PersonalizationProfileExists(int id)
         {
             return _context.PersonalizationProfiles.Any(e => e.CreationOrder == id);
