@@ -1,44 +1,122 @@
 ﻿@model CollaborativeQuestViewModel
 
 @{
-    Layout = null;
+    Layout = "_Layout";
+    ViewData["Title"] = "Add Collaborative Quest";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add Collaborative Quest</title>
-</head>
-<body>
-<div>
+<style>
+    :root {
+        --surface0: #f0f0f0; /* Example color */
+        --base: #ffffff; /* Example color */
+        --text: #000000; /* Example color */
+        --surface2: #cccccc; /* Example color */
+        --lavender: #e6e6fa; /* Example color */
+        --nav-background-color: #333333; /* Example color */
+    }
+
+    :root {
+        --form-background-color: var(--surface0); /* Background color for the form */
+        --input-background-color: var(--base); /* Background color for inputs */
+        --input-text-color: var(--text); /* Text color for inputs */
+        --input-border-color: var(--surface2); /* Border color for inputs */
+        --button-background-color: var(--surface0); /* Background color for buttons */
+        --button-text-color: var(--text); /* Text color for buttons */
+        --button-hover-background-color: var(--lavender); /* Background color for buttons on hover */
+        --button-hover-text-color: var(--nav-background-color); /* Text color for buttons on hover */
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        min-height: 100vh;
+        margin: 0;
+    }
+
+    .form-container {
+        background-color: var(--form-background-color);
+        border-radius: 25px; /* Squircle shape */
+        padding: 2rem;
+        width: 50%; /* Adjust width as needed */
+        margin: 2rem auto;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text); /* Use the appropriate text color */
+        font-weight: 500;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="datetime-local"] {
+        width: calc(100% - 1rem); /* Adjust width for padding */
+        padding: 0.5rem;
+        border: 1px solid var(--input-border-color);
+        border-radius: 8px;
+        background-color: var(--input-background-color);
+        color: var(--input-text-color);
+    }
+
+    .btn-primary {
+        background-color: var(--button-background-color);
+        color: var(--button-text-color);
+        border: none;
+        border-radius: 24px;
+        padding: 0.5rem 1.5rem;
+        text-decoration: none;
+        display: inline-block;
+        font-weight: 500;
+        transition: background-color 0.3s, color 0.3s;
+        margin-top: 1rem;
+        cursor: pointer;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--button-hover-background-color);
+        color: var(--button-hover-text-color);
+    }
+
+    h2 {
+        color: var(--text);
+        margin-bottom: 1rem;
+    }
+</style>
+
+<div class="form-container">
     <h2>Add Collaborative Quest</h2>
     <form asp-action="AddCollabQuest" method="post">
-        <div>
+        <div class="form-group">
             <label for="Title">Title</label>
             <input type="text" id="Title" name="Title" required />
         </div>
-        <div>
+        <div class="form-group">
             <label for="Description">Description</label>
             <input type="text" id="Description" name="Description" required />
         </div>
-        <div>
+        <div class="form-group">
             <label for="DifficultyLevel">Difficulty Level</label>
             <input type="text" id="DifficultyLevel" name="DifficultyLevel" required />
         </div>
-        <div>
+        <div class="form-group">
             <label for="Criteria">Criteria</label>
             <input type="text" id="Criteria" name="Criteria" required />
         </div>
-        <div>
+        <div class="form-group">
             <label for="MaxParticipants">Max Number of Participants</label>
             <input type="number" id="MaxParticipants" name="MaxParticipants" required />
         </div>
-        <div>
+        <div class="form-group">
             <label for="Deadline">Deadline</label>
             <input type="datetime-local" id="Deadline" name="Deadline" required />
         </div>
-        <button type="submit">Add Quest</button>
+        <button type="submit" class="btn-primary">Add Quest</button>
     </form>
 </div>
-</body>
-</html>

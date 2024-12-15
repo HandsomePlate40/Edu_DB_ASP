@@ -4,31 +4,139 @@
     ViewData["Title"] = "Available Collaborative Quests";
 }
 
+<style>
+    :root {
+        --ctp-mocha-rosewater: #f5e0dc;
+        --ctp-mocha-flamingo: #f2cdcd;
+        --ctp-mocha-pink: #f5c2e7;
+        --ctp-mocha-mauve: #cba6f7;
+        --ctp-mocha-red: #f38ba8;
+        --ctp-mocha-maroon: #eba0ac;
+        --ctp-mocha-peach: #fab387;
+        --ctp-mocha-yellow: #f9e2af;
+        --ctp-mocha-green: #a6e3a1;
+        --ctp-mocha-teal: #94e2d5;
+        --ctp-mocha-sky: #89dceb;
+        --ctp-mocha-sapphire: #74c7ec;
+        --ctp-mocha-blue: #89b4fa;
+        --ctp-mocha-lavender: #b4befe;
+        --ctp-mocha-text: #cdd6f4;
+        --ctp-mocha-subtext1: #bac2de;
+        --ctp-mocha-subtext0: #a6adc8;
+        --ctp-mocha-overlay2: #9399b2;
+        --ctp-mocha-overlay1: #7f849c;
+        --ctp-mocha-overlay0: #6c7086;
+        --ctp-mocha-surface2: #585b70;
+        --ctp-mocha-surface1: #45475a;
+        --ctp-mocha-surface0: #313244;
+        --ctp-mocha-crust: #181825;
+        --ctp-mocha-mantle: #1e1e2e;
+        --ctp-mocha-base: #11111b;
+    }
+
+    body {
+        background-color: var(--ctp-mocha-base);
+        color: var(--ctp-mocha-text);
+        font-family: sans-serif; /* More readable font */
+    }
+
+    .table-container {
+        border-radius: 15px;
+        overflow: hidden; /* Ensures rounded corners are applied */
+        margin: 2rem auto;
+        width: 80%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    /* Apply rounded corners to the table */
+    .table-container table {
+        border-radius: 15px;
+        overflow: hidden; /* Clip content to rounded corners */
+    }
+
+    th, td {
+        text-align: left;
+        padding: 0.75rem;
+        color: var(--ctp-mocha-subtext1); /* Lighter text for contrast */
+    }
+
+    /* Style for the table header */
+    thead th {
+        background-color: var(--ctp-mocha-crust); /* Darker header */
+        color: var(--ctp-mocha-lavender);
+        font-weight: 600;
+        border-bottom: 2px solid var(--ctp-mocha-overlay0); /* Subtle border */
+    }
+
+    /* Style for table rows */
+    tbody td {
+        background-color: var(--ctp-mocha-surface0);
+        border-bottom: 1px solid var(--ctp-mocha-overlay0); /* Row separator */
+    }
+
+    /* Alternate row background for better readability */
+    tbody tr:nth-child(even) td {
+        background-color: var(--ctp-mocha-surface1);
+    }
+
+    .btn-primary {
+        background-color: var(--ctp-mocha-blue);
+        color: var(--ctp-mocha-base);
+        border: none;
+        border-radius: 20px;
+        padding: 0.6rem 1.6rem;
+        text-decoration: none;
+        display: inline-block;
+        font-weight: 500;
+        transition: background-color 0.3s, color 0.3s;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--ctp-mocha-lavender);
+        color: var(--ctp-mocha-base);
+    }
+
+    h2 {
+        margin-top: 2rem;
+        color: var(--ctp-mocha-lavender);
+        text-align: center;
+    }
+</style>
+
 <h2>Available Collaborative Quests</h2>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Quest Title</th>
-        <th>Description</th>
-        <th>Max Participants</th>
-        <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var quest in Model)
-    {
+<div class="table-container">
+    <table>
+        <thead>
         <tr>
-            <td>@quest.Quest.Title</td>
-            <td>@quest.Quest.QuestDescription</td>
-            <td>@quest.MaxParticipants</td>
-            <td>
-                <form asp-action="JoinQuest" method="post">
-                    <input type="hidden" name="questId" value="@quest.QuestId" />
-                    <button type="submit" class="btn btn-primary">Join</button>
-                </form>
-            </td>
+            <th>Quest Title</th>
+            <th>Description</th>
+            <th>Max Participants</th>
+            <th>Action</th>
         </tr>
-    }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (var quest in Model)
+        {
+            <tr>
+                <td>@quest.Quest.Title</td>
+                <td>@quest.Quest.QuestDescription</td>
+                <td>@quest.MaxParticipants</td>
+                <td>
+                    <form asp-action="JoinQuest" method="post">
+                        <input type="hidden" name="questId" value="@quest.QuestId" />
+                        <button type="submit" class="btn-primary">Join</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
