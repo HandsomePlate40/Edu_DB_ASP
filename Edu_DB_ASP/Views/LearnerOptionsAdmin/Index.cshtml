@@ -24,84 +24,31 @@
             <th>
                 @Html.DisplayNameFor(model => model.CountryOfOrigin)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CulturalBackground)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PersonalityTraits)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmotionalProfile)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhysicalHealth)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MentalHealth)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ExperienceLevel)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PasswordHash)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProfilePictureUrl)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Gender)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CountryOfOrigin)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CulturalBackground)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PersonalityTraits)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmotionalProfile)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhysicalHealth)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MentalHealth)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExperienceLevel)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PasswordHash)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProfilePictureUrl)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.LearnerId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.LearnerId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.LearnerId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gender)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CountryOfOrigin)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.LearnerId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.LearnerId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.LearnerId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
