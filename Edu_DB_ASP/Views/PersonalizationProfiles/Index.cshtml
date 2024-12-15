@@ -34,9 +34,9 @@
 			<td>@Html.DisplayFor(modelItem => item.Notification.NotificationId)</td>
 			<td>@Html.DisplayFor(modelItem => item.Path.PathId)</td>
 			<td>
-				<a asp-action="Edit" asp-route-id="@item.CreationOrder">Edit</a> |
-				<a asp-action="Details" asp-route-id="@item.CreationOrder">Details</a> |
-				<a asp-action="Delete" asp-route-id="@item.CreationOrder">Delete</a>
+				<a asp-action="Edit" asp-controller="PersonalizationProfiles" asp-route-id1="@item.CreationOrder" asp-route-id2="@item.LearnerId">Edit</a> |
+				<a asp-action="Details" asp-route-id="@item.LearnerId">Details</a> |
+				<a asp-action="Delete" asp-route-id="@item.LearnerId">Delete</a>
 			</td>
 		</tr>
 	}

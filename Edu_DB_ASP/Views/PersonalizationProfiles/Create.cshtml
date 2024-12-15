@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="LearnerId" class="control-label"></label>
-                <select asp-for="LearnerId" class ="form-control" asp-items="ViewBag.LearnerId"></select>
+                <select asp-for="LearnerId" class="form-control" asp-items="ViewBag.LearnerId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="PersonalityType" class="control-label"></label>
@@ -37,14 +37,6 @@
                 <span asp-validation-for="PreferredContentTypes" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NotificationId" class="control-label"></label>
-                <select asp-for="NotificationId" class ="form-control" asp-items="ViewBag.NotificationId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="PathId" class="control-label"></label>
-                <select asp-for="PathId" class ="form-control" asp-items="ViewBag.PathId"></select>
-            </div>
-            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -54,4 +46,3 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
