@@ -1018,16 +1018,20 @@ public partial class EduDbContext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.Learner).WithMany(p => p.PersonalizationProfiles)
+            entity.HasOne(d => d.Learner)
+                .WithMany(p => p.PersonalizationProfiles)
                 .HasForeignKey(d => d.LearnerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
+                
                 .HasConstraintName("FK__Personali__Learn__48CFD27E");
 
-            entity.HasOne(d => d.Notification).WithMany(p => p.PersonalizationProfiles)
+            entity.HasOne(d => d.Notification)
+                .WithMany(p => p.PersonalizationProfiles)
                 .HasForeignKey(d => d.NotificationId)
                 .HasConstraintName("FK__Personali__Notif__49C3F6B7");
 
-            entity.HasOne(d => d.Path).WithMany(p => p.PersonalizationProfiles)
+            entity.HasOne(d => d.Path)
+                .WithMany(p => p.PersonalizationProfiles)
                 .HasForeignKey(d => d.PathId)
                 .HasConstraintName("FK__Personali__PathI__4AB81AF0");
         });
