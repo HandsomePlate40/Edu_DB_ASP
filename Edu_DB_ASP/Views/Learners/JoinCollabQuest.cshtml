@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Available Collaborative Quests";
+    var errorMessage = TempData["ErrorMessage"] as string;
 }
 
 <style>
@@ -37,12 +38,12 @@
     body {
         background-color: var(--ctp-mocha-base);
         color: var(--ctp-mocha-text);
-        font-family: sans-serif; /* More readable font */
+        font-family: sans-serif;
     }
 
     .table-container {
         border-radius: 15px;
-        overflow: hidden; /* Ensures rounded corners are applied */
+        overflow: hidden;
         margin: 2rem auto;
         width: 80%;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -53,33 +54,29 @@
         border-collapse: collapse;
     }
 
-    /* Apply rounded corners to the table */
     .table-container table {
         border-radius: 15px;
-        overflow: hidden; /* Clip content to rounded corners */
+        overflow: hidden;
     }
 
     th, td {
         text-align: left;
         padding: 0.75rem;
-        color: var(--ctp-mocha-subtext1); /* Lighter text for contrast */
+        color: var(--ctp-mocha-subtext1);
     }
 
-    /* Style for the table header */
     thead th {
-        background-color: var(--ctp-mocha-crust); /* Darker header */
+        background-color: var(--ctp-mocha-crust);
         color: var(--ctp-mocha-lavender);
         font-weight: 600;
-        border-bottom: 2px solid var(--ctp-mocha-overlay0); /* Subtle border */
+        border-bottom: 2px solid var(--ctp-mocha-overlay0);
     }
 
-    /* Style for table rows */
     tbody td {
         background-color: var(--ctp-mocha-surface0);
-        border-bottom: 1px solid var(--ctp-mocha-overlay0); /* Row separator */
+        border-bottom: 1px solid var(--ctp-mocha-overlay0);
     }
 
-    /* Alternate row background for better readability */
     tbody tr:nth-child(even) td {
         background-color: var(--ctp-mocha-surface1);
     }
@@ -140,3 +137,12 @@
         </tbody>
     </table>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var errorMessage = '@errorMessage';
+        if (errorMessage) {
+            alert(errorMessage);
+        }
+    });
+</script>

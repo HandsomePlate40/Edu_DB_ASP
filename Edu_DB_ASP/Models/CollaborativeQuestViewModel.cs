@@ -6,4 +6,5 @@
     public string Criteria { get; set; }
     public int MaxParticipants { get; set; }
     public DateTime Deadline { get; set; }
+    
 }

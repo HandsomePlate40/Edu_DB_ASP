@@ -182,15 +182,25 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
 
             var learnerId = learner.LearnerId;
 
-            var sql = "EXEC JoinQuest @LearnerID, @QuestID";
+            var messageParam = new SqlParameter
+            {
+                ParameterName = "@Message",
+                SqlDbType = System.Data.SqlDbType.NVarChar,
+                Size = 100,
+                Direction = System.Data.ParameterDirection.Output
+            };
+
+            var sql = "EXEC JoinQuest @LearnerID, @QuestID, @Message OUTPUT";
             var parameters = new[]
             {
                 new SqlParameter("@LearnerID", learnerId),
-                new SqlParameter("@QuestID", questId)
+                new SqlParameter("@QuestID", questId),
+                messageParam
             };
 
             await _context.Database.ExecuteSqlRawAsync(sql, parameters);
 
+            TempData["ErrorMessage"] = messageParam.Value.ToString();
             return RedirectToAction("JoinCollabQuest");
         }
     
