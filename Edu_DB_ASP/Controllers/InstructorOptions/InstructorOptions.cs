@@ -54,5 +54,51 @@ namespace Edu_DB_ASP.Controllers.InstructorOptions
 
             return View(model);
         }
+        
+        [HttpGet]
+        public IActionResult AddDiscussion()
+        {
+            if (HttpContext.Session.GetString("UserRole") != "Instructor")
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+            return View();
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> AddDiscussion(int moduleId, int courseId, string title, string description)
+        {
+            if (HttpContext.Session.GetString("UserRole") != "Instructor")
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            string confirmationMessage = string.Empty;
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var command = new SqlCommand("CreateDiscussion", connection)
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                };
+                command.Parameters.AddWithValue("@ModuleID", moduleId);
+                command.Parameters.AddWithValue("@CourseID", courseId);
+                command.Parameters.AddWithValue("@Title", title);
+                command.Parameters.AddWithValue("@Description", description);
+
+                var outputParam = new SqlParameter("@ConfirmationMessage", System.Data.SqlDbType.VarChar, 100)
+                {
+                    Direction = System.Data.ParameterDirection.Output
+                };
+                command.Parameters.Add(outputParam);
+
+                connection.Open();
+                await command.ExecuteNonQueryAsync();
+                confirmationMessage = outputParam.Value.ToString();
+            }
+
+            ViewBag.ConfirmationMessage = confirmationMessage;
+            return View();
+        }
     }
 }

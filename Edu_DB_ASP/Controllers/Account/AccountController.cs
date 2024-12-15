@@ -2,6 +2,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 
 namespace Edu_DB_ASP.Controllers.Account
 {
@@ -160,6 +161,7 @@ namespace Edu_DB_ASP.Controllers.Account
         }
 
         [HttpGet]
+        [HttpGet]
         public IActionResult LearnerProfile()
         {
             var email = HttpContext.Session.GetString("UserEmail");
@@ -174,9 +176,20 @@ namespace Edu_DB_ASP.Controllers.Account
                 return RedirectToAction("LearnerLogin");
             }
 
-            return View(learner);
+            var enrolledCourses = _context.EnrolledCourseViewModels
+                .FromSqlRaw("EXEC EnrolledCourses @LearnerID = {0}", learner.LearnerId)
+                .ToList();
+
+            var viewModel = new LearnerProfileViewModel
+            {
+                Learner = learner,
+                EnrolledCourses = enrolledCourses
+            };
+
+            return View(viewModel);
         }
 
+        [HttpPost]
         [HttpPost]
         public async Task<IActionResult> UploadProfilePicture(IFormFile profilePicture)
         {
@@ -210,20 +223,23 @@ namespace Edu_DB_ASP.Controllers.Account
                     }
 
                     learner.ProfilePictureUrl = $"/images/{profilePicture.FileName}";
-                    // If learner is already tracked, no need to explicitly call Update
                     _context.Learners.Update(learner);
                     await _context.SaveChangesAsync();
 
                     return RedirectToAction("LearnerProfile");
                 }
 
-                // If no file selected
                 ViewBag.ErrorMessage = "No profile picture was selected. Please choose a file and try again.";
                 var noEmail = HttpContext.Session.GetString("UserEmail");
                 if (noEmail != null)
                 {
                     var noPicLearner = _context.Learners.SingleOrDefault(u => u.Email == noEmail);
-                    return View("LearnerProfile", noPicLearner);
+                    var viewModel = new LearnerProfileViewModel
+                    {
+                        Learner = noPicLearner,
+                        EnrolledCourses = new List<EnrolledCourseViewModel>()
+                    };
+                    return View("LearnerProfile", viewModel);
                 }
                 else
                 {
@@ -232,20 +248,25 @@ namespace Edu_DB_ASP.Controllers.Account
             }
             catch (Exception ex)
             {
-                // If there is an error, pass it to the view
                 ViewBag.ErrorMessage = $"An error occurred while uploading the profile picture: {ex.Message}";
 
                 var email = HttpContext.Session.GetString("UserEmail");
                 if (email != null)
                 {
                     var learner = _context.Learners.SingleOrDefault(u => u.Email == email);
-                    return View("LearnerProfile", learner);
+                    var viewModel = new LearnerProfileViewModel
+                    {
+                        Learner = learner,
+                        EnrolledCourses = new List<EnrolledCourseViewModel>()
+                    };
+                    return View("LearnerProfile", viewModel);
                 }
                 else
                 {
                     return RedirectToAction("LearnerLogin");
                 }
             }
+
         }
 
         [HttpGet]

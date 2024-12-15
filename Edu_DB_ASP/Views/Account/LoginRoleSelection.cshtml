@@ -5,31 +5,61 @@
 
 <style>
     :root {
-        --button-background-color: #313244; /* surface0 */
-        --button-text-color: #D9E0EE; /* text */
-        --button-hover-background-color: #B4BEFE; /* lavender */
-        --button-hover-text-color: #11111B; /* base */
+        --ctp-mocha-rosewater: #f5e0dc;
+        --ctp-mocha-flamingo: #f2cdcd;
+        --ctp-mocha-pink: #f5c2e7;
+        --ctp-mocha-mauve: #cba6f7;
+        --ctp-mocha-red: #f38ba8;
+        --ctp-mocha-maroon: #eba0ac;
+        --ctp-mocha-peach: #fab387;
+        --ctp-mocha-yellow: #f9e2af;
+        --ctp-mocha-green: #a6e3a1;
+        --ctp-mocha-teal: #94e2d5;
+        --ctp-mocha-sky: #89dceb;
+        --ctp-mocha-sapphire: #74c7ec;
+        --ctp-mocha-blue: #89b4fa;
+        --ctp-mocha-lavender: #b4befe;
+        --ctp-mocha-text: #cdd6f4;
+        --ctp-mocha-subtext1: #bac2de;
+        --ctp-mocha-subtext0: #a6adc8;
+        --ctp-mocha-overlay2: #9399b2;
+        --ctp-mocha-overlay1: #7f849c;
+        --ctp-mocha-overlay0: #6c7086;
+        --ctp-mocha-surface2: #585b70;
+        --ctp-mocha-surface1: #45475a;
+        --ctp-mocha-surface0: #313244;
+        --ctp-mocha-crust: #181825;
+        --ctp-mocha-mantle: #1e1e2e;
+        --ctp-mocha-base: #11111b;
+    }
+
+    body {
+        background-color: var(--ctp-mocha-base);
+        color: var(--ctp-mocha-text);
+        font-family: sans-serif;
     }
 
     .btn-primary {
-        background-color: var(--button-background-color);
-        color: var(--button-text-color);
+        background-color: var(--ctp-mocha-blue);
+        color: var(--ctp-mocha-base);
         border: none;
-        border-radius: 24px; /* Consistent with navbar buttons */
-        padding: 0.5rem 1.5rem;
+        border-radius: 25px;
+        padding: 0.75rem 2rem; /* Increase padding */
         text-decoration: none;
-        display: inline-flex; /* Align icon and text */
-        align-items: center; /* Vertically center */
-        justify-content: center; /* Horizontally center */
-        font-weight: 500;
-        transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600; /* Make font bolder */
+        font-size: 1.1rem; /* Increase font size */
+        transition: background-color 0.3s, color 0.3s;
         margin: 0.5rem;
-        width: 200px; /* Set a fixed width for consistency */
+        width: 220px; /* Increase button width */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
     .btn-primary:hover {
-        background-color: var(--button-hover-background-color);
-        color: var(--button-hover-text-color);
+        background-color: var(--ctp-mocha-lavender);
+        color: var(--ctp-mocha-base);
     }
 
     .container {
@@ -39,6 +69,12 @@
         justify-content: center;
         gap: 20px;
         margin-top: 3rem;
+    }
+
+    h1 {
+        color: var(--ctp-mocha-lavender);
+        font-size: 2rem; /* Increase heading size */
+        margin-bottom: 2rem;
     }
 </style>
 

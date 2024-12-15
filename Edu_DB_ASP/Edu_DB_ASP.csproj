@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="Controllers\Course\" />
+    <Folder Include="Controllers\ModuleController\" />
     <Folder Include="Migrations\" />
     <Folder Include="Models\Account\" />
   </ItemGroup>

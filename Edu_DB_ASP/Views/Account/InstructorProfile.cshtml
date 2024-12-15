@@ -164,6 +164,27 @@
         .table-section {
             margin-bottom: 3rem;
         }
+
+        .back-to-index {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .back-to-index button {
+            background-color: #313244; /* surface0 */
+            color: #D9E0EE; /* text */
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .back-to-index button:hover {
+            background-color: #45475A; /* surface1 */
+        }
     </style>
 </head>
 <body>
@@ -198,6 +219,13 @@
     <div class="back-to-index">
         <a asp-action="AddCollabQuest" asp-controller="InstructorOptions">
             <button>Go to Your Options</button>
+        </a>
+    </div>
+
+    <!-- Back to Index Button -->
+    <div class="back-to-index">
+        <a asp-action="AddDiscussion" asp-controller="InstructorOptions">
+            <button>Add a discussion</button>
         </a>
     </div>
 

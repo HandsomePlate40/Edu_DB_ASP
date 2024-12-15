@@ -93,7 +93,7 @@ public partial class EduDbContext : DbContext
 
     public virtual DbSet<Admin> Admins { get; set; } 
 
-    
+    public DbSet<EnrolledCourseViewModel> EnrolledCourseViewModels { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -101,6 +101,8 @@ public partial class EduDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<EnrolledCourseViewModel>().HasNoKey();
+        
         modelBuilder.Entity<Achievement>(entity =>
         {
             entity.HasKey(e => e.AchievementId).HasName("PK__Achievem__276330E0200B5C44");

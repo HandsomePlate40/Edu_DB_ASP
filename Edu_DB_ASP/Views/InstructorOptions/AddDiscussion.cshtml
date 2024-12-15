@@ -1,0 +1,188 @@
+﻿@model Edu_DB_ASP.Models.DiscussionForum
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Discussion</title>
+    <style>
+        :root {
+            --ctp-mocha-rosewater: #f5e0dc;
+            --ctp-mocha-flamingo: #f2cdcd;
+            --ctp-mocha-pink: #f5c2e7;
+            --ctp-mocha-mauve: #cba6f7;
+            --ctp-mocha-red: #f38ba8;
+            --ctp-mocha-maroon: #eba0ac;
+            --ctp-mocha-peach: #fab387;
+            --ctp-mocha-yellow: #f9e2af;
+            --ctp-mocha-green: #a6e3a1;
+            --ctp-mocha-teal: #94e2d5;
+            --ctp-mocha-sky: #89dceb;
+            --ctp-mocha-sapphire: #74c7ec;
+            --ctp-mocha-blue: #89b4fa;
+            --ctp-mocha-lavender: #b4befe;
+            --ctp-mocha-text: #cdd6f4;
+            --ctp-mocha-subtext1: #bac2de;
+            --ctp-mocha-subtext0: #a6adc8;
+            --ctp-mocha-overlay2: #9399b2;
+            --ctp-mocha-overlay1: #7f849c;
+            --ctp-mocha-overlay0: #6c7086;
+            --ctp-mocha-surface2: #585b70;
+            --ctp-mocha-surface1: #45475a;
+            --ctp-mocha-surface0: #313244;
+            --ctp-mocha-crust: #181825;
+            --ctp-mocha-mantle: #1e1e2e;
+            --ctp-mocha-base: #11111b;
+        }
+
+        body {
+            background-color: var(--ctp-mocha-base);
+            color: var(--ctp-mocha-text);
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background-color: var(--ctp-mocha-surface0);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 400px; /* Adjust width as needed */
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            color: var(--ctp-mocha-subtext0);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        textarea {
+            background-color: var(--ctp-mocha-surface2);
+            color: var(--ctp-mocha-text);
+            border: 1px solid var(--ctp-mocha-overlay0);
+            border-radius: 5px;
+            padding: 0.5rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--ctp-mocha-blue);
+            box-shadow: 0 0 5px var(--ctp-mocha-blue);
+        }
+
+        .btn {
+            background-color: var(--ctp-mocha-blue);
+            color: var(--ctp-mocha-base);
+            border: none;
+            border-radius: 25px;
+            padding: 0.75rem 2rem;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: background-color 0.3s, color 0.3s;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin-top: 1rem; /* Add margin-top for spacing */
+        }
+
+        .btn-primary {
+            /* ... existing styles ... */
+        }
+
+        .btn-primary:hover {
+            background-color: var(--ctp-mocha-lavender);
+            color: var(--ctp-mocha-base);
+        }
+
+        .btn-secondary {
+            background-color: var(--ctp-mocha-green);
+            margin-top: 1rem; /* Add margin-top for spacing */
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--ctp-mocha-teal);
+            color: var(--ctp-mocha-base);
+        }
+
+        .confirmation-message {
+            margin-top: 1.5rem;
+            color: var(--ctp-mocha-green);
+        }
+        .back-to-index button {
+            background-color: #313244; /* surface0 */
+            color: #D9E0EE; /* text */
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .back-to-index button:hover {
+            background-color: #45475A; /* surface1 */
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <form asp-action="AddDiscussion" method="post">
+        <div class="form-group">
+            <label for="moduleId">Module ID:</label>
+            <input type="number" id="moduleId" name="moduleId" required />
+        </div>
+        <div class="form-group">
+            <label for="courseId">Course ID:</label>
+            <input type="number" id="courseId" name="courseId" required />
+        </div>
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required />
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Discussion</button>
+    </form>
+
+    <div class="back-to-index">
+        <a asp-action="InstructorProfile" asp-controller="Account">
+            <button>Go back</button>
+        </a>
+    </div>
+
+    @if (ViewBag.ConfirmationMessage != null)
+    {
+        <div class="confirmation-message">
+            <p>@ViewBag.ConfirmationMessage</p>
+        </div>
+    }
+</div>
+</body>
+</html>

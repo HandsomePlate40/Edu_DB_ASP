@@ -1,4 +1,4 @@
-﻿@model Edu_DB_ASP.Models.Learner
+﻿@model LearnerProfileViewModel
 
 <!DOCTYPE html>
 <html lang="en">
@@ -188,132 +188,81 @@
     </style>
 </head>
 <body>
-
-    <!-- Profile Header Section -->
-    <div class="profile-container">
-        <!-- Profile Image and Upload Functionality -->
-        <div class="profile-pic-form">
-            <div class="profile-image">
-                <img src="@Model.ProfilePictureUrl" alt="User Profile Picture" id="profileImg" />
-
-                <label class="profile-upload-label">
-                    Change Profile Picture
-                    <input type="file" id="profilePicture" name="profilePicture" accept="image/*" onchange="uploadProfilePicture()" />
-                </label>
-            </div>
-        </div>
-
-        <div class="profile-info">
-            <h1>@Model.FirstName @Model.LastName</h1>
-            <p>@Model.Email</p>
-            <p>Followers: 3 | Following: 2</p>
+<!-- Profile Header Section -->
+<div class="profile-container">
+    <!-- Profile Image and Upload Functionality -->
+    <div class="profile-pic-form">
+        <div class="profile-image">
+            <img src="@Model.Learner.ProfilePictureUrl" alt="User Profile Picture" id="profileImg" />
+            <label class="profile-upload-label">
+                Change Profile Picture
+                <input type="file" id="profilePicture" name="profilePicture" accept="image/*" onchange="uploadProfilePicture()" />
+            </label>
         </div>
     </div>
 
-    <!-- Hidden Form to Submit Uploaded File -->
-    <form id="uploadForm" asp-action="UploadProfilePicture" method="post" enctype="multipart/form-data" style="display:none;">
-        <input type="file" id="hiddenProfilePicture" name="profilePicture" />
-    </form>
-
-    <div class="section-container">
-        <!-- Enrolled Courses Table -->
-        <div class="table-section">
-            <h2>Enrolled Courses</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Course Title</th>
-                        <th>Instructor</th>
-                        <th>Start Date</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Course entries -->
-                    <tr>
-                        <td>Database Systems</td>
-                        <td>Dr. Maria Schneider</td>
-                        <td>2024-02-15</td>
-                        <td><span class="tag active">Active</span></td>
-                    </tr>
-                    <tr>
-                        <td>Web Development with ASP.NET</td>
-                        <td>Prof. Ahmed Hussein</td>
-                        <td>2024-03-01</td>
-                        <td><span class="tag active">Active</span></td>
-                    </tr>
-                    <tr>
-                        <td>Operating Systems Fundamentals</td>
-                        <td>Dr. Karl Mueller</td>
-                        <td>2024-01-10</td>
-                        <td><span class="tag archived">Completed</span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Discussion Forums Table -->
-        <div class="table-section">
-            <h2>Discussion Forums</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Topic</th>
-                        <th>Last Post By</th>
-                        <th>Last Activity</th>
-                        <th>Replies</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Forum entries -->
-                    <tr>
-                        <td>Normalization Questions</td>
-                        <td>JaneDoe123</td>
-                        <td>2024-12-13</td>
-                        <td>15</td>
-                    </tr>
-                    <tr>
-                        <td>Help with ASP.NET Routing</td>
-                        <td>OSDevGuy</td>
-                        <td>2024-12-10</td>
-                        <td>8</td>
-                    </tr>
-                    <tr>
-                        <td>Thread Scheduling Examples</td>
-                        <td>@Model.FirstName @Model.LastName</td>
-                        <td>2024-12-09</td>
-                        <td>4</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="profile-info">
+        <h1>@Model.Learner.FirstName @Model.Learner.LastName</h1>
+        <p>@Model.Learner.Email</p>
+        <p>Followers: 3 | Following: 2</p>
     </div>
+</div>
 
-    <!-- Back to Index Button -->
-    <div class="back-to-index">
-        <a asp-action="Index" asp-controller="Learners">
-            <button>Back to Learners Index</button>
-        </a>
+<!-- Hidden Form to Submit Uploaded File -->
+<form id="uploadForm" asp-action="UploadProfilePicture" method="post" enctype="multipart/form-data" style="display:none;">
+    <input type="file" id="hiddenProfilePicture" name="profilePicture" />
+</form>
+
+<div class="section-container">
+    <!-- Enrolled Courses Table -->
+    <div class="table-section">
+        <h2>Enrolled Courses</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Course Title</th>
+                <th>Description</th>
+                <th>Difficulty Level</th>
+                <th>Credit Points</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var course in Model.EnrolledCourses)
+            {
+                <tr>
+                    <td>@course.Title</td>
+                    <td>@course.CourseDescription</td>
+                    <td>@course.DifficultyLevel</td>
+                    <td>@course.CreditPoints</td>
+                </tr>
+            }
+            </tbody>
+        </table>
     </div>
+</div>
 
-    <!-- Back to Index Button -->
-    <div class="back-to-index">
-        <a asp-action="JoinCollabQuest" asp-controller="Learners">
-            <button>Check available Quests!</button>
-        </a>
-    </div>
+<!-- Back to Index Button -->
+<div class="back-to-index">
+    <a asp-action="Index" asp-controller="Learners">
+        <button>View your Info</button>
+    </a>
+</div>
 
-    <!-- Scripts -->
-    <script>
-        function uploadProfilePicture() {
-            var fileInput = document.getElementById('profilePicture');
-            var hiddenFileInput = document.getElementById('hiddenProfilePicture');
-            var form = document.getElementById('uploadForm');
+<div class="back-to-index">
+    <a asp-action="JoinCollabQuest" asp-controller="Learners">
+        <button>Join a Quest</button>
+    </a>
+</div>
+<!-- Scripts -->
+<script>
+    function uploadProfilePicture() {
+        var fileInput = document.getElementById('profilePicture');
+        var hiddenFileInput = document.getElementById('hiddenProfilePicture');
+        var form = document.getElementById('uploadForm');
 
-            hiddenFileInput.files = fileInput.files;
-            form.submit();
-        }
-    </script>
-
+        hiddenFileInput.files = fileInput.files;
+        form.submit();
+    }
+</script>
 </body>
 </html>
