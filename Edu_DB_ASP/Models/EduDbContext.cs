@@ -94,7 +94,9 @@ public partial class EduDbContext : DbContext
     public virtual DbSet<Admin> Admins { get; set; } 
 
     public DbSet<EnrolledCourseViewModel> EnrolledCourseViewModels { get; set; }
-
+    
+    public DbSet<InstructorJoins> InstructorJoins { get; set; }
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=edu_DB;Trusted_Connection=True;");
@@ -102,6 +104,9 @@ public partial class EduDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<EnrolledCourseViewModel>().HasNoKey();
+        
+        modelBuilder.Entity<InstructorJoins>()
+            .HasKey(ij => new { ij.InstructorId, ij.ForumId });
         
         modelBuilder.Entity<Achievement>(entity =>
         {
