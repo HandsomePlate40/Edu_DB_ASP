@@ -7,15 +7,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Edu_DB_ASP.Models;
 using Microsoft.Data.SqlClient;
+
 namespace Edu_DB_ASP.Controllers.LearnerOptions
 {
     public class LearnersController : Controller
     {
         private readonly EduDbContext _context;
+        private readonly QuestRepository _questRepository;
 
-        public LearnersController(EduDbContext context)
+        public LearnersController(EduDbContext context, QuestRepository questRepository)
         {
             _context = context;
+            _questRepository = questRepository;
         }
 
         // GET: Learners
@@ -35,7 +38,6 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
 
             return View(learner);
         }
-
 
         // GET: Learners/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -62,8 +64,6 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
         }
 
         // POST: Learners/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("LearnerId,FirstName,LastName,Gender,CountryOfOrigin,CulturalBackground,PersonalityTraits,EmotionalProfile,PhysicalHealth,MentalHealth,ExperienceLevel,Email,PasswordHash,ProfilePictureUrl")] Learner learner)
@@ -94,8 +94,6 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
         }
 
         // POST: Learners/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("LearnerId,FirstName,LastName,Gender,CountryOfOrigin,CulturalBackground,PersonalityTraits,EmotionalProfile,PhysicalHealth,MentalHealth,ExperienceLevel,Email,PasswordHash,ProfilePictureUrl")] Learner learner)
@@ -165,7 +163,7 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
         {
             return _context.Learners.Any(e => e.LearnerId == id);
         }
-        
+
         public async Task<IActionResult> JoinQuest(int questId)
         {
             var learnerEmail = HttpContext.Session.GetString("UserEmail");
@@ -203,7 +201,7 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
             TempData["ErrorMessage"] = messageParam.Value.ToString();
             return RedirectToAction("JoinCollabQuest");
         }
-    
+
         public async Task<IActionResult> AvailableQuests()
         {
             var quests = await _context.CollaborativeQuests
@@ -218,7 +216,7 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
 
             return View(quests);
         }
-        
+
         public async Task<IActionResult> JoinCollabQuest()
         {
             var userRole = HttpContext.Session.GetString("UserRole");
@@ -240,7 +238,7 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
 
             return View(quests);
         }
-        
+
         public async Task<IActionResult> Notifications()
         {
             var email = HttpContext.Session.GetString("UserEmail");
@@ -269,5 +267,23 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
 
             return View(notifications);
         }
+
+        public async Task<IActionResult> QuestMembers()
+        {
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (email == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var learner = await _context.Learners.SingleOrDefaultAsync(u => u.Email == email);
+            if (learner == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var participants = await _questRepository.GetQuestMembersAsync(learner.LearnerId);
+            return View(participants);
+        }
+        }
     }
-}

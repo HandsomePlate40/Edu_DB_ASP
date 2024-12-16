@@ -10,6 +10,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<EduDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Register the QuestRepository
+builder.Services.AddScoped<QuestRepository>();
+
 // Add session services
 builder.Services.AddDistributedMemoryCache(); // Required for session storage
 builder.Services.AddSession(options =>
@@ -27,8 +30,6 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-
-
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

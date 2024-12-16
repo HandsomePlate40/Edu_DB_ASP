@@ -1,0 +1,84 @@
+﻿@model List<Participant>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quest Members</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #11111B;
+            color: #D9E0EE;
+        }
+        .section-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        h2 {
+            color: #cba6f7;
+            border-bottom: 2px solid #45475a;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #181825;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        table thead {
+            background: #313244;
+        }
+        table thead th {
+            text-align: left;
+            padding: 1rem;
+            color: #cdd6f4;
+            font-weight: 600;
+            border-bottom: 1px solid #45475a;
+        }
+        table tbody tr {
+            border-bottom: 1px solid #313244;
+        }
+        table tbody tr:hover {
+            background: #1e1e2e;
+        }
+        table tbody td {
+            padding: 1rem;
+            color: #a6adc8;
+        }
+    </style>
+</head>
+<body>
+<div class="section-container">
+    <h2>Quest Members</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Quest ID</th>
+            <th>Quest Title</th>
+            <th>Learner ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var participant in Model)
+        {
+            <tr>
+                <td>@participant.QuestId</td>
+                <td>@participant.QuestTitle</td>
+                <td>@participant.LearnerId</td>
+                <td>@participant.FirstName</td>
+                <td>@participant.LastName</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
