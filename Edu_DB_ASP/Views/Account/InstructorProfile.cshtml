@@ -247,6 +247,18 @@
     </a>
 </div>
 
+<!-- Form to Delete Quests by Criteria -->
+<div class="section-container">
+    <h2>Delete Quests by Criteria</h2>
+    <form asp-controller="InstructorOptions" asp-action="DeleteQuestsByCriteria" method="post">
+        <div>
+            <label for="criteria">Criteria:</label>
+            <input type="text" id="criteria" name="criteria" required />
+        </div>
+        <button type="submit" class="btn-primary">Delete Quests</button>
+    </form>
+</div>
+
 <!-- Scripts -->
 <script>
     function uploadProfilePicture() {

@@ -161,36 +161,59 @@ namespace Edu_DB_ASP.Controllers.Account
         }
 
         [HttpGet]
-        public IActionResult LearnerProfile()
+        public async Task<IActionResult> LearnerProfile()
         {
             var email = HttpContext.Session.GetString("UserEmail");
             if (email == null)
             {
-                return RedirectToAction("LearnerLogin");
+                return RedirectToAction("LearnerLogin", "Account");
             }
 
-            var learner = _context.Learners.SingleOrDefault(u => u.Email == email);
+            var learner = await _context.Learners.SingleOrDefaultAsync(u => u.Email == email);
             if (learner == null)
             {
-                return RedirectToAction("LearnerLogin");
+                return RedirectToAction("LearnerLogin", "Account");
             }
 
-            var enrolledCourses = _context.EnrolledCourseViewModels
-                .FromSqlRaw("EXEC EnrolledCourses @LearnerID = {0}", learner.LearnerId)
-                .ToList();
+            var learnerId = learner.LearnerId;
 
-            var availableForums = _context.DiscussionForums.ToList(); // Fetch available forums
+            var learningPath = await _context.LearningPaths
+                .FromSqlRaw("EXEC CurrentPath @LearnerID = {0}", learnerId)
+                .ToListAsync();
 
-            var learningGoals = _context.LearningGoals
-                .Where(lg => lg.LearnerId == learner.LearnerId)
-                .ToList(); // Fetch learning goals
+            var enrolledCourses = await _context.CourseEnrollments
+                .Where(ec => ec.LearnerId == learnerId)
+                .Select(ec => new EnrolledCourseViewModel
+                {
+                    CourseId = ec.CourseId,
+                    Title = ec.Course.Title,
+                    CourseDescription = ec.Course.CourseDescription,
+                    DifficultyLevel = ec.Course.DifficultyLevel,
+                    CreditPoints = ec.Course.CreditPoints.HasValue ? (int)ec.Course.CreditPoints.Value : 0,
+                    
+                })
+                .ToListAsync();
+
+            var availableForums = await _context.DiscussionForums
+                .Join(_context.Joins,
+                    df => df.ForumId,
+                    j => j.ForumId,
+                    (df, j) => new { DiscussionForum = df, Join = j })
+                .Where(dj => dj.Join.LearnerId == learnerId)
+                .Select(dj => dj.DiscussionForum)
+                .ToListAsync();
+
+            var learningGoals = await _context.LearningGoals
+                .Where(lg => lg.LearnerId == learnerId)
+                .ToListAsync();
 
             var viewModel = new LearnerProfileViewModel
             {
                 Learner = learner,
-                EnrolledCourses = enrolledCourses,
-                AvailableForums = availableForums,
-                LearningGoals = learningGoals // Add learning goals to the view model
+                LearningPath = learningPath ?? new List<LearningPath>(),
+                EnrolledCourses = enrolledCourses ?? new List<EnrolledCourseViewModel>(),
+                AvailableForums = availableForums ?? new List<DiscussionForum>(),
+                LearningGoals = learningGoals ?? new List<LearningGoal>()
             };
 
             return View(viewModel);

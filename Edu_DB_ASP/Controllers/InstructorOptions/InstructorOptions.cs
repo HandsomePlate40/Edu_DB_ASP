@@ -202,5 +202,39 @@ namespace Edu_DB_ASP.Controllers.InstructorOptions
 
             return View(model);
         }
+
+        public async Task<IActionResult> DeleteQuestsByCriteria(string criteria)
+        {
+            if (string.IsNullOrEmpty(criteria))
+            {
+                return BadRequest("Criteria cannot be null or empty.");
+            }
+
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    // Delete related records from the Partake table
+                    var deletePartakeSql =
+                        "DELETE FROM Partake WHERE QuestID IN (SELECT QuestID FROM Quests WHERE Criteria = @Criteria)";
+                    var partakeParameters = new SqlParameter("@Criteria", criteria);
+                    await _context.Database.ExecuteSqlRawAsync(deletePartakeSql, partakeParameters);
+
+                    // Delete records from the Quests table
+                    var deleteQuestsSql = "DELETE FROM Quests WHERE Criteria = @Criteria";
+                    await _context.Database.ExecuteSqlRawAsync(deleteQuestsSql, partakeParameters);
+
+                    await transaction.CommitAsync();
+
+                    return Json(new
+                        { success = true, message = $"All quests with the criteria '{criteria}' have been deleted." });
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    return Json(new { success = false, message = "An error occurred while deleting the quests." });
+                }
+            }
+        }
     }
 }

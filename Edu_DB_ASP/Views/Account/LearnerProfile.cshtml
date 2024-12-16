@@ -195,6 +195,12 @@
             font-size: 1rem;
             padding: 0.5rem 1rem;
         }
+        .status-done {
+            color: #A6E3A1; /* green */
+        }
+        .status-in-progress {
+            color: #F8BD96; /* yellow */
+        }
     </style>
 </head>
 <body>
@@ -224,7 +230,43 @@
 </form>
 
 <div class="section-container">
-    <!-- Enrolled Courses Table -->
+    <!-- Learning Path Table -->
+    <div class="table-section">
+        <h2>Learning Path</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Path ID</th>
+                <th>Description</th>
+                <th>Completion Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var path in Model.LearningPath)
+            {
+                <tr>
+                    <td>@path.PathId</td>
+                    <td>@path.LearningPathDescription</td>
+                    <td class="@(path.CompletionStatus == "done" ? "status-done" : path.CompletionStatus == "in progress" ? "status-in-progress" : "")">
+                        @path.CompletionStatus
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .status-done {
+        color: #A6E3A1; /* green */
+    }
+    .status-in-progress {
+        color: #F8BD96; /* yellow */
+    }
+</style>
+<!-- Enrolled Courses Table -->
+<div class="section-container">
     <div class="table-section">
         <h2>Enrolled Courses</h2>
         <table>
@@ -250,6 +292,7 @@
         </table>
     </div>
 </div>
+
 <div class="section-container">
     <!-- Available Forums Table -->
     <div class="table-section">
@@ -280,6 +323,7 @@
         </table>
     </div>
 </div>
+
 <div class="section-container">
     <!-- Learning Goals Table -->
     <div class="table-section">
@@ -307,6 +351,7 @@
         </table>
     </div>
 </div>
+
 <!-- Back to Index Button -->
 <div class="back-to-index">
     <a asp-action="Index" asp-controller="Learners">
@@ -325,6 +370,13 @@
         <button>Add a Goal</button>
     </a>
 </div>
+
+<div class="back-to-index">
+    <a asp-action="QuestMembers" asp-controller="Learners">
+        <button>Show Members in Active Quest</button>
+    </a>
+</div>
+
 <!-- Scripts -->
 <script>
     function uploadProfilePicture() {
@@ -338,8 +390,3 @@
 </script>
 </body>
 </html>
-<div class="back-to-index">
-    <a asp-action="QuestMembers" asp-controller="Learners">
-        <button>Show Members in Active Quest</button>
-    </a>
-</div>

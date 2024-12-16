@@ -7,21 +7,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Goal</title>
     <style>
-        /* Reuse CSS from Notifications page */
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #11111B; /* base */
-            color: #D9E0EE; /* text */
+            background: #11111B;
+            /* base */
+            color: #D9E0EE;
+            /* text */
         }
 
         .form-container {
-            max-width: 600px;
-            margin: 2rem auto;
+            background-color: #181825;
+            border-radius: 25px;
             padding: 2rem;
-            background: #181825; /* mantle */
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 50%;
+            margin: 2rem auto;
         }
 
         .form-group {
@@ -31,57 +31,72 @@
         .form-label {
             display: block;
             margin-bottom: 0.5rem;
-            color: #cdd6f4; /* text color */
+            color: #cba6f7;
+            font-weight: 500;
         }
 
         .form-input {
-            width: 100%;
+            width: calc(100% - 1rem);
             padding: 0.5rem;
-            border: 1px solid #4c566a; /* Border color */
-            border-radius: 5px;
-            background-color: #3b4252; /* Dark input background */
-            color: #cdd6f4; /* text color */
+            border: 1px solid #45475a;
+            border-radius: 8px;
+            background-color: #313244;
+            color: #cdd6f4;
         }
 
         .form-button {
-            width: 100%;
-            padding: 0.75rem;
-            background-color: #89B4FAFF; /* Accent button color */
-            color: #2e3440; /* Dark text color */
+            background-color: #89b4fa;
+            color: #1e1e2e;
             border: none;
-            border-radius: 5px;
-            font-size: 1em;
-            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s;
+            border-radius: 15px;
+            transition: background-color 0.3s ease;
         }
 
         .form-button:hover {
-            background-color: #3e89ff; /* Slightly darker accent color */
+            background-color: #74c7ec;
         }
+
+        .form-error {
+            color: #f38ba8;
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        h2 {
+            color: #cba6f7;
+            border-bottom: 2px solid #45475a;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
     </style>
 </head>
 <body>
 <div class="form-container">
+    <h2>Add Your Goal!</h2>
     <form asp-action="AddGoal" method="post">
         <div class="form-group">
-            <label asp-for="GoalId" class="form-label"></label>
-            <input asp-for="GoalId" class="form-input" />
+            <label asp-for="GoalId" class="form-label">Goal ID</label>
+            <input asp-for="GoalId" class="form-input"/>
         </div>
         <div class="form-group">
-            <label asp-for="ObjectiveType" class="form-label"></label>
+            <label asp-for="ObjectiveType" class="form-label">Objective Type</label>
             <input asp-for="ObjectiveType" class="form-input"/>
         </div>
         <div class="form-group">
-            <label asp-for="ProgressStatus" class="form-label"></label>
+            <label asp-for="ProgressStatus" class="form-label">Progress Status</label>
             <input asp-for="ProgressStatus" class="form-input"/>
         </div>
         <div class="form-group">
-            <label asp-for="GoalDescription" class="form-label"></label>
+            <label asp-for="GoalDescription" class="form-label">Goal Description</label>
             <input asp-for="GoalDescription" class="form-input"/>
         </div>
         <div class="form-group">
-            <label asp-for="TimeBound" class="form-label"></label>
+            <label asp-for="TimeBound" class="form-label">Time Bound</label>
             <input asp-for="TimeBound" type="date" class="form-input"/>
         </div>
         <button type="submit" class="form-button">Add Goal</button>
