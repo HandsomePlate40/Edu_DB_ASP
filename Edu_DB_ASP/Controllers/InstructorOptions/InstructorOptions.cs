@@ -143,5 +143,64 @@ namespace Edu_DB_ASP.Controllers.InstructorOptions
 
             return Json(new { success = true });
         }
+
+        [HttpGet]
+        public IActionResult AddLearningPath()
+        {
+            if (HttpContext.Session.GetString("UserRole") != "Instructor")
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddLearningPath(LearningPathViewModel model)
+        {
+            if (HttpContext.Session.GetString("UserRole") != "Instructor")
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            if (ModelState.IsValid)
+            {
+                // Check if the GoalID exists in the LearningGoal table
+                var goalExists = await _context.LearningGoals.AnyAsync(g => g.GoalId == model.GoalID);
+                if (!goalExists)
+                {
+                    ModelState.AddModelError("GoalID", "The specified GoalID does not exist.");
+                    return View(model);
+                }
+
+                var sql =
+                    "EXEC NewPath @LearnerID, @ProfileID, @completion_status, @custom_content, @adaptiverules, @GoalID";
+                var parameters = new[]
+                {
+                    new SqlParameter("@LearnerID", model.LearnerID),
+                    new SqlParameter("@ProfileID", model.ProfileID),
+                    new SqlParameter("@completion_status", model.CompletionStatus),
+                    new SqlParameter("@custom_content", model.CustomContent),
+                    new SqlParameter("@adaptiverules", model.AdaptiveRules),
+                    new SqlParameter("@GoalID", model.GoalID)
+                };
+
+                try
+                {
+                    await _context.Database.ExecuteSqlRawAsync(sql, parameters);
+                    TempData["SuccessMessage"] = "Learning path added successfully.";
+                }
+                catch (SqlException ex)
+                {
+                    ModelState.AddModelError(string.Empty,
+                        $"An error occurred while adding the learning path: {ex.Message}");
+                    return View(model);
+                }
+
+                return RedirectToAction("AddLearningPath", "InstructorOptions");
+            }
+
+            return View(model);
+        }
     }
 }

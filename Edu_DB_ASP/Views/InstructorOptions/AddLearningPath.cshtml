@@ -1,0 +1,117 @@
+﻿@model LearningPathViewModel
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Add Learning Path";
+}
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #11111B;
+        color: #D9E0EE;
+    }
+
+    .form-container {
+        background-color: #181825;
+        border-radius: 25px;
+        padding: 2rem;
+        width: 50%;
+        margin: 2rem auto;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #cba6f7;
+        font-weight: 500;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea {
+        width: calc(100% - 1rem);
+        padding: 0.5rem;
+        border: 1px solid #45475a;
+        border-radius: 8px;
+        background-color: #313244;
+        color: #cdd6f4;
+    }
+
+    .btn-primary {
+        background-color: #89b4fa;
+        color: #1e1e2e;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 15px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #74c7ec;
+    }
+
+    .validation-summary-errors {
+        color: #ff6b6b;
+        margin-bottom: 1rem;
+    }
+
+    .field-validation-error {
+        color: #ff6b6b;
+    }
+
+    .success-message {
+        color: #A6E3A1;
+        margin-bottom: 1rem;
+    }
+</style>
+
+<div class="form-container">
+    <h2>Add Learning Path</h2>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="success-message">@TempData["SuccessMessage"]</div>
+    }
+    <form asp-action="AddLearningPath" method="post">
+        <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
+        <div class="form-group">
+            <label for="LearnerID">Learner ID</label>
+            <input type="number" id="LearnerID" name="LearnerID" required />
+            <span asp-validation-for="LearnerID" class="field-validation-error"></span>
+        </div>
+        <div class="form-group">
+            <label for="ProfileID">Profile ID</label>
+            <input type="number" id="ProfileID" name="ProfileID" required />
+            <span asp-validation-for="ProfileID" class="field-validation-error"></span>
+        </div>
+        <div class="form-group">
+            <label for="CompletionStatus">Completion Status</label>
+            <input type="text" id="CompletionStatus" name="CompletionStatus" required />
+            <span asp-validation-for="CompletionStatus" class="field-validation-error"></span>
+        </div>
+        <div class="form-group">
+            <label for="CustomContent">Custom Content</label>
+            <textarea id="CustomContent" name="CustomContent" required></textarea>
+            <span asp-validation-for="CustomContent" class="field-validation-error"></span>
+        </div>
+        <div class="form-group">
+            <label for="AdaptiveRules">Adaptive Rules</label>
+            <textarea id="AdaptiveRules" name="AdaptiveRules" required></textarea>
+            <span asp-validation-for="AdaptiveRules" class="field-validation-error"></span>
+        </div>
+        <div class="form-group">
+            <label for="GoalID">Goal ID</label>
+            <input type="number" id="GoalID" name="GoalID" required />
+            <span asp-validation-for="GoalID" class="field-validation-error"></span>
+        </div>
+        <button type="submit" class="btn-primary">Add Path</button>
+    </form>
+</div>

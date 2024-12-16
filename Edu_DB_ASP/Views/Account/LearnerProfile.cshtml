@@ -287,7 +287,6 @@
         <table>
             <thead>
             <tr>
-                <th>Action</th>
                 <th>Objective Type</th>
                 <th>Progress Status</th>
                 <th>Goal Description</th>
@@ -298,12 +297,6 @@
             @foreach (var goal in Model.LearningGoals)
             {
                 <tr>
-                    <td>
-                        <form asp-action="EditGoal" asp-controller="Goals" method="get">
-                            <input type="hidden" name="goalId" value="@goal.GoalId" />
-                            <button type="submit" class="btn btn-primary">Edit</button>
-                        </form>
-                    </td>
                     <td>@goal.ObjectiveType</td>
                     <td>@goal.ProgressStatus</td>
                     <td>@goal.GoalDescription</td>
