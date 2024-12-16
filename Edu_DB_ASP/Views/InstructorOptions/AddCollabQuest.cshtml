@@ -6,40 +6,214 @@
 }
 
 <style>
-    :root {
-        --surface0: #f0f0f0; /* Example color */
-        --base: #ffffff; /* Example color */
-        --text: #000000; /* Example color */
-        --surface2: #cccccc; /* Example color */
-        --lavender: #e6e6fa; /* Example color */
-        --nav-background-color: #333333; /* Example color */
-    }
-
-    :root {
-        --form-background-color: var(--surface0); /* Background color for the form */
-        --input-background-color: var(--base); /* Background color for inputs */
-        --input-text-color: var(--text); /* Text color for inputs */
-        --input-border-color: var(--surface2); /* Border color for inputs */
-        --button-background-color: var(--surface0); /* Background color for buttons */
-        --button-text-color: var(--text); /* Text color for buttons */
-        --button-hover-background-color: var(--lavender); /* Background color for buttons on hover */
-        --button-hover-text-color: var(--nav-background-color); /* Text color for buttons on hover */
-    }
-
     body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        min-height: 100vh;
         margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #11111B;
+        /* base */
+        color: #D9E0EE;
+        /* text */
+    }
+
+    .profile-container {
+        display: flex;
+        align-items: center;
+        padding: 2rem;
+        background: #181825;
+        /* mantle */
+        border-bottom: 1px solid #313244;
+        /* surface0 */
+        position: relative;
+        border-radius: 15px;
+        margin: 2rem;
+    }
+
+    .profile-pic-form {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        margin-right: 1.5rem;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    .profile-image {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: #313244;
+        /* surface0 */
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .profile-image img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    /* Hidden label appears on hover */
+    .profile-upload-label {
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        color: #D9E0EE;
+        font-size: 0.9rem;
+        font-weight: 500;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.3s;
+        cursor: pointer;
+        display: flex;
+    }
+
+    .profile-image:hover .profile-upload-label {
+        opacity: 1;
+    }
+
+    .profile-upload-label:hover {
+        background: rgba(0,0,0,0.6);
+    }
+
+    .profile-upload-label input[type="file"] {
+        display: none;
+    }
+
+    .profile-info {
+        flex: 1;
+    }
+
+    .profile-info h1 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: #D9E0EE;
+        /* text */
+    }
+
+    .profile-info p {
+        margin: 0.5rem 0 0;
+        color: #BAC2DE;
+        /* subtext1 */
+    }
+
+    .section-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    h2 {
+        color: #cba6f7;
+        border-bottom: 2px solid #45475a;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #181825;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    table thead {
+        background: #313244;
+    }
+
+    table thead th {
+        text-align: left;
+        padding: 1rem;
+        color: #cdd6f4;
+        font-weight: 600;
+        border-bottom: 1px solid #45475a;
+    }
+
+    table tbody tr {
+        border-bottom: 1px solid #313244;
+    }
+
+    table tbody tr:hover {
+        background: #1e1e2e;
+    }
+
+    table tbody td {
+        padding: 1rem;
+        color: #a6adc8;
+    }
+
+    .tag {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-right: 0.5rem;
+    }
+
+    .tag.active {
+        background: #A6E3A1;
+        /* green */
+        color: #1E1E2E;
+        /* base */
+    }
+
+    .tag.archived {
+        background: #F8BD96;
+        /* peach */
+        color: #1E1E2E;
+        /* base */
+    }
+
+    .table-section {
+        margin-bottom: 3rem;
+    }
+
+    .back-to-index {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .back-to-index button,
+    .btn-primary {
+        background-color: #89b4fa;
+        color: #1e1e2e;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 15px;
+        transition: background-color: 0.3s ease;
+    }
+
+    .back-to-index button:hover,
+    .btn-primary:hover {
+        background-color: #74c7ec;
+    }
+
+    .btn-primary {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
     }
 
     .form-container {
-        background-color: var(--form-background-color);
-        border-radius: 25px; /* Squircle shape */
+        background-color: #181825;
+        /* mantle */
+        border-radius: 25px;
+        /* Squircle shape */
         padding: 2rem;
-        width: 50%; /* Adjust width as needed */
+        width: 50%;
+        /* Adjust width as needed */
         margin: 2rem auto;
     }
 
@@ -50,43 +224,24 @@
     label {
         display: block;
         margin-bottom: 0.5rem;
-        color: var(--text); /* Use the appropriate text color */
+        color: #cba6f7;
+        /* lavender */
         font-weight: 500;
     }
 
     input[type="text"],
     input[type="number"],
     input[type="datetime-local"] {
-        width: calc(100% - 1rem); /* Adjust width for padding */
+        width: calc(100% - 1rem);
+        /* Adjust width for padding */
         padding: 0.5rem;
-        border: 1px solid var(--input-border-color);
+        border: 1px solid #45475a;
+        /* surface 1 */
         border-radius: 8px;
-        background-color: var(--input-background-color);
-        color: var(--input-text-color);
-    }
-
-    .btn-primary {
-        background-color: var(--button-background-color);
-        color: var(--button-text-color);
-        border: none;
-        border-radius: 24px;
-        padding: 0.5rem 1.5rem;
-        text-decoration: none;
-        display: inline-block;
-        font-weight: 500;
-        transition: background-color 0.3s, color 0.3s;
-        margin-top: 1rem;
-        cursor: pointer;
-    }
-
-    .btn-primary:hover {
-        background-color: var(--button-hover-background-color);
-        color: var(--button-hover-text-color);
-    }
-
-    h2 {
-        color: var(--text);
-        margin-bottom: 1rem;
+        background-color: #313244;
+        /* surface 0 */
+        color: #cdd6f4;
+        /* text */
     }
 </style>
 
@@ -119,4 +274,10 @@
         </div>
         <button type="submit" class="btn-primary">Add Quest</button>
     </form>
+
+    <div class="back-to-index">
+        <a asp-action="DeadlineUpdate" asp-controller="InstructorOptions">
+            <button>Module Manager</button>
+        </a>
+    </div>
 </div>

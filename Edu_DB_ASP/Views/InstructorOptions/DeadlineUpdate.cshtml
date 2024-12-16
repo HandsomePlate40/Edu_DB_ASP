@@ -1,0 +1,279 @@
+﻿@model IEnumerable<Edu_DB_ASP.Models.CollaborativeQuest>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Collaborative Quests</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #11111B; /* base */
+            color: #D9E0EE; /* text */
+        }
+
+        /* ... other styles ... */
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+            padding: 2rem;
+            background: #181825; /* mantle */
+            border-bottom: 1px solid #313244; /* surface0 */
+            position: relative;
+            border-radius: 15px;
+            margin: 2rem;
+        }
+
+        .profile-pic-form {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin-right: 1.5rem;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .profile-image {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #313244; /* surface0 */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        /* Hidden label appears on hover */
+        .profile-upload-label {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            color: #D9E0EE;
+            font-size: 0.9rem;
+            font-weight: 500;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s;
+            cursor: pointer;
+            display: flex;
+        }
+
+        .profile-image:hover .profile-upload-label {
+            opacity: 1;
+        }
+
+        .profile-upload-label:hover {
+            background: rgba(0,0,0,0.6);
+        }
+
+        .profile-upload-label input[type="file"] {
+            display: none;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-info h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #D9E0EE; /* text */
+        }
+
+        .profile-info p {
+            margin: 0.5rem 0 0;
+            color: #BAC2DE; /* subtext1 */
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        h2 {
+            color: #cba6f7;
+            border-bottom: 2px solid #45475a;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #181825;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        table thead {
+            background: #313244;
+        }
+
+        table thead th {
+            text-align: left;
+            padding: 1rem;
+            color: #cdd6f4;
+            font-weight: 600;
+            border-bottom: 1px solid #45475a;
+        }
+
+        table tbody tr {
+            border-bottom: 1px solid #313244;
+        }
+
+        table tbody tr:hover {
+            background: #1e1e2e;
+        }
+
+        table tbody td {
+            padding: 1rem;
+            color: #a6adc8;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+        }
+
+        .tag.active {
+            background: #A6E3A1; /* green */
+            color: #1E1E2E; /* base */
+        }
+
+        .tag.archived {
+            background: #F8BD96; /* peach */
+            color: #1E1E2E; /* base */
+        }
+
+        .table-section {
+            margin-bottom: 3rem;
+        }
+
+        .back-to-index {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .back-to-index button, .btn-primary {
+            background-color: #89b4fa;
+            color: #1e1e2e;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-to-index button:hover, .btn-primary:hover {
+            background-color: #74c7ec;
+        }
+
+        .update-deadline-form button {
+            background-color: #89b4fa;
+            color: #1e1e2e;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .update-deadline-form button:hover {
+            background-color: #74c7ec;
+        }
+    </style>
+</head>
+<body>
+<h2>Collaborative Quests</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Quest ID</th>
+        <th>Title</th>
+        <th>Deadline</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model != null)
+    {
+        foreach (var quest in Model)
+        {
+            <tr>
+                <td>@quest?.QuestId</td>
+                <td>@quest?.Quest?.Title</td>
+                <td>@quest?.DeadLine</td>
+                <td>
+                    <form class="update-deadline-form" data-quest-id="@quest?.QuestId">
+                        <input type="datetime-local" name="deadline" required />
+                        <button type="submit">Update</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td colspan="4">No quests available</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('.update-deadline-form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            var questId = form.data('quest-id');
+            var deadline = form.find('input[name="deadline"]').val();
+
+            $.ajax({
+                url: '@Url.Action("UpdateDeadline", "InstructorOptions")',
+                type: 'POST',
+                data: {
+                    QuestID: questId,
+                    Deadline: deadline
+                },
+                success: function (response) {
+                    alert('Deadline updated successfully');
+                    location.reload();
+                },
+                error: function () {
+                    alert('Error updating deadline');
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
