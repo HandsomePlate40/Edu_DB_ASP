@@ -341,76 +341,116 @@ namespace Edu_DB_ASP.Controllers.Account
                 return RedirectToAction("InstructorLogin");
             }
 
-            return View(instructor);
+            var taughtCourses = _context.Courses
+                .FromSqlRaw("EXEC InstructorCourses @InstructorID = {0}", instructor.InstructorId)
+                .ToList();
+
+            var viewModel = new InstructorProfileViewModel
+            {
+                Instructor = instructor,
+                TaughtCourses = taughtCourses
+            };
+
+            return View(viewModel);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UploadInstructorProfilePicture(IFormFile profilePicture)
+ [HttpPost]
+public async Task<IActionResult> UploadInstructorProfilePicture(IFormFile profilePicture)
+{
+    try
+    {
+        if (profilePicture != null && profilePicture.Length > 0)
         {
-            try
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (email == null)
             {
-                if (profilePicture != null && profilePicture.Length > 0)
-                {
-                    var email = HttpContext.Session.GetString("UserEmail");
-                    if (email == null)
-                    {
-                        return RedirectToAction("InstructorLogin");
-                    }
-
-                    var instructor = _context.Instructors.SingleOrDefault(u => u.Email == email);
-                    if (instructor == null)
-                    {
-                        return RedirectToAction("InstructorLogin");
-                    }
-
-                    var directoryPath = Path.Combine("wwwroot", "images");
-                    if (!Directory.Exists(directoryPath))
-                    {
-                        Directory.CreateDirectory(directoryPath);
-                    }
-
-                    var filePath = Path.Combine(directoryPath, profilePicture.FileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await profilePicture.CopyToAsync(stream);
-                    }
-
-                    instructor.ProfilePictureUrl = $"/images/{profilePicture.FileName}";
-                    _context.Instructors.Update(instructor);
-                    await _context.SaveChangesAsync();
-
-                    return RedirectToAction("InstructorProfile");
-                }
-
-                ViewBag.ErrorMessage = "No profile picture was selected. Please choose a file and try again.";
-                var noEmail = HttpContext.Session.GetString("UserEmail");
-                if (noEmail != null)
-                {
-                    var noPicInstructor = _context.Instructors.SingleOrDefault(u => u.Email == noEmail);
-                    return View("InstructorProfile", noPicInstructor);
-                }
-                else
-                {
-                    return RedirectToAction("InstructorLogin");
-                }
+                return RedirectToAction("InstructorLogin");
             }
-            catch (Exception ex)
+
+            var instructor = _context.Instructors.SingleOrDefault(u => u.Email == email);
+            if (instructor == null)
             {
-                ViewBag.ErrorMessage = $"An error occurred while uploading the profile picture: {ex.Message}";
-
-                var email = HttpContext.Session.GetString("UserEmail");
-                if (email != null)
-                {
-                    var instructor = _context.Instructors.SingleOrDefault(u => u.Email == email);
-                    return View("InstructorProfile", instructor);
-                }
-                else
-                {
-                    return RedirectToAction("InstructorLogin");
-                }
+                return RedirectToAction("InstructorLogin");
             }
+
+            var directoryPath = Path.Combine("wwwroot", "images");
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            var filePath = Path.Combine(directoryPath, profilePicture.FileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await profilePicture.CopyToAsync(stream);
+            }
+
+            instructor.ProfilePictureUrl = $"/images/{profilePicture.FileName}";
+            _context.Instructors.Update(instructor);
+            await _context.SaveChangesAsync();
+
+            var taughtCourses = _context.Courses
+                .FromSqlRaw("EXEC InstructorCourses @InstructorID = {0}", instructor.InstructorId)
+                .ToList();
+
+            var viewModel = new InstructorProfileViewModel
+            {
+                Instructor = instructor,
+                TaughtCourses = taughtCourses
+            };
+
+            return View("InstructorProfile", viewModel);
         }
+
+        ViewBag.ErrorMessage = "No profile picture was selected. Please choose a file and try again.";
+        var noEmail = HttpContext.Session.GetString("UserEmail");
+        if (noEmail != null)
+        {
+            var noPicInstructor = _context.Instructors.SingleOrDefault(u => u.Email == noEmail);
+            var taughtCourses = _context.Courses
+                .FromSqlRaw("EXEC InstructorCourses @InstructorID = {0}", noPicInstructor.InstructorId)
+                .ToList();
+
+            var viewModel = new InstructorProfileViewModel
+            {
+                Instructor = noPicInstructor,
+                TaughtCourses = taughtCourses
+            };
+
+            return View("InstructorProfile", viewModel);
+        }
+        else
+        {
+            return RedirectToAction("InstructorLogin");
+        }
+    }
+    catch (Exception ex)
+    {
+        ViewBag.ErrorMessage = $"An error occurred while uploading the profile picture: {ex.Message}";
+
+        var email = HttpContext.Session.GetString("UserEmail");
+        if (email != null)
+        {
+            var instructor = _context.Instructors.SingleOrDefault(u => u.Email == email);
+            var taughtCourses = _context.Courses
+                .FromSqlRaw("EXEC InstructorCourses @InstructorID = {0}", instructor.InstructorId)
+                .ToList();
+
+            var viewModel = new InstructorProfileViewModel
+            {
+                Instructor = instructor,
+                TaughtCourses = taughtCourses
+            };
+
+            return View("InstructorProfile", viewModel);
+        }
+        else
+        {
+            return RedirectToAction("InstructorLogin");
+        }
+    }
+}
 
         [HttpGet]
         public IActionResult AdminProfile()
