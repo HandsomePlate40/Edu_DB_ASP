@@ -280,6 +280,40 @@
         </table>
     </div>
 </div>
+<div class="section-container">
+    <!-- Learning Goals Table -->
+    <div class="table-section">
+        <h2>Learning Goals</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Action</th>
+                <th>Objective Type</th>
+                <th>Progress Status</th>
+                <th>Goal Description</th>
+                <th>Time Bound</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var goal in Model.LearningGoals)
+            {
+                <tr>
+                    <td>
+                        <form asp-action="EditGoal" asp-controller="Goals" method="get">
+                            <input type="hidden" name="goalId" value="@goal.GoalId" />
+                            <button type="submit" class="btn btn-primary">Edit</button>
+                        </form>
+                    </td>
+                    <td>@goal.ObjectiveType</td>
+                    <td>@goal.ProgressStatus</td>
+                    <td>@goal.GoalDescription</td>
+                    <td>@goal.TimeBound?.ToString("yyyy-MM-dd")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
 <!-- Back to Index Button -->
 <div class="back-to-index">
     <a asp-action="Index" asp-controller="Learners">
@@ -290,6 +324,12 @@
 <div class="back-to-index">
     <a asp-action="JoinCollabQuest" asp-controller="Learners">
         <button>Join a Quest</button>
+    </a>
+</div>
+
+<div class="back-to-index">
+    <a asp-action="AddGoal" asp-controller="Learners">
+        <button>Add a Goal</button>
     </a>
 </div>
 <!-- Scripts -->

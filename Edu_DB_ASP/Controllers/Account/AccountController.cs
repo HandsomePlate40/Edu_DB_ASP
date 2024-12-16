@@ -181,11 +181,16 @@ namespace Edu_DB_ASP.Controllers.Account
 
             var availableForums = _context.DiscussionForums.ToList(); // Fetch available forums
 
+            var learningGoals = _context.LearningGoals
+                .Where(lg => lg.LearnerId == learner.LearnerId)
+                .ToList(); // Fetch learning goals
+
             var viewModel = new LearnerProfileViewModel
             {
                 Learner = learner,
                 EnrolledCourses = enrolledCourses,
-                AvailableForums = availableForums // Add forums to the view model
+                AvailableForums = availableForums,
+                LearningGoals = learningGoals // Add learning goals to the view model
             };
 
             return View(viewModel);

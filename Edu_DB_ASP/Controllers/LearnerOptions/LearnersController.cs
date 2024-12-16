@@ -14,11 +14,13 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
     {
         private readonly EduDbContext _context;
         private readonly QuestRepository _questRepository;
+        private readonly string _connectionString;
 
-        public LearnersController(EduDbContext context, QuestRepository questRepository)
+        public LearnersController(EduDbContext context, QuestRepository questRepository, IConfiguration configuration)
         {
             _context = context;
             _questRepository = questRepository;
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         // GET: Learners
@@ -66,7 +68,10 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
         // POST: Learners/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LearnerId,FirstName,LastName,Gender,CountryOfOrigin,CulturalBackground,PersonalityTraits,EmotionalProfile,PhysicalHealth,MentalHealth,ExperienceLevel,Email,PasswordHash,ProfilePictureUrl")] Learner learner)
+        public async Task<IActionResult> Create(
+            [Bind(
+                "LearnerId,FirstName,LastName,Gender,CountryOfOrigin,CulturalBackground,PersonalityTraits,EmotionalProfile,PhysicalHealth,MentalHealth,ExperienceLevel,Email,PasswordHash,ProfilePictureUrl")]
+            Learner learner)
         {
             if (ModelState.IsValid)
             {
@@ -74,6 +79,7 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(learner);
         }
 
@@ -90,13 +96,17 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
             {
                 return NotFound();
             }
+
             return View(learner);
         }
 
         // POST: Learners/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LearnerId,FirstName,LastName,Gender,CountryOfOrigin,CulturalBackground,PersonalityTraits,EmotionalProfile,PhysicalHealth,MentalHealth,ExperienceLevel,Email,PasswordHash,ProfilePictureUrl")] Learner learner)
+        public async Task<IActionResult> Edit(int id,
+            [Bind(
+                "LearnerId,FirstName,LastName,Gender,CountryOfOrigin,CulturalBackground,PersonalityTraits,EmotionalProfile,PhysicalHealth,MentalHealth,ExperienceLevel,Email,PasswordHash,ProfilePictureUrl")]
+            Learner learner)
         {
             if (id != learner.LearnerId)
             {
@@ -121,8 +131,10 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(learner);
         }
 
@@ -285,5 +297,53 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
             var participants = await _questRepository.GetQuestMembersAsync(learner.LearnerId);
             return View(participants);
         }
+
+
+
+        [HttpGet]
+        public IActionResult AddGoal()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddGoal(LearningGoal model)
+        {
+            var learnerEmail = HttpContext.Session.GetString("UserEmail");
+            if (learnerEmail == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var learner = await _context.Learners.SingleOrDefaultAsync(u => u.Email == learnerEmail);
+            if (learner == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            if (ModelState.IsValid)
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    var query =
+                        "EXEC AddGoal @LearnerID, @GoalID, @ObjectiveType, @ProgressStatus, @GoalDescription, @TimeBound";
+                    var command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@LearnerID", learner.LearnerId);
+                    command.Parameters.AddWithValue("@GoalID", model.GoalId);
+                    command.Parameters.AddWithValue("@ObjectiveType", model.ObjectiveType ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@ProgressStatus", model.ProgressStatus ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@GoalDescription", model.GoalDescription ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@TimeBound",
+                        model.TimeBound.HasValue ? (object)model.TimeBound.Value : DBNull.Value);
+
+                    connection.Open();
+                    await command.ExecuteNonQueryAsync();
+                }
+
+                return RedirectToAction("LearnerProfile", "Account");
+            }
+
+            return View(model);
         }
     }
+}
