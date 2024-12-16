@@ -1,0 +1,19 @@
+﻿@model PostMessageViewModel
+
+@{
+    ViewData["Title"] = "Post Message";
+}
+
+<h1>Post Message</h1>
+
+<form asp-action="PostMessage" method="post">
+    <div class="form-group">
+        <label asp-for="Post" class="control-label"></label>
+        <textarea asp-for="Post" class="form-control"></textarea>
+        <span asp-validation-for="Post" class="text-danger"></span>
+    </div>
+    <input type="hidden" asp-for="ForumId" />
+    <div class="form-group">
+        <input type="submit" value="Post" class="btn btn-primary" />
+    </div>
+</form>
