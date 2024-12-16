@@ -2,16 +2,21 @@
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
+using Edu_DB_ASP.Models; // Add this to include the models
+using System.Linq;
+using Microsoft.EntityFrameworkCore; // Add this to use LINQ
 
 namespace Edu_DB_ASP.Controllers.InstructorOptions
 {
     public class InstructorOptions : Controller
     {
         private readonly string _connectionString;
+        private readonly EduDbContext _context; // Add this to define the context
 
-        public InstructorOptions(IConfiguration configuration)
+        public InstructorOptions(IConfiguration configuration, EduDbContext context) // Add context to the constructor
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _context = context; // Initialize the context
         }
 
         [HttpGet]
@@ -21,6 +26,7 @@ namespace Edu_DB_ASP.Controllers.InstructorOptions
             {
                 return RedirectToAction("LearnerLogin", "Account");
             }
+
             return View();
         }
 
@@ -36,7 +42,8 @@ namespace Edu_DB_ASP.Controllers.InstructorOptions
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
-                    var query = "EXEC CollaborativeQuest @difficulty_level, @criteria, @description, @title, @Maxnumparticipants, @deadline";
+                    var query =
+                        "EXEC CollaborativeQuest @difficulty_level, @criteria, @description, @title, @Maxnumparticipants, @deadline";
                     var command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@difficulty_level", model.DifficultyLevel);
                     command.Parameters.AddWithValue("@criteria", model.Criteria);
@@ -54,7 +61,7 @@ namespace Edu_DB_ASP.Controllers.InstructorOptions
 
             return View(model);
         }
-        
+
         [HttpGet]
         public IActionResult AddDiscussion()
         {
@@ -62,9 +69,10 @@ namespace Edu_DB_ASP.Controllers.InstructorOptions
             {
                 return RedirectToAction("LearnerLogin", "Account");
             }
+
             return View();
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> AddDiscussion(int moduleId, int courseId, string title, string description)
         {
@@ -99,6 +107,41 @@ namespace Edu_DB_ASP.Controllers.InstructorOptions
 
             ViewBag.ConfirmationMessage = confirmationMessage;
             return View();
+        }
+
+        public IActionResult DeadlineUpdate()
+        {
+            if (HttpContext.Session.GetString("UserRole") != "Instructor")
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var collaborativeQuests = _context.CollaborativeQuests.Include(q => q.Quest).ToList();
+            return View(collaborativeQuests);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateDeadline(int QuestID, DateTime Deadline)
+        {
+            if (HttpContext.Session.GetString("UserRole") != "Instructor")
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var command = new SqlCommand("DeadlineUpdate", connection)
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure
+                };
+                command.Parameters.AddWithValue("@QuestID", QuestID);
+                command.Parameters.AddWithValue("@deadline", Deadline);
+
+                connection.Open();
+                await command.ExecuteNonQueryAsync();
+            }
+
+            return Json(new { success = true });
         }
     }
 }

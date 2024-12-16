@@ -1,4 +1,4 @@
-﻿@model Edu_DB_ASP.Models.Instructor
+﻿@model InstructorProfileViewModel
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,13 +9,13 @@
     <title>Instructor Profile</title>
     <!-- Styles -->
     <style>
+        /* Existing styles */
         body {
             margin: 0;
-            font-family: sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #11111B; /* base */
             color: #D9E0EE; /* text */
         }
-
         .profile-container {
             display: flex;
             align-items: center;
@@ -23,8 +23,9 @@
             background: #181825; /* mantle */
             border-bottom: 1px solid #313244; /* surface0 */
             position: relative;
+            border-radius: 15px;
+            margin: 2rem;
         }
-
         .profile-pic-form {
             position: relative;
             width: 100px;
@@ -33,7 +34,6 @@
             border-radius: 50%;
             overflow: hidden;
         }
-
         .profile-image {
             position: relative;
             width: 100%;
@@ -45,15 +45,12 @@
             align-items: center;
             overflow: hidden;
         }
-
-            .profile-image img {
-                width: 100%;
-                height: auto;
-                object-fit: cover;
-                border-radius: 50%;
-            }
-
-        /* Hidden label appears on hover */
+        .profile-image img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 50%;
+        }
         .profile-upload-label {
             position: absolute;
             inset: 0;
@@ -70,78 +67,65 @@
             cursor: pointer;
             display: flex;
         }
-
         .profile-image:hover .profile-upload-label {
             opacity: 1;
         }
-
         .profile-upload-label:hover {
             background: rgba(0,0,0,0.6);
         }
-
         .profile-upload-label input[type="file"] {
             display: none;
         }
-
         .profile-info {
             flex: 1;
         }
-
-            .profile-info h1 {
-                margin: 0;
-                font-size: 1.5rem;
-                color: #D9E0EE; /* text */
-            }
-
-            .profile-info p {
-                margin: 0.5rem 0 0;
-                color: #BAC2DE; /* subtext1 */
-            }
-
+        .profile-info h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #D9E0EE; /* text */
+        }
+        .profile-info p {
+            margin: 0.5rem 0 0;
+            color: #BAC2DE; /* subtext1 */
+        }
         .section-container {
             max-width: 1200px;
             margin: 2rem auto;
             padding: 0 1rem;
         }
-
         h2 {
-            color: #D9E0EE;
-            border-bottom: 2px solid #313244; /* surface0 */
+            color: #cba6f7;
+            border-bottom: 2px solid #45475a;
             padding-bottom: 0.5rem;
             margin-bottom: 1rem;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
-            background: #181825; /* mantle */
+            background: #181825;
+            border-radius: 15px;
+            overflow: hidden;
         }
-
-            table thead {
-                background: #313244; /* surface0 */
-            }
-
-                table thead th {
-                    text-align: left;
-                    padding: 0.75rem;
-                    color: #D9E0EE; /* text */
-                    font-weight: 600;
-                    border-bottom: 1px solid #45475A; /* surface1 */
-                }
-
-            table tbody tr {
-                border-bottom: 1px solid #313244; /* surface0 */
-            }
-
-                table tbody tr:hover {
-                    background: #252535; /* slightly lighter for hover */
-                }
-
-            table tbody td {
-                padding: 0.75rem;
-                color: #A6ADC8; /* subtext0 */
-            }
-
+        table thead {
+            background: #313244;
+        }
+        table thead th {
+            text-align: left;
+            padding: 1rem;
+            color: #cdd6f4;
+            font-weight: 600;
+            border-bottom: 1px solid #45475a;
+        }
+        table tbody tr {
+            border-bottom: 1px solid #313244;
+        }
+        table tbody tr:hover {
+            background: #1e1e2e;
+        }
+        table tbody td {
+            padding: 1rem;
+            color: #a6adc8;
+        }
         .tag {
             display: inline-block;
             padding: 0.25rem 0.5rem;
@@ -150,94 +134,124 @@
             font-weight: 500;
             margin-right: 0.5rem;
         }
-
-            .tag.active {
-                background: #A6E3A1; /* green */
-                color: #1E1E2E; /* base */
-            }
-
-            .tag.archived {
-                background: #F8BD96; /* peach */
-                color: #1E1E2E; /* base */
-            }
-
+        .tag.active {
+            background: #A6E3A1; /* green */
+            color: #1E1E2E; /* base */
+        }
+        .tag.archived {
+            background: #F8BD96; /* peach */
+            color: #1E1E2E; /* base */
+        }
         .table-section {
             margin-bottom: 3rem;
         }
-
         .back-to-index {
             display: flex;
             justify-content: center;
             margin-top: 2rem;
         }
-
-        .back-to-index button {
-            background-color: #313244; /* surface0 */
-            color: #D9E0EE; /* text */
+        .back-to-index button, .btn-primary {
+            background-color: #89b4fa;
+            color: #1e1e2e;
             border: none;
             padding: 0.75rem 1.5rem;
             font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            border-radius: 4px;
-            transition: background-color 0.3s;
+            border-radius: 15px;
+            transition: background-color 0.3s ease;
         }
-
-        .back-to-index button:hover {
-            background-color: #45475A; /* surface1 */
+        .back-to-index button:hover, .btn-primary:hover {
+            background-color: #74c7ec;
         }
     </style>
 </head>
 <body>
 
-    <!-- Profile Header Section -->
-    <div class="profile-container">
-        <!-- Profile Image and Upload Functionality -->
-        <div class="profile-pic-form">
-            <div class="profile-image">
-                <img src="@Model.ProfilePictureUrl" alt="Instructor Profile Picture" id="profileImg" />
+<!-- Profile Header Section -->
+<div class="profile-container">
+    <!-- Profile Image and Upload Functionality -->
+    <div class="profile-pic-form">
+        <div class="profile-image">
+            <img src="@Model.Instructor.ProfilePictureUrl" alt="Instructor Profile Picture" id="profileImg" />
 
-                <label class="profile-upload-label">
-                    Change Profile Picture
-                    <input type="file" id="profilePicture" name="profilePicture" accept="image/*" onchange="uploadProfilePicture()" />
-                </label>
-            </div>
-        </div>
-
-        <div class="profile-info">
-            <h1>@Model.InstructorName</h1>
-            <p>@Model.Email</p>
-            <p>Qualifications: @Model.Qualifications</p>
+            <label class="profile-upload-label">
+                Change Profile Picture
+                <input type="file" id="profilePicture" name="profilePicture" accept="image/*" onchange="uploadProfilePicture()" />
+            </label>
         </div>
     </div>
 
-    <!-- Hidden Form to Submit Uploaded File -->
-    <form id="uploadForm" asp-action="UploadInstructorProfilePicture" method="post" enctype="multipart/form-data" style="display:none;">
-        <input type="file" id="hiddenProfilePicture" name="profilePicture" />
-    </form>
-
-    <!-- Back to Index Button -->
-    <div class="back-to-index">
-        <a asp-action="AddCollabQuest" asp-controller="InstructorOptions">
-            <button>Go to Your Options</button>
-        </a>
+    <div class="profile-info">
+        <h1>@Model.Instructor.InstructorName</h1>
+        <p>@Model.Instructor.Email</p>
+        <p>Qualifications: @Model.Instructor.Qualifications</p>
     </div>
+</div>
 
-    <!-- Back to Index Button -->
-    <div class="back-to-index">
-        <a asp-action="AddDiscussion" asp-controller="InstructorOptions">
-            <button>Add a discussion</button>
-        </a>
+<!-- Hidden Form to Submit Uploaded File -->
+<form id="uploadForm" asp-action="UploadInstructorProfilePicture" method="post" enctype="multipart/form-data" style="display:none;">
+    <input type="file" id="hiddenProfilePicture" name="profilePicture" />
+</form>
+
+<!-- Taught Courses Table -->
+<div class="section-container">
+    <div class="table-section">
+        <h2>Taught Courses</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Course Title</th>
+                <th>Description</th>
+                <th>Difficulty Level</th>
+                <th>Credit Points</th>
+                <th>Learning Objectives</th> <!-- Add this column -->
+                <th>Prerequisites</th>
+                
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var course in Model.TaughtCourses)
+            {
+                <tr>
+                    <td>@course.Title</td>
+                    <td>@course.CourseDescription</td>
+                    <td>@course.DifficultyLevel</td>
+                    <td>@course.CreditPoints</td>
+                    <td>@course.LearningObjectives</td> <!-- Add this column -->
+                    <td>@course.Prerequisites</td>
+                </tr>
+            }
+            </tbody>
+        </table>
     </div>
+</div>
 
-    <!-- Scripts -->
-    <script>
-        function uploadProfilePicture() {
-            var fileInput = document.getElementById('profilePicture');
-            var hiddenFileInput = document.getElementById('hiddenProfilePicture');
-            var form = document.getElementById('uploadForm');
+<!-- Back to Index Button -->
+<div class="back-to-index">
+    <a asp-action="AddCollabQuest" asp-controller="InstructorOptions">
+        <button>Go to Your Options</button>
+    </a>
+</div>
 
-            hiddenFileInput.files = fileInput.files;
-            form.submit();
-        }
-    </script>
+<!-- Back to Index Button -->
+<div class="back-to-index">
+    <a asp-action="AddDiscussion" asp-controller="InstructorOptions">
+        <button>Add a discussion</button>
+    </a>
+</div>
 
+<!-- Scripts -->
+<script>
+    function uploadProfilePicture() {
+        var fileInput = document.getElementById('profilePicture');
+        var hiddenFileInput = document.getElementById('hiddenProfilePicture');
+        var form = document.getElementById('uploadForm');
+
+        hiddenFileInput.files = fileInput.files;
+        form.submit();
+    }
+</script>
+
+</body>
+</html>

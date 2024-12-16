@@ -1,13 +1,14 @@
-﻿@model LearnerProfileViewModel
+﻿@model IEnumerable<Edu_DB_ASP.Models.CollaborativeQuest>
+
+@{
+    Layout = null;
+}
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <!-- Meta tags -->
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Profile</title>
-    <!-- Styles -->
+    <title>Collaborative Quests</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -15,6 +16,8 @@
             background: #11111B; /* base */
             color: #D9E0EE; /* text */
         }
+
+        /* ... other styles ... */
 
         .profile-container {
             display: flex;
@@ -191,117 +194,86 @@
             background-color: #74c7ec;
         }
 
-        .btn-primary {
-            font-size: 1rem;
+        .update-deadline-form button {
+            background-color: #89b4fa;
+            color: #1e1e2e;
+            border: none;
             padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .update-deadline-form button:hover {
+            background-color: #74c7ec;
         }
     </style>
 </head>
 <body>
-<!-- Profile Header Section -->
-<div class="profile-container">
-    <!-- Profile Image and Upload Functionality -->
-    <div class="profile-pic-form">
-        <div class="profile-image">
-            <img src="@Model.Learner.ProfilePictureUrl" alt="User Profile Picture" id="profileImg" />
-            <label class="profile-upload-label">
-                Change Profile Picture
-                <input type="file" id="profilePicture" name="profilePicture" accept="image/*" onchange="uploadProfilePicture()" />
-            </label>
-        </div>
-    </div>
-
-    <div class="profile-info">
-        <h1>@Model.Learner.FirstName @Model.Learner.LastName</h1>
-        <p>@Model.Learner.Email</p>
-        <p>Followers: 3 | Following: 2</p>
-    </div>
-</div>
-
-<!-- Hidden Form to Submit Uploaded File -->
-<form id="uploadForm" asp-action="UploadProfilePicture" method="post" enctype="multipart/form-data" style="display:none;">
-    <input type="file" id="hiddenProfilePicture" name="profilePicture" />
-</form>
-
-<div class="section-container">
-    <!-- Enrolled Courses Table -->
-    <div class="table-section">
-        <h2>Enrolled Courses</h2>
-        <table>
-            <thead>
+<h2>Collaborative Quests</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Quest ID</th>
+        <th>Title</th>
+        <th>Deadline</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    @if (Model != null)
+    {
+        foreach (var quest in Model)
+        {
             <tr>
-                <th>Course Title</th>
-                <th>Description</th>
-                <th>Difficulty Level</th>
-                <th>Credit Points</th>
+                <td>@quest?.QuestId</td>
+                <td>@quest?.Quest?.Title</td>
+                <td>@quest?.DeadLine</td>
+                <td>
+                    <form class="update-deadline-form" data-quest-id="@quest?.QuestId">
+                        <input type="datetime-local" name="deadline" required />
+                        <button type="submit">Update</button>
+                    </form>
+                </td>
             </tr>
-            </thead>
-            <tbody>
-            @foreach (var course in Model.EnrolledCourses)
-            {
-                <tr>
-                    <td>@course.Title</td>
-                    <td>@course.CourseDescription</td>
-                    <td>@course.DifficultyLevel</td>
-                    <td>@course.CreditPoints</td>
-                </tr>
-            }
-            </tbody>
-        </table>
-    </div>
-</div>
-<div class="section-container">
-    <!-- Available Forums Table -->
-    <div class="table-section">
-        <h2>Available Forums</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>Forum Title</th>
-                <th>Description</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var forum in Model.AvailableForums)
-            {
-                <tr>
-                    <td>@forum.Title</td>
-                    <td>@forum.Description</td>
-                    <td>
-                        <form asp-action="PostMessage" asp-controller="DiscussionForums" method="get">
-                            <input type="hidden" name="forumId" value="@forum.ForumId" />
-                            <button type="submit" class="btn btn-primary">Post</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
-    </div>
-</div>
-<!-- Back to Index Button -->
-<div class="back-to-index">
-    <a asp-action="Index" asp-controller="Learners">
-        <button>View your Info</button>
-    </a>
-</div>
-
-<div class="back-to-index">
-    <a asp-action="JoinCollabQuest" asp-controller="Learners">
-        <button>Join a Quest</button>
-    </a>
-</div>
-<!-- Scripts -->
-<script>
-    function uploadProfilePicture() {
-        var fileInput = document.getElementById('profilePicture');
-        var hiddenFileInput = document.getElementById('hiddenProfilePicture');
-        var form = document.getElementById('uploadForm');
-
-        hiddenFileInput.files = fileInput.files;
-        form.submit();
+        }
     }
+    else
+    {
+        <tr>
+            <td colspan="4">No quests available</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('.update-deadline-form').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            var questId = form.data('quest-id');
+            var deadline = form.find('input[name="deadline"]').val();
+
+            $.ajax({
+                url: '@Url.Action("UpdateDeadline", "InstructorOptions")',
+                type: 'POST',
+                data: {
+                    QuestID: questId,
+                    Deadline: deadline
+                },
+                success: function (response) {
+                    alert('Deadline updated successfully');
+                    location.reload();
+                },
+                error: function () {
+                    alert('Error updating deadline');
+                }
+            });
+        });
+    });
 </script>
 </body>
 </html>

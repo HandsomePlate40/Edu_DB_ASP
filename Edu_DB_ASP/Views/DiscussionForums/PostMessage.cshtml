@@ -4,16 +4,170 @@
     ViewData["Title"] = "Post Message";
 }
 
-<h1>Post Message</h1>
+<style>
+    body {
+        background-color: #11111b;
+        color: #cdd6f4;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-<form asp-action="PostMessage" method="post">
+    h1 {
+        color: #cba6f7;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .messages-area {
+        background-color: #181825;
+        max-height: 400px;
+        overflow-y: auto;
+        margin-bottom: 20px;
+        border: none;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .message {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        padding: 10px;
+        border-bottom: 1px solid #45475a;
+    }
+
+    .message img {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+    }
+
+    .message strong {
+        color: #f38ba8;
+    }
+
+    .message p {
+        color: #a6e3a1;
+    }
+
+    .timestamp {
+        font-size: 0.8em;
+        color: #7f849c;
+    }
+
+    .post-form {
+        margin-top: 20px;
+        background-color: transparent;
+        border-radius: 10px;
+        padding: 0px;
+        box-shadow: none;
+        width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        width: 100%;
+    }
+
+    textarea.form-control {
+        background-color: #1c1c28;
+        color: #cdd6f4;
+        border: none;
+        border-radius: 25px;
+        padding: 20px;
+        min-height: 120px;
+        resize: none;
+        width: calc(100% - 40px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        margin: 0px;
+    }
+
+    textarea.form-control:focus {
+        border-color: #b4befe;
+        box-shadow: 0 0 5px rgba(180, 190, 254, 0.5);
+        outline: none;
+    }
+
+    .btn-primary {
+        background-color: #89b4fa;
+        color: #11111b;
+        border: none;
+        border-radius: 15px;
+        padding: 10px 20px;
+        font-weight: bold;
+        display: block;
+        width: 30%;
+        margin: 0px;
+        margin-top: 10px;
+        margin-left: auto;
+    }
+
+    .btn-primary:hover {
+        background-color: #74c7ec;
+        color: #11111b;
+    }
+
+    .alert-danger {
+        background-color: #181825;
+        border-radius: 10px;
+        padding: 15px;
+        margin-top: 20px;
+        color: #fab387;
+    }
+
+    .text-danger {
+        color: #f38ba8;
+    }
+
+    .forum-description {
+        background-color: #181825;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        color: #a6e3a1;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+</style>
+
+<h1 class="text-center">Post Message</h1>
+
+<div class="forum-description">
+    <p>@Model.Post</p>
+</div>
+
+<div class="messages-area">
+    @foreach (var message in Model.Messages)
+    {
+        <div class="message">
+            <img src="@message.ProfilePictureUrl" alt="Profile Picture" />
+            <div>
+                <strong>@message.LearnerName:</strong>
+                <p>@message.Content</p>
+            </div>
+        </div>
+    }
+</div>
+
+<form asp-action="PostMessage" method="post" class="post-form">
     <div class="form-group">
-        <label asp-for="Post" class="control-label"></label>
-        <textarea asp-for="Post" class="form-control"></textarea>
+        <textarea asp-for="Post" class="form-control" placeholder="Enter your message here..."></textarea>
         <span asp-validation-for="Post" class="text-danger"></span>
     </div>
     <input type="hidden" asp-for="ForumId" />
-    <div class="form-group">
+    <div class="form-group" style="display: flex; justify-content: flex-end;">
         <input type="submit" value="Post" class="btn btn-primary" />
     </div>
 </form>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}

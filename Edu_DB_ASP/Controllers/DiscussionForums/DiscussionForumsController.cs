@@ -157,12 +157,32 @@ namespace Edu_DB_ASP.Controllers.DiscussionForums
         }
 
         [HttpGet]
-        public IActionResult PostMessage(int forumId)
+        public async Task<IActionResult> PostMessage(int forumId)
         {
+            var forum = await _context.DiscussionForums
+                .FirstOrDefaultAsync(f => f.ForumId == forumId);
+
+            if (forum == null)
+            {
+                return NotFound();
+            }
+
+            var messages = await _context.Joins
+                .Where(j => j.ForumId == forumId)
+                .Select(j => new MessageViewModel
+                {
+                    LearnerName = j.Learner.FirstName + " " + j.Learner.LastName,
+                    Content = j.Post,
+                    ProfilePictureUrl = j.Learner.ProfilePictureUrl // Assuming this property exists
+                })
+                .ToListAsync();
+
             var viewModel = new PostMessageViewModel
             {
-                ForumId = forumId
+                ForumId = forumId,
+                Messages = messages
             };
+
             return View(viewModel);
         }
 
@@ -177,6 +197,16 @@ namespace Edu_DB_ASP.Controllers.DiscussionForums
                     return RedirectToAction("LearnerLogin", "Account");
                 }
 
+                // Check if the learner has already posted in this forum
+                var existingPost = await _context.Joins
+                    .FirstOrDefaultAsync(j => j.ForumId == model.ForumId && j.LearnerId == learnerId);
+
+                if (existingPost != null)
+                {
+                    ModelState.AddModelError("", "You have already posted in this forum.");
+                    return View(model);
+                }
+
                 var result = await _context.Database.ExecuteSqlRawAsync(
                     "EXEC Post @LearnerID = {0}, @DiscussionID = {1}, @Post = {2}",
                     learnerId, model.ForumId, model.Post);
@@ -187,7 +217,7 @@ namespace Edu_DB_ASP.Controllers.DiscussionForums
                     return View(model);
                 }
 
-                return RedirectToAction("LearnerProfile", "Account");
+                return RedirectToAction("PostMessage", new { forumId = model.ForumId });
             }
 
             return View(model);

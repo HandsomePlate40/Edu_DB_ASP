@@ -240,5 +240,34 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
 
             return View(quests);
         }
+        
+        public async Task<IActionResult> Notifications()
+        {
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (email == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (userRole != "Learner")
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var learner = await _context.Learners.SingleOrDefaultAsync(u => u.Email == email);
+            if (learner == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var learnerId = learner.LearnerId;
+
+            var notifications = await _context.Notifications
+                .FromSqlRaw("EXEC ViewNot @LearnerID = {0}", learnerId)
+                .ToListAsync();
+
+            return View(notifications);
+        }
     }
 }
