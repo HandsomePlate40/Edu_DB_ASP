@@ -52,8 +52,6 @@ namespace Edu_DB_ASP.Controllers.DiscussionForums
         }
 
         // POST: DiscussionForums/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ForumId,Title,Description,LastActiveTimestamp,ModuleId")] DiscussionForum discussionForum)
@@ -86,8 +84,6 @@ namespace Edu_DB_ASP.Controllers.DiscussionForums
         }
 
         // POST: DiscussionForums/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ForumId,Title,Description,LastActiveTimestamp,ModuleId")] DiscussionForum discussionForum)
@@ -158,6 +154,43 @@ namespace Edu_DB_ASP.Controllers.DiscussionForums
         private bool DiscussionForumExists(int id)
         {
             return _context.DiscussionForums.Any(e => e.ForumId == id);
+        }
+
+        [HttpGet]
+        public IActionResult PostMessage(int forumId)
+        {
+            var viewModel = new PostMessageViewModel
+            {
+                ForumId = forumId
+            };
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostMessage(PostMessageViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var learnerId = HttpContext.Session.GetInt32("LearnerId");
+                if (learnerId == null)
+                {
+                    return RedirectToAction("LearnerLogin", "Account");
+                }
+
+                var result = await _context.Database.ExecuteSqlRawAsync(
+                    "EXEC Post @LearnerID = {0}, @DiscussionID = {1}, @Post = {2}",
+                    learnerId, model.ForumId, model.Post);
+
+                if (result == -1)
+                {
+                    ModelState.AddModelError("", "An error occurred while posting the message.");
+                    return View(model);
+                }
+
+                return RedirectToAction("LearnerProfile", "Account");
+            }
+
+            return View(model);
         }
     }
 }

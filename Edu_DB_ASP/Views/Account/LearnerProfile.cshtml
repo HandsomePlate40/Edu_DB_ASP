@@ -240,7 +240,36 @@
         </table>
     </div>
 </div>
-
+<div class="section-container">
+    <!-- Available Forums Table -->
+    <div class="table-section">
+        <h2>Available Forums</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Forum Title</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var forum in Model.AvailableForums)
+            {
+                <tr>
+                    <td>@forum.Title</td>
+                    <td>@forum.Description</td>
+                    <td>
+                        <form asp-action="PostMessage" asp-controller="DiscussionForums" method="get">
+                            <input type="hidden" name="forumId" value="@forum.ForumId" />
+                            <button type="submit" class="btn btn-primary">Post</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
 <!-- Back to Index Button -->
 <div class="back-to-index">
     <a asp-action="Index" asp-controller="Learners">

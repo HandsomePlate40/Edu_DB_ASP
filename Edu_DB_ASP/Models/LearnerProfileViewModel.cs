@@ -4,4 +4,5 @@ public class LearnerProfileViewModel
 {
     public Learner Learner { get; set; }
     public List<EnrolledCourseViewModel> EnrolledCourses { get; set; }
+    public List<DiscussionForum> AvailableForums { get; set; } // Add this property
 }

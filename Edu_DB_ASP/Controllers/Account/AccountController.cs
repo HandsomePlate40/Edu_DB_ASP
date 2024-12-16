@@ -161,7 +161,6 @@ namespace Edu_DB_ASP.Controllers.Account
         }
 
         [HttpGet]
-        [HttpGet]
         public IActionResult LearnerProfile()
         {
             var email = HttpContext.Session.GetString("UserEmail");
@@ -180,16 +179,19 @@ namespace Edu_DB_ASP.Controllers.Account
                 .FromSqlRaw("EXEC EnrolledCourses @LearnerID = {0}", learner.LearnerId)
                 .ToList();
 
+            var availableForums = _context.DiscussionForums.ToList(); // Fetch available forums
+
             var viewModel = new LearnerProfileViewModel
             {
                 Learner = learner,
-                EnrolledCourses = enrolledCourses
+                EnrolledCourses = enrolledCourses,
+                AvailableForums = availableForums // Add forums to the view model
             };
 
             return View(viewModel);
         }
 
-        [HttpPost]
+        
         [HttpPost]
         public async Task<IActionResult> UploadProfilePicture(IFormFile profilePicture)
         {
@@ -545,6 +547,7 @@ namespace Edu_DB_ASP.Controllers.Account
             {
                 HttpContext.Session.SetString("UserEmail", learner.Email);
                 HttpContext.Session.SetString("UserRole", "Learner");
+                HttpContext.Session.SetInt32("LearnerId", learner.LearnerId); // Set LearnerId in session
 
                 return RedirectToAction("LearnerProfile", "Account");
             }
