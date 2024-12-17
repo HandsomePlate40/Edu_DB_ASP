@@ -6,16 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Edu_DB_ASP.Models;
+using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace Edu_DB_ASP.Controllers.ModuleController
 {
     public class ModuleController : Controller
     {
         private readonly EduDbContext _context;
-
-        public ModuleController(EduDbContext context)
+        private readonly IConfiguration _configuration;
+        public ModuleController(EduDbContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         // GET: Module
@@ -161,6 +164,40 @@ namespace Edu_DB_ASP.Controllers.ModuleController
         private bool ModuleExists(int id)
         {
             return _context.Modules.Any(e => e.ModuleId == id);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddActivity(int moduleId, string activityType, string instructionDetails, int maxPoints)
+        {
+            var courseId = _context.Modules.Where(m => m.ModuleId == moduleId).Select(m => m.CourseId).FirstOrDefault();
+
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                using (var command = new SqlCommand("NewActivity", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@CourseID", courseId);
+                    command.Parameters.AddWithValue("@ModuleID", moduleId);
+                    command.Parameters.AddWithValue("@activitytype", activityType);
+                    command.Parameters.AddWithValue("@instructiondetails", instructionDetails);
+                    command.Parameters.AddWithValue("@maxpoints", maxPoints);
+
+                    connection.Open();
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+
+            return RedirectToAction(nameof(Edit), new { id = moduleId });
+        }
+
+        public async Task<IActionResult> ViewModules(int courseId)
+        {
+            var modules = await _context.Modules
+                .Where(m => m.CourseId == courseId)
+                .ToListAsync();
+
+            return View(modules);
         }
     }
 }

@@ -205,9 +205,9 @@
                 <th>Description</th>
                 <th>Difficulty Level</th>
                 <th>Credit Points</th>
-                <th>Learning Objectives</th> <!-- Add this column -->
+                <th>Learning Objectives</th>
                 <th>Prerequisites</th>
-                
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -218,14 +218,25 @@
                     <td>@course.CourseDescription</td>
                     <td>@course.DifficultyLevel</td>
                     <td>@course.CreditPoints</td>
-                    <td>@course.LearningObjectives</td> <!-- Add this column -->
+                    <td>@course.LearningObjectives</td>
                     <td>@course.Prerequisites</td>
+                    <td>
+                        <form asp-action="DeleteCourse" method="post">
+                            <input type="hidden" name="courseId" value="@course.CourseId" />
+                            <button type="submit" class="btn-primary">Delete</button>
+                        </form>
+                    </td>
                 </tr>
             }
             </tbody>
         </table>
     </div>
 </div>
+
+@if (TempData["Message"] != null)
+{
+    <div>@TempData["Message"]</div>
+}
 
 <!-- Back to Index Button -->
 <div class="back-to-index">

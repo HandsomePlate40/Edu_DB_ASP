@@ -8,18 +8,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Edu_DB_ASP.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
+using System.Data;
+using System.Security.Claims;
 
 namespace Edu_DB_ASP.Controllers.Course
 {
     public class CourseController : Controller
     {
         private readonly EduDbContext _context;
-        
+        private readonly IConfiguration _configuration;
 
-        public CourseController(EduDbContext context)
+        public CourseController(EduDbContext context, IConfiguration configuration)
         {
             _context = context;
-            
+            _configuration = configuration;
         }
 
         // GET: Course
@@ -201,6 +204,136 @@ namespace Edu_DB_ASP.Controllers.Course
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost]
+        public IActionResult DeleteCourse(int courseId)
+        {
+            string message;
+            using (SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                using (SqlCommand cmd = new SqlCommand("CourseRemove", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@courseID", courseId);
+                    SqlParameter outputMessage = new SqlParameter("@Message", SqlDbType.NVarChar, 100)
+                    {
+                        Direction = ParameterDirection.Output
+                    };
+                    cmd.Parameters.Add(outputMessage);
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    message = outputMessage.Value.ToString();
+                }
+            }
+
+            TempData["Message"] = message;
+            return RedirectToAction("InstructorProfile", "Account");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CheckPrerequisites(int learnerId, int courseId)
+        {
+            string message;
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                using (var command = new SqlCommand("Prerequisites", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@LearnerID", learnerId);
+                    command.Parameters.AddWithValue("@CourseID", courseId);
+
+                    connection.Open();
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        if (reader.Read())
+                        {
+                            message = reader["Message"].ToString();
+                        }
+                        else
+                        {
+                            message = "Error: Unable to check prerequisites.";
+                        }
+                    }
+                }
+            }
+
+            return Ok(new { Message = message });
+        }
+
+        public async Task<IActionResult> ViewPreviousCourses()
+        {
+            var learnerId = HttpContext.Session.GetInt32("LearnerId");
+            if (learnerId == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var previousCourses = new List<PreviousCourseViewModel>();
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+            using (var connection = new SqlConnection(connectionString))
+            {
+                using (var command = new SqlCommand("ViewPreviousCourseDetailsLearner", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@LearnerID", learnerId);
+                    command.Parameters.AddWithValue("@CourseID", DBNull.Value); // Assuming you want all courses
+
+                    connection.Open();
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            previousCourses.Add(new PreviousCourseViewModel
+                            {
+                                CourseId = reader.GetInt32(0),
+                                Title = reader.GetString(1),
+                                CourseDescription = reader.GetString(2),
+                                DifficultyLevel = reader.GetString(3),
+                                CreditPoints = reader.GetDecimal(4),
+                                EnrollmentDate = reader.GetDateTime(5),
+                                CompletionDate = reader.GetDateTime(6)
+                            });
+                        }
+                    }
+                }
+            }
+
+            return View(previousCourses);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Unregister(int courseId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var learner = await _context.Learners
+                .Include(l => l.CourseEnrollments)
+                .FirstOrDefaultAsync(l => l.IdentityUserId == userId); // Corrected property name
+
+            if (learner == null)
+            {
+                return NotFound();
+            }
+
+            var enrollment = learner.CourseEnrollments.FirstOrDefault(e => e.CourseId == courseId);
+            if (enrollment != null)
+            {
+                _context.CourseEnrollments.Remove(enrollment);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("LearnerProfile", "Account");
+        }
     }
 }
+
 

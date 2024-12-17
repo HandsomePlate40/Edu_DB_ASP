@@ -213,3 +213,39 @@
         </tbody>
     </table>
 </div>
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var course in Model)
+            {
+                <tr>
+                    <td>@course.Title</td>
+                    <td>
+                        <button class="btn" onclick="checkPrerequisites(@course.CourseId)">Check Prerequisites</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div id="prerequisitesResult" class="alert" style="display:none;"></div>
+
+@section Scripts {
+    <script>
+        async function checkPrerequisites(courseId) {
+            const learnerId = 1; // Replace with actual learner ID
+            const response = await fetch(`/Course/CheckPrerequisites?learnerId=${learnerId}&courseId=${courseId}`);
+            const data = await response.json();
+            const resultDiv = document.getElementById('prerequisitesResult');
+            resultDiv.innerText = data.Message;
+            resultDiv.style.display = 'block';
+        }
+    </script>
+}

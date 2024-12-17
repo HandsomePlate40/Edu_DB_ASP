@@ -213,6 +213,18 @@
             font-weight: 600;
             text-transform: uppercase;
         }
+
+        .module-manager-button {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #cba6f7;
+            color: #11111B;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -280,34 +292,41 @@
     </div>
 </div>
 
-<!-- Enrolled Courses Table -->
-<div class="section-container">
-    <div class="table-section">
-        <h2>Enrolled Courses</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>Course Title</th>
-                <th>Description</th>
-                <th>Difficulty Level</th>
-                <th>Credit Points</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var course in Model.EnrolledCourses)
-            {
-                <tr>
-                    <td>@course.Title</td>
-                    <td>@course.CourseDescription</td>
-                    <td>@course.DifficultyLevel</td>
-                    <td>@course.CreditPoints</td>
-                </tr>
-            }
-            </tbody>
-        </table>
+    <!-- Enrolled Courses Table -->
+    <div class="section-container">
+        <div class="table-section">
+            <h2>Enrolled Courses</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Course Title</th>
+                        <th>Description</th>
+                        <th>Difficulty Level</th>
+                        <th>Credit Points</th>
+                        <th>Actions</th> <!-- Add this header for actions -->
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var course in Model.EnrolledCourses)
+                    {
+                        <tr>
+                            <td>@course.Title</td>
+                            <td>@course.CourseDescription</td>
+                            <td>@course.DifficultyLevel</td>
+                            <td>@course.CreditPoints</td>
+                            <td>
+                                <a href="@Url.Action("ViewModules", "Module", new { courseId = course.CourseId })" class="module-manager-button">View Modules</a>
+                                <form asp-action="Unregister" method="post" style="display:inline;">
+                                    <input type="hidden" name="courseId" value="@course.CourseId" />
+                                    <button type="submit" class="btn-primary">Unregister</button>
+                                </form>
+                            </td> <!-- Add this cell for the buttons -->
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
-
 <div class="section-container">
     <!-- Discussion Forums Table -->
     <div class="table-section">
@@ -396,6 +415,12 @@
         <button>Show your Assessments Options</button>
     </a>
 </div>
+
+    <div class="back-to-index">
+        <a asp-action="ViewPreviousCourses" asp-controller="Course">
+            <button>View Previous Courses</button>
+        </a>
+    </div>
 
 <!-- Scripts -->
 <script>

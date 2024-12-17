@@ -49,3 +49,41 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+<!-- Button to open the modal form -->
+<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#addActivityModal">
+    Add New Activity
+</button>
+
+<!-- Modal form for adding new activity -->
+<div class="modal fade" id="addActivityModal" tabindex="-1" role="dialog" aria-labelledby="addActivityModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addActivityModalLabel">Add New Activity</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="AddActivity">
+                    <input type="hidden" asp-for="ModuleId" />
+                    <div class="form-group">
+                        <label for="activityType">Activity Type</label>
+                        <input type="text" class="form-control" id="activityType" name="activityType" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="instructionDetails">Instruction Details</label>
+                        <textarea class="form-control" id="instructionDetails" name="instructionDetails" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="maxPoints">Max Points</label>
+                        <input type="number" class="form-control" id="maxPoints" name="maxPoints" required />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Add Activity" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
