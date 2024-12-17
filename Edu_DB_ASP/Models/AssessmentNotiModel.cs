@@ -5,7 +5,7 @@ namespace Edu_DB_ASP.Models
     
     public class AssessmentNotiModel
     {
-
+        [Required]
         public string Message { get; set; }
 
         [Required]
