@@ -111,7 +111,8 @@ public partial class EduDbContext : DbContext
 
             entity.HasIndex(e => e.BadgeId, "IX_Achievement_BadgeID");
 
-            entity.HasIndex(e => e.LearnerId, "IX_Achievement_LearnerID");
+            entity.HasIndex(e => e.LearnerId, "IX_Achievement_LearnerID")
+                ;
 
             entity.Property(e => e.AchievementId).HasColumnName("AchievementID");
             entity.Property(e => e.AchievementDescription).IsUnicode(false);
@@ -128,7 +129,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Learner).WithMany(p => p.Achievements)
                 .HasForeignKey(d => d.LearnerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Achieveme__Learn__619B8048");
 
             entity.HasMany(d => d.Badges).WithMany(p => p.AchievementsNavigation)
@@ -209,7 +210,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Activity).WithMany(p => p.ActivityInstructions)
                 .HasForeignKey(d => d.ActivityId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__ActivityI__Activ__59063A47");
         });
 
@@ -237,7 +238,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Module).WithMany(p => p.Assessments)
                 .HasForeignKey(d => d.ModuleId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Assessmen__Modul__07C12930");
         });
 
@@ -292,6 +293,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Quest).WithOne(p => p.CollaborativeQuest)
                 .HasForeignKey<CollaborativeQuest>(d => d.QuestId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Collabora__Quest__7D439ABD");
         });
 
@@ -330,6 +332,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Course).WithMany(p => p.ContentLibraries)
                 .HasForeignKey(d => d.CourseId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__ContentLi__Cours__1332DBDC");
         });
 
@@ -427,7 +430,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Module).WithMany(p => p.DiscussionForums)
                 .HasForeignKey(d => d.ModuleId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Discussio__Modul__17036CC0");
         });
 
@@ -450,7 +453,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Learner).WithMany(p => p.EmotionalFeedbacks)
                 .HasForeignKey(d => d.LearnerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Emotional__Learn__75A278F5");
 
             entity.HasMany(d => d.Instructors).WithMany(p => p.Feedbacks)
@@ -488,17 +491,17 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Assessment).WithMany(p => p.Evaluates)
                 .HasForeignKey(d => d.AssessmentId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Evaluates__Asses__503BEA1C");
 
             entity.HasOne(d => d.Course).WithMany(p => p.Evaluates)
                 .HasForeignKey(d => d.CourseId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Evaluates__Cours__4E53A1AA");
 
             entity.HasOne(d => d.Module).WithMany(p => p.Evaluates)
                 .HasForeignKey(d => d.ModuleId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Evaluates__Modul__4F47C5E3");
         });
 
@@ -515,7 +518,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Instructor).WithMany(p => p.Expertises)
                 .HasForeignKey(d => d.InstructorId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Expertise_Instructor");
         });
 
@@ -533,17 +536,17 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Activity).WithMany(p => p.Expresses)
                 .HasForeignKey(d => d.ActivityId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Expresses__Activ__42E1EEFE");
 
             entity.HasOne(d => d.Feedback).WithMany(p => p.Expresses)
                 .HasForeignKey(d => d.FeedbackId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Expresses__Feedb__43D61337");
 
             entity.HasOne(d => d.Learner).WithMany(p => p.Expresses)
                 .HasForeignKey(d => d.LearnerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Expresses__Learn__41EDCAC5");
         });
 
@@ -559,9 +562,10 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.PersonalizationProfile).WithMany(p => p.HealthConditions)
                 .HasForeignKey(d => new { d.CreationOrder, d.LearnerId })
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__HealthConditions__4D94879B");
         });
+        
         modelBuilder.Entity<Instructor>(entity =>
         {
             entity.HasKey(e => e.InstructorId).HasName("PK__Instruct__9D010B7B01C75B11");
@@ -634,12 +638,12 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Activity).WithMany(p => p.InteractionLogs)
                 .HasForeignKey(d => d.ActivityId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Interacti__Activ__70DDC3D8");
 
             entity.HasOne(d => d.Learner).WithMany(p => p.InteractionLogs)
                 .HasForeignKey(d => d.LearnerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Interacti__Learn__71D1E811");
         });
 
@@ -655,12 +659,12 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Forum).WithMany(p => p.Joins)
                 .HasForeignKey(d => d.ForumId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Joins__ForumID__1AD3FDA4");
 
             entity.HasOne(d => d.Learner).WithMany(p => p.Joins)
                 .HasForeignKey(d => d.LearnerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Joins__LearnerID__19DFD96B");
         });
 
@@ -691,12 +695,12 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Leaderboard).WithMany(p => p.LeaderboardRanks)
                 .HasForeignKey(d => d.LeaderboardId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Leaderboa__Leade__6754599E");
 
             entity.HasOne(d => d.Learner).WithMany(p => p.LeaderboardRanks)
                 .HasForeignKey(d => d.LearnerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Leaderboa__Learn__68487DD7");
         });
 
@@ -716,17 +720,17 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Course).WithMany(p => p.LeaderboardStudentsCourses)
                 .HasForeignKey(d => d.CourseId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Leaderboa__Cours__6B24EA82");
 
             entity.HasOne(d => d.Leaderboard).WithMany(p => p.LeaderboardStudentsCourses)
                 .HasForeignKey(d => d.LeaderboardId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Leaderboa__Leade__6D0D32F4");
 
             entity.HasOne(d => d.Learner).WithMany(p => p.LeaderboardStudentsCourses)
                 .HasForeignKey(d => d.LearnerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Leaderboa__Learn__6C190EBB");
         });
 
@@ -831,7 +835,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Learner).WithMany(p => p.LearnerSkills)
                 .HasForeignKey(d => d.LearnerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__LearnerSk__Learn__3A81B327");
         });
 
@@ -852,6 +856,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Module).WithMany(p => p.LearningActivities)
                 .HasForeignKey(d => d.ModuleId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__LearningA__Modul__5629CD9C");
         });
 
@@ -906,7 +911,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Goal).WithMany(p => p.LearningPaths)
                 .HasForeignKey(d => d.GoalId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__LearningP__GoalI__45F365D3");
 
             entity.HasMany(d => d.Instructors).WithMany(p => p.Paths)
@@ -942,7 +947,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Learner).WithMany(p => p.LearningPreferences)
                 .HasForeignKey(d => d.LearnerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__LearningP__Learn__3D5E1FD2");
         });
 
@@ -970,6 +975,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Course).WithMany(p => p.Modules)
                 .HasForeignKey(d => d.CourseId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Modules__CourseI__5070F446");
         });
 
@@ -1111,6 +1117,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Quest).WithMany(p => p.QuestRewards)
                 .HasForeignKey(d => d.QuestId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__QuestRewa__Quest__00200768");
         });
 
@@ -1147,6 +1154,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Quest).WithOne(p => p.SkillMasteryQuest)
                 .HasForeignKey<SkillMasteryQuest>(d => d.QuestId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Skill_Mas__Quest__7A672E12");
         });
 
@@ -1172,7 +1180,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Learner).WithMany(p => p.SkillProgressions)
                 .HasForeignKey(d => d.LearnerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__SkillProg__Learn__04E4BC85");
         });
 
@@ -1204,7 +1212,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Survey).WithMany(p => p.SurveyQuestions)
                 .HasForeignKey(d => d.SurveyId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__SurveyQue__Surve__208CD6FA");
         });
 
@@ -1221,12 +1229,12 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Assessment).WithMany(p => p.TakenAssessments)
                 .HasForeignKey(d => d.AssessmentId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__TakenAsse__Asses__0A9D95DB");
 
             entity.HasOne(d => d.Learner).WithMany(p => p.TakenAssessments)
                 .HasForeignKey(d => d.LearnerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__TakenAsse__Learn__0B91BA14");
         });
 
@@ -1241,7 +1249,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Module).WithMany(p => p.TargetTraits)
                 .HasForeignKey(d => d.ModuleId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__TargetTra__Modul__534D60F1");
         });
 
