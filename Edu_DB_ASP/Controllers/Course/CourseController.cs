@@ -268,6 +268,7 @@ namespace Edu_DB_ASP.Controllers.Course
             try
             {
                 var enrollment = await _context.CourseEnrollments
+                    .Include(e => e.Course)
                     .FirstOrDefaultAsync(e => e.LearnerId == learnerId && e.CourseId == courseId);
 
                 if (enrollment == null)
@@ -276,6 +277,15 @@ namespace Edu_DB_ASP.Controllers.Course
                     return RedirectToAction(nameof(Index));
                 }
 
+                // Insert into RemovedCourse
+                var removedCourse = new RemovedCourse
+                {
+                    LearnerId = learnerId.Value,
+                    Title = enrollment.Course.Title,
+                    Description = enrollment.Course.CourseDescription
+                };
+                _context.RemovedCourses.Add(removedCourse);
+
                 _context.CourseEnrollments.Remove(enrollment);
                 await _context.SaveChangesAsync();
                 TempData["Message"] = "Successfully unenrolled from the course.";
@@ -283,6 +293,10 @@ namespace Edu_DB_ASP.Controllers.Course
             catch (Exception ex)
             {
                 TempData["Error"] = "Error unenrolling from the course: " + ex.Message;
+                if (ex.InnerException != null)
+                {
+                    TempData["Error"] += " Inner exception: " + ex.InnerException.Message;
+                }
             }
 
             return RedirectToAction(nameof(Index));
@@ -361,6 +375,28 @@ namespace Edu_DB_ASP.Controllers.Course
             }
 
             return RedirectToAction(nameof(Index));
+        }
+        
+        public async Task<IActionResult> LearnerCourses()
+        {
+            var learnerId = HttpContext.Session.GetInt32("LearnerId");
+            if (learnerId == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var courses = await _context.CourseEnrollments
+                .Include(e => e.Course)
+                .Where(e => e.LearnerId == learnerId)
+                .Select(e => e.Course)
+                .ToListAsync();
+
+            return View(courses);
+        }
+        public async Task<IActionResult> RemovedCourses()
+        {
+            var removedCourses = await _context.RemovedCourses.ToListAsync();
+            return View(removedCourses);
         }
     }
 }

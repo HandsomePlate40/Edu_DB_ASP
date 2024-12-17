@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Edu_DB_ASP.Models.RemovedCourse>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Removed Courses</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #11111B; /* base */
+            color: #D9E0EE; /* text */
+        }
+        .section-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        h2 {
+            color: #cba6f7;
+            border-bottom: 2px solid #45475a;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #181825;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        table thead {
+            background: #313244;
+        }
+        table thead th {
+            text-align: left;
+            padding: 1rem;
+            color: #cdd6f4;
+            font-weight: 600;
+            border-bottom: 1px solid #45475a;
+        }
+        table tbody tr {
+            border-bottom: 1px solid #313244;
+        }
+        table tbody tr:hover {
+            background: #1e1e2e;
+        }
+        table tbody td {
+            padding: 1rem;
+            color: #a6adc8;
+        }
+    </style>
+</head>
+<body>
+<div class="section-container">
+    <h2>Removed Courses</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Removed Course ID</th>
+            <th>Learner ID</th>
+            <th>Title</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var course in Model)
+        {
+            <tr>
+                <td>@course.RemovedCourseId</td>
+                <td>@course.LearnerId</td>
+                <td>@course.Title</td>
+                <td>@course.Description</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
