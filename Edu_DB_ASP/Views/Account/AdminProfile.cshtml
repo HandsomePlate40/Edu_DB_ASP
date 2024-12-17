@@ -246,6 +246,14 @@
     </a>
 </div>
 
+<form asp-controller="InstructorOptions" asp-action="DeleteQuestsByCriteria" method="post">
+    <div>
+        <label for="criteria">Criteria:</label>
+        <input type="text" id="criteria" name="criteria" required style="color: black" />
+    </div>
+    <button type="submit" class="btn-primary">Delete Quests</button>
+</form>
+
 <!-- Scripts -->
 <script>
     function uploadProfilePicture() {

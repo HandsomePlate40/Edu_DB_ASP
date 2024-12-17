@@ -3,11 +3,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Meta tags -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Instructor Profile</title>
-    <!-- Styles -->
     <style>
         /* Existing styles */
         body {
@@ -101,30 +99,38 @@
         }
         table {
             width: 100%;
-            border-collapse: collapse;
-            background: #181825;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 2rem;
             border-radius: 15px;
             overflow: hidden;
+            border: 1px solid #313244;
         }
-        table thead {
-            background: #313244;
+
+        .table-header-row {
+            background-color: #313244;
         }
-        table thead th {
+
+        th {
             text-align: left;
-            padding: 1rem;
-            color: #cdd6f4;
-            font-weight: 600;
-            border-bottom: 1px solid #45475a;
+            padding: 0.75rem;
+            color: #cba6f7;
+            border-bottom: 2px solid #45475a;
         }
-        table tbody tr {
+
+        td {
+            padding: 0.75rem;
             border-bottom: 1px solid #313244;
         }
+
+        /* Remove the right border from the last th and td in each row */
+        th:last-child,
+        td:last-child {
+            border-right: none;
+        }
+
         table tbody tr:hover {
             background: #1e1e2e;
-        }
-        table tbody td {
-            padding: 1rem;
-            color: #a6adc8;
         }
         .tag {
             display: inline-block;
@@ -145,12 +151,27 @@
         .table-section {
             margin-bottom: 3rem;
         }
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Creates a 2-column grid */
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem auto;
+            max-width: 600px; /* Adjust as needed */
+        }
+
+        .actions-grid a, .actions-grid form {
+            display: flex; /* Use flexbox to center content */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            text-align: center;
+        }
         .back-to-index {
             display: flex;
             justify-content: center;
             margin-top: 2rem;
         }
-        .back-to-index button, .btn-primary {
+        .back-to-index button, .btn-primary, .btn-danger{
             background-color: #89b4fa;
             color: #1e1e2e;
             border: none;
@@ -160,17 +181,26 @@
             cursor: pointer;
             border-radius: 15px;
             transition: background-color 0.3s ease;
+            text-decoration: none;
         }
-        .back-to-index button:hover, .btn-primary:hover {
+        .back-to-index button:hover, .btn-primary:hover, .btn-danger:hover {
             background-color: #74c7ec;
+        }
+
+        .btn-danger {
+            background-color: #F38BA8;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc7791;
         }
     </style>
 </head>
 <body>
 
-<!-- Profile Header Section -->
 <div class="profile-container">
-    <!-- Profile Image and Upload Functionality -->
     <div class="profile-pic-form">
         <div class="profile-image">
             <img src="@Model.Instructor.ProfilePictureUrl" alt="Instructor Profile Picture" id="profileImg" />
@@ -189,18 +219,16 @@
     </div>
 </div>
 
-<!-- Hidden Form to Submit Uploaded File -->
 <form id="uploadForm" asp-action="UploadInstructorProfilePicture" method="post" enctype="multipart/form-data" style="display:none;">
     <input type="file" id="hiddenProfilePicture" name="profilePicture" />
 </form>
 
-<!-- Taught Courses Table -->
 <div class="section-container">
     <div class="table-section">
         <h2>Taught Courses</h2>
         <table>
             <thead>
-            <tr>
+            <tr class="table-header-row">
                 <th>Course Title</th>
                 <th>Description</th>
                 <th>Difficulty Level</th>
@@ -220,10 +248,10 @@
                     <td>@course.CreditPoints</td>
                     <td>@course.LearningObjectives</td>
                     <td>@course.Prerequisites</td>
-                    <td>
+                    <td class="actions-cell">
                         <form asp-action="Delete" asp-controller="Course" method="get">
                             <input type="hidden" name="id" value="@course.CourseId" />
-                            <button type="submit" class="btn-primary">Delete</button>
+                            <button type="submit" class="btn-danger">Delete</button>
                         </form>
                     </td>
                 </tr>
@@ -238,69 +266,43 @@
     <div>@TempData["Message"]</div>
 }
 
-<!-- Back to Index Button -->
-<div class="back-to-index">
-    <a asp-action="AddCollabQuest" asp-controller="InstructorOptions">
-        <button>Go to Your Options</button>
+<div class="actions-grid">
+    <a asp-action="AddCollabQuest" asp-controller="InstructorOptions" class="btn-primary">
+        Add a Quest
     </a>
-</div>
-
-<!-- Back to Index Button -->
-<div class="back-to-index">
-    <a asp-action="AddDiscussion" asp-controller="InstructorOptions">
-        <button>Add a discussion</button>
+    <a asp-action="AddDiscussion" asp-controller="InstructorOptions" class="btn-primary">
+        Add a discussion
     </a>
-</div>
-
-<div class="back-to-index">
-    <a asp-action="AddLearningPath" asp-controller="InstructorOptions">
-        <button>Add a Learning Path</button>
+    <a asp-action="AddLearningPath" asp-controller="InstructorOptions" class="btn-primary">
+        Add a Learning Path
     </a>
-</div>
-
-<div class="back-to-index">
-    <a asp-action="Index" asp-controller="InstructorProfileOptions">
-        <button>View your Information</button>
+    <a asp-action="Index" asp-controller="InstructorProfileOptions" class="btn-primary">
+        View your Information
     </a>
-</div>
-
-<div class="back-to-index">
-    <a asp-action="Index" asp-controller="Module">
-        <button>Module Manager</button>
+    <a asp-action="Index" asp-controller="Module" class="btn-primary">
+        See Modules
     </a>
-</div>
-
-<div class="back-to-index">
-    <a asp-action="Create" asp-controller="Course">
-        <button>Course Manager</button>
+    <a asp-action="Create" asp-controller="Course" class="btn-primary">
+        Course Manager
     </a>
-</div>
-
-<div class="back-to-index">
-    <a asp-action="Teach" asp-controller="Course">
-        <button>Teach a course</button>
+    <a asp-action="Teach" asp-controller="Course" class="btn-primary">
+        Teach a course
     </a>
-</div>
-
-<!-- Form to Delete Quests by Criteria -->
-<div class="section-container">
-    <h2>Delete Quests by Criteria</h2>
+    <a asp-action="AddAchievement" asp-controller="InstructorOptions" class="btn-primary">
+        Add Achievement
+    </a>
+    <a asp-action="InstructorAssessmentView" asp-controller="Assessment" class="btn-primary">
+        Assessments Manager
+    </a>
     <form asp-controller="InstructorOptions" asp-action="DeleteQuestsByCriteria" method="post">
         <div>
             <label for="criteria">Criteria:</label>
-            <input type="text" id="criteria" name="criteria" required />
+            <input type="text" id="criteria" name="criteria" required style="color: black" />
         </div>
         <button type="submit" class="btn-primary">Delete Quests</button>
     </form>
 </div>
 
-<div class="back-to-index">
-    <a asp-action="AddAchievement" asp-controller="InstructorOptions">
-        <button>Add Achievement</button>
-    </a>
-</div>
-
-<!-- Scripts -->
 <script>
     function uploadProfilePicture() {
         var fileInput = document.getElementById('profilePicture');

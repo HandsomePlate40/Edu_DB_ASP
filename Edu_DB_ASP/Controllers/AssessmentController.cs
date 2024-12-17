@@ -25,8 +25,6 @@ namespace Edu_DB_ASP.Controllers.Assessments
                 MaxScore = max,
                 TotalMarks = marks,
                 PassingMarks = pass,
-                
-                
             };
             _context.Assessments.Add(assessment);
             _context.SaveChangesAsync();
@@ -64,9 +62,6 @@ namespace Edu_DB_ASP.Controllers.Assessments
                     .ToListAsync();
                 
             }
-            
-            
-
             return assessments; 
         }
         [HttpGet]

@@ -40,20 +40,29 @@ namespace Edu_DB_ASP.Controllers.InstructorOptions
 
             if (ModelState.IsValid)
             {
-                using (var connection = new SqlConnection(_connectionString))
+                try
                 {
-                    var query =
-                        "EXEC CollaborativeQuest @difficulty_level, @criteria, @description, @title, @Maxnumparticipants, @deadline";
-                    var command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@difficulty_level", model.DifficultyLevel);
-                    command.Parameters.AddWithValue("@criteria", model.Criteria);
-                    command.Parameters.AddWithValue("@description", model.Description);
-                    command.Parameters.AddWithValue("@title", model.Title);
-                    command.Parameters.AddWithValue("@Maxnumparticipants", model.MaxParticipants);
-                    command.Parameters.AddWithValue("@deadline", model.Deadline);
+                    using (var connection = new SqlConnection(_connectionString))
+                    {
+                        var query =
+                            "EXEC CollaborativeQuest @difficulty_level, @criteria, @description, @title, @Maxnumparticipants, @deadline";
+                        var command = new SqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@difficulty_level", model.DifficultyLevel);
+                        command.Parameters.AddWithValue("@criteria", model.Criteria);
+                        command.Parameters.AddWithValue("@description", model.Description);
+                        command.Parameters.AddWithValue("@title", model.Title);
+                        command.Parameters.AddWithValue("@Maxnumparticipants", model.MaxParticipants);
+                        command.Parameters.AddWithValue("@deadline", model.Deadline);
 
-                    connection.Open();
-                    await command.ExecuteNonQueryAsync();
+                        connection.Open();
+                        await command.ExecuteNonQueryAsync();
+                    }
+
+                    TempData["SuccessMessage"] = "Collaborative quest added successfully.";
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = $"An error occurred while adding the collaborative quest: {ex.Message}";
                 }
 
                 return RedirectToAction("AddCollabQuest", "InstructorOptions");

@@ -3,11 +3,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Meta tags -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Profile</title>
-    <!-- Styles -->
     <style>
         body {
             margin: 0;
@@ -115,35 +113,38 @@
 
         table {
             width: 100%;
-            border-collapse: collapse;
-            background: #181825;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 2rem;
             border-radius: 15px;
             overflow: hidden;
+            border: 1px solid #313244;
         }
 
-        table thead {
-            background: #313244;
+        .table-header-row {
+            background-color: #313244;
         }
 
-        table thead th {
+        th {
             text-align: left;
-            padding: 1rem;
-            color: #cdd6f4;
-            font-weight: 600;
-            border-bottom: 1px solid #45475a;
+            padding: 0.75rem;
+            color: #cba6f7;
+            border-bottom: 2px solid #45475a;
         }
 
-        table tbody tr {
+        td {
+            padding: 0.75rem;
             border-bottom: 1px solid #313244;
         }
 
-        table tbody tr:hover {
-            background: #1e1e2e;
+        /* Remove the right border from the last th and td in each row */
+        th:last-child,
+        td:last-child {
+            border-right: none;
         }
 
-        table tbody td {
-            padding: 1rem;
-            color: #a6adc8;
+        tr:hover {
+            background-color: #1e1e2e;
         }
 
         .tag {
@@ -168,6 +169,27 @@
         .table-section {
             margin-bottom: 3rem;
         }
+        .actions-cell {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Creates a 2-column grid */
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem auto;
+            max-width: 600px; /* Adjust as needed */
+        }
+
+        .actions-grid a {
+            display: flex; /* Use flexbox to center content */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            text-align: center;
+        }
 
         .back-to-index {
             display: flex;
@@ -175,7 +197,7 @@
             margin-top: 2rem;
         }
 
-        .back-to-index button, .btn-primary {
+        .back-to-index button, .btn-primary, .btn-danger {
             background-color: #89b4fa;
             color: #1e1e2e;
             border: none;
@@ -185,10 +207,21 @@
             cursor: pointer;
             border-radius: 15px;
             transition: background-color 0.3s ease;
+            text-decoration: none;
         }
 
-        .back-to-index button:hover, .btn-primary:hover {
+        .back-to-index button:hover, .btn-primary:hover, .btn-danger:hover {
             background-color: #74c7ec;
+        }
+
+        .btn-danger {
+            background-color: #F38BA8;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc7791;
         }
 
         .btn-primary {
@@ -225,12 +258,44 @@
             font-weight: bold;
             cursor: pointer;
         }
+        /* Dropdown styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #313244;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .dropdown-content a {
+            color: #D9E0EE;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #45475a;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
     </style>
 </head>
 <body>
-<!-- Profile Header Section -->
 <div class="profile-container">
-    <!-- Profile Image and Upload Functionality -->
     <div class="profile-pic-form">
         <div class="profile-image">
             <img src="@Model.Learner.ProfilePictureUrl" alt="User Profile Picture" id="profileImg" />
@@ -248,188 +313,149 @@
     </div>
 </div>
 
-<!-- Hidden Form to Submit Uploaded File -->
 <form id="uploadForm" asp-action="UploadProfilePicture" method="post" enctype="multipart/form-data" style="display:none;">
     <input type="file" id="hiddenProfilePicture" name="profilePicture" />
 </form>
 
 <div class="section-container">
-    <!-- Learning Path Table -->
     <div class="table-section">
         <h2>Learning Path</h2>
         <table>
             <thead>
-            <tr>
-                <th>Path ID</th>
-                <th>Description</th>
-                <th>Completion Status</th>
-            </tr>
+                <tr class="table-header-row">
+                    <th>Path ID</th>
+                    <th>Description</th>
+                    <th>Completion Status</th>
+                </tr>
             </thead>
             <tbody>
-            @foreach (var path in Model.LearningPath)
-            {
-                <tr>
-                    <td>@path.PathId</td>
-                    <td>@path.LearningPathDescription</td>
-                    <td>
-                        @if (path.CompletionStatus.ToLower() == "new")
-                        {
-                            <span class="status-new">@path.CompletionStatus.ToUpper()</span>
-                        }
-                        else if (path.CompletionStatus.ToLower() == "in progress")
-                        {
-                            <span class="status-in-progress">@path.CompletionStatus.ToUpper()</span>
-                        }
-                        else
-                        {
-                            @path.CompletionStatus
-                        }
-                    </td>
-                </tr>
-            }
+                @foreach (var path in Model.LearningPath)
+                {
+                    <tr>
+                        <td>@path.PathId</td>
+                        <td>@path.LearningPathDescription</td>
+                        <td>
+                            @if (path.CompletionStatus.ToLower() == "new")
+                            {
+                                <span class="status-new">@path.CompletionStatus.ToUpper()</span>
+                            }
+                            else if (path.CompletionStatus.ToLower() == "in progress")
+                            {
+                                <span class="status-in-progress">@path.CompletionStatus.ToUpper()</span>
+                            }
+                            else
+                            {
+                                @path.CompletionStatus
+                            }
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
 </div>
 <div class="section-container">
-    <!-- Enrolled Courses Table -->
     <div class="table-section">
         <h2>Enrolled Courses</h2>
         <table>
             <thead>
-            <tr>
-                <th>Course Title</th>
-                <th>Description</th>
-                <th>Difficulty Level</th>
-                <th>Credit Points</th>
-                <th>Actions</th>
-            </tr>
+                <tr class="table-header-row">
+                    <th>Course Title</th>
+                    <th>Description</th>
+                    <th>Difficulty Level</th>
+                    <th>Credit Points</th>
+                    <th>Actions</th>
+                </tr>
             </thead>
             <tbody>
-            @foreach (var course in Model.EnrolledCourses)
-            {
-                <tr>
-                    <td>@course.Title</td>
-                    <td>@course.CourseDescription</td>
-                    <td>@course.DifficultyLevel</td>
-                    <td>@course.CreditPoints</td>
-                    <td>
-                        <a href="@Url.Action("Unenroll", "Course", new { courseId = course.CourseId })" class="btn btn-danger">Unenroll</a>
-                    </td>
-                </tr>
-            }
+                @foreach (var course in Model.EnrolledCourses)
+                {
+                    <tr>
+                        <td>@course.Title</td>
+                        <td>@course.CourseDescription</td>
+                        <td>@course.DifficultyLevel</td>
+                        <td>@course.CreditPoints</td>
+                        <td class="actions-cell">
+                            <a href="@Url.Action("Unenroll", "Course", new { courseId = course.CourseId })" class="btn btn-danger">Unenroll</a>
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
 </div>
 <div class="section-container">
-    <!-- Discussion Forums Table -->
     <div class="table-section">
         <h2>Discussion Forums</h2>
         <table>
             <thead>
-            <tr>
-                <th>Forum Title</th>
-                <th>Description</th>
-                <th>Actions</th>
-            </tr>
+                <tr class="table-header-row">
+                    <th>Forum Title</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
             </thead>
             <tbody>
-            @foreach (var forum in Model.AvailableForums)
-            {
-                <tr>
-                    <td>@forum.Title</td>
-                    <td>@forum.Description</td>
-                    <td>
-                        <a asp-action="PostMessage" asp-controller="DiscussionForums" asp-route-forumId="@forum.ForumId">
-                            <button class="btn-primary">Post</button>
-                        </a>
-                    </td>
-                </tr>
-            }
+                @foreach (var forum in Model.AvailableForums)
+                {
+                    <tr>
+                        <td>@forum.Title</td>
+                        <td>@forum.Description</td>
+                         <td class="actions-cell">
+                            <a asp-action="PostMessage" asp-controller="DiscussionForums" asp-route-forumId="@forum.ForumId">
+                                <button class="btn-primary">Post</button>
+                            </a>
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
 </div>
 
 <div class="section-container">
-    <!-- Learning Goals Table -->
     <div class="table-section">
         <h2>Learning Goals</h2>
         <table>
             <thead>
-            <tr>
-                <th>Objective Type</th>
-                <th>Progress Status</th>
-                <th>Goal Description</th>
-                <th>Time Bound</th>
-            </tr>
+                <tr class="table-header-row">
+                    <th>Objective Type</th>
+                    <th>Progress Status</th>
+                    <th>Goal Description</th>
+                    <th>Time Bound</th>
+                </tr>
             </thead>
             <tbody>
-            @foreach (var goal in Model.LearningGoals)
-            {
-                <tr>
-                    <td>@goal.ObjectiveType</td>
-                    <td>@goal.ProgressStatus</td>
-                    <td>@goal.GoalDescription</td>
-                    <td>@goal.TimeBound?.ToString("yyyy-MM-dd")</td>
-                </tr>
-            }
+                @foreach (var goal in Model.LearningGoals)
+                {
+                    <tr>
+                        <td>@goal.ObjectiveType</td>
+                        <td>@goal.ProgressStatus</td>
+                        <td>@goal.GoalDescription</td>
+                        <td>@goal.TimeBound?.ToString("yyyy-MM-dd")</td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
 </div>
 
-<!-- Back to Index Button -->
-<div class="back-to-index">
-    <a asp-action="Index" asp-controller="Learners">
-        <button>View your Info</button>
+<div class="actions-grid">
+    <a asp-action="Index" asp-controller="Learners" class="btn-primary">View your Info</a>
+    <a asp-action="JoinCollabQuest" asp-controller="Learners" class="btn-primary">Join a Quest</a>
+    <a asp-action="AddGoal" asp-controller="Learners" class="btn-primary">Add a Goal</a>
+    <a asp-action="QuestMembers" asp-controller="Learners" class="btn-primary">Show Members in Active Quest</a>
+    <a asp-action="LearnerAssessmentView" asp-controller="Assessment" class="btn-primary">Show your Assessments Options</a>
+    <a asp-action="ViewPreviousCourses" asp-controller="Course" class="btn-primary">View Previous Courses</a>
+    <a asp-action="Unenroll" asp-controller="Course" class="btn-primary">Remove enrollment from your Courses</a>
+    <a asp-action="RemovedCourses" asp-controller="Course" class="btn-primary">View Removed Courses</a>
+    <a asp-action="TrackProgress" asp-controller="Learners" class="btn-primary">Track Progress</a>
+    <a asp-action="ShareFeedback" asp-controller="Learners" class="btn-primary">Share Emotional Feedback</a>
+    <a asp-action="ViewLearnerIndex" asp-controller="Module" class="btn-primary">
+        See Modules
     </a>
 </div>
 
-<div class="back-to-index">
-    <a asp-action="JoinCollabQuest" asp-controller="Learners">
-        <button>Join a Quest</button>
-    </a>
-</div>
-
-<div class="back-to-index">
-    <a asp-action="AddGoal" asp-controller="Learners">
-        <button>Add a Goal</button>
-    </a>
-</div>
-
-<div class="back-to-index">
-    <a asp-action="QuestMembers" asp-controller="Learners">
-        <button>Show Members in Active Quest</button>
-    </a>
-</div>
-
-<div class="back-to-index">
-    <a asp-action="LearnerAssessmentView" asp-controller="Assessment">
-        <button>Show your Assessments Options</button>
-    </a>
-</div>
-
-<div class="back-to-index">
-    <a asp-action="ViewPreviousCourses" asp-controller="Course">
-        <button>View Previous Courses</button>
-    </a>
-</div>
-
-<div class="back-to-index">
-    <a asp-action="Unenroll" asp-controller="Course">
-        <button>Remove enrollment from your Courses</button>
-    </a>
-</div>
-
-<div class="back-to-index">
-    <a asp-action="RemovedCourses" asp-controller="Course">
-        <button>View Removed Courses</button>
-    </a>
-</div>
-
-<!-- Scripts -->
 <script>
     function uploadProfilePicture() {
         var fileInput = document.getElementById('profilePicture');

@@ -247,6 +247,20 @@
 
 <div class="form-container">
     <h2>Add Collaborative Quest</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
     <form asp-action="AddCollabQuest" method="post">
         <div class="form-group">
             <label for="Title">Title</label>

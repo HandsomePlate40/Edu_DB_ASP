@@ -7,10 +7,6 @@
 <div class="container">
     <h1 class="page-title">Modules</h1>
 
-    <div class="table-controls">
-        <a asp-action="Create" class="btn btn-primary">Create New Module</a>
-    </div>
-
     <table class="table">
         <thead>
         <tr class="table-header-row">
@@ -60,11 +56,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Course.Title)
                 </td>
-                <td class="actions-cell">
-                    <a asp-action="Edit" asp-route-id="@item.ModuleId" class="btn btn-secondary btn-sm">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.ModuleId" class="btn btn-secondary btn-sm">Details</a>
-                    <a asp-action="Delete" asp-route-id="@item.ModuleId" class="btn btn-danger btn-sm">Delete</a>
-                </td>
+           
             </tr>
         }
         </tbody>

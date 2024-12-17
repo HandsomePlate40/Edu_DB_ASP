@@ -172,26 +172,44 @@ namespace Edu_DB_ASP.Controllers.ModuleController
         {
             var courseId = _context.Modules.Where(m => m.ModuleId == moduleId).Select(m => m.CourseId).FirstOrDefault();
 
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            try
             {
-                using (var command = new SqlCommand("NewActivity", connection))
+                using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
                 {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@CourseID", courseId);
-                    command.Parameters.AddWithValue("@ModuleID", moduleId);
-                    command.Parameters.AddWithValue("@activitytype", activityType);
-                    command.Parameters.AddWithValue("@instructiondetails", instructionDetails);
-                    command.Parameters.AddWithValue("@maxpoints", maxPoints);
+                    using (var command = new SqlCommand("NewActivity", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@CourseID", courseId);
+                        command.Parameters.AddWithValue("@ModuleID", moduleId);
+                        command.Parameters.AddWithValue("@activitytype", activityType);
+                        command.Parameters.AddWithValue("@instructiondetails", instructionDetails);
+                        command.Parameters.AddWithValue("@maxpoints", maxPoints);
 
-                    connection.Open();
-                    await command.ExecuteNonQueryAsync();
+                        connection.Open();
+                        await command.ExecuteNonQueryAsync();
+                    }
                 }
+
+                TempData["Message"] = "Activity added successfully.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"An error occurred while adding the activity: {ex.Message}";
             }
 
             return RedirectToAction(nameof(Edit), new { id = moduleId });
         }
-
+        
         public async Task<IActionResult> ViewModules(int courseId)
+        {
+            var modules = await _context.Modules
+                .Where(m => m.CourseId == courseId)
+                .ToListAsync();
+
+            return View(modules);
+        }
+        
+        public async Task<IActionResult> ViewLearnerIndex(int courseId)
         {
             var modules = await _context.Modules
                 .Where(m => m.CourseId == courseId)
