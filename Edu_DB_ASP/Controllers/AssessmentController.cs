@@ -78,7 +78,7 @@ namespace Edu_DB_ASP.Controllers.Assessments
         public async Task<IActionResult> UpdateScore(AssessmentUpdateModel model)
         {
             var assessment = await _context.Assessments
-                .FirstOrDefaultAsync(a => a.Title == model.title);
+                .FirstOrDefaultAsync(a => a.AssessmentId == model.AssessmentId);
 
             if (assessment == null)
             {
@@ -313,7 +313,7 @@ namespace Edu_DB_ASP.Controllers.Assessments
                 course =a.Module.Course.CourseId
             }
             );
-            return View(assessments);
+            return View(fassessments);
         }
         [HttpGet]
         public IActionResult LearnerReset()
@@ -380,4 +380,6 @@ namespace Edu_DB_ASP.Controllers.Assessments
 
     }
  }
+
+
 
