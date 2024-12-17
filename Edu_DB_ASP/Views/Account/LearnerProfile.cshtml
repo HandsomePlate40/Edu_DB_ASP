@@ -309,15 +309,15 @@
 </div>
 
 <div class="section-container">
-    <!-- Available Forums Table -->
+    <!-- Discussion Forums Table -->
     <div class="table-section">
-        <h2>Available Forums</h2>
+        <h2>Discussion Forums</h2>
         <table>
             <thead>
             <tr>
                 <th>Forum Title</th>
                 <th>Description</th>
-                <th>Action</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -327,10 +327,9 @@
                     <td>@forum.Title</td>
                     <td>@forum.Description</td>
                     <td>
-                        <form asp-action="PostMessage" asp-controller="DiscussionForums" method="get">
-                            <input type="hidden" name="forumId" value="@forum.ForumId" />
-                            <button type="submit" class="btn btn-primary">Post</button>
-                        </form>
+                        <a asp-action="PostMessage" asp-controller="DiscussionForums" asp-route-forumId="@forum.ForumId">
+                            <button class="btn-primary">Post</button>
+                        </a>
                     </td>
                 </tr>
             }

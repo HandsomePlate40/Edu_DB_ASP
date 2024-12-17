@@ -190,18 +190,10 @@ namespace Edu_DB_ASP.Controllers.Account
                     CourseDescription = ec.Course.CourseDescription,
                     DifficultyLevel = ec.Course.DifficultyLevel,
                     CreditPoints = ec.Course.CreditPoints.HasValue ? (int)ec.Course.CreditPoints.Value : 0,
-                    
                 })
                 .ToListAsync();
 
-            var availableForums = await _context.DiscussionForums
-                .Join(_context.Joins,
-                    df => df.ForumId,
-                    j => j.ForumId,
-                    (df, j) => new { DiscussionForum = df, Join = j })
-                .Where(dj => dj.Join.LearnerId == learnerId)
-                .Select(dj => dj.DiscussionForum)
-                .ToListAsync();
+            var availableForums = await _context.DiscussionForums.ToListAsync();
 
             var learningGoals = await _context.LearningGoals
                 .Where(lg => lg.LearnerId == learnerId)
@@ -657,7 +649,6 @@ public async Task<IActionResult> UploadInstructorProfilePicture(IFormFile profil
             ModelState.AddModelError("", "Invalid email or password.");
             return View(model);
         }
-
     }
 }
     

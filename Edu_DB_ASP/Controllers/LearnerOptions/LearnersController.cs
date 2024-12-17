@@ -345,42 +345,5 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
 
             return View(model);
         }
-        
-        public async Task<IActionResult> LearnerProfile()
-        {
-            var email = HttpContext.Session.GetString("UserEmail");
-            if (email == null)
-            {
-                return RedirectToAction("LearnerLogin", "Account");
-            }
-
-            var learner = await _context.Learners.SingleOrDefaultAsync(u => u.Email == email);
-            if (learner == null)
-            {
-                return RedirectToAction("LearnerLogin", "Account");
-            }
-
-            var learnerId = learner.LearnerId;
-
-            var learningPath = await _context.LearningPaths
-                .FromSqlRaw("EXEC CurrentPath @LearnerID = {0}", learnerId)
-                .ToListAsync();
-
-            var learningGoals = await _context.LearningGoals
-                .Where(lg => lg.LearnerId == learnerId)
-                .ToListAsync();
-
-            var availableForums = await _context.DiscussionForums.ToListAsync();
-
-            var viewModel = new LearnerProfileViewModel
-            {
-                Learner = learner,
-                LearningPath = learningPath ?? new List<LearningPath>(),
-                LearningGoals = learningGoals ?? new List<LearningGoal>(),
-                AvailableForums = availableForums ?? new List<DiscussionForum>()
-            };
-
-            return View(viewModel);
-        }
     }
 }
