@@ -355,10 +355,9 @@ public partial class EduDbContext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false);
         });
-
         modelBuilder.Entity<CourseEnrollment>(entity =>
         {
-            entity.HasKey(e => new { e.EnrollmentId, e.LearnerId, e.CourseId }).HasName("PK__CourseEn__4FDBE545C4B4E420");
+            entity.HasKey(e => e.EnrollmentId).HasName("PK__CourseEn__4FDBE545C4B4E420");
 
             entity.ToTable("CourseEnrollment");
 
@@ -366,7 +365,7 @@ public partial class EduDbContext : DbContext
 
             entity.HasIndex(e => e.LearnerId, "IX_CourseEnrollment_LearnerID");
 
-            entity.Property(e => e.EnrollmentId).HasColumnName("EnrollmentID");
+            entity.Property(e => e.EnrollmentId).HasColumnName("EnrollmentID").ValueGeneratedOnAdd();
             entity.Property(e => e.LearnerId).HasColumnName("LearnerID");
             entity.Property(e => e.CourseId).HasColumnName("CourseID");
             entity.Property(e => e.EnrollmentStatus)
@@ -375,11 +374,12 @@ public partial class EduDbContext : DbContext
 
             entity.HasOne(d => d.Course).WithMany(p => p.CourseEnrollments)
                 .HasForeignKey(d => d.CourseId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__CourseEnr__Cours__5CD6CB2B");
 
             entity.HasOne(d => d.Learner).WithMany(p => p.CourseEnrollments)
                 .HasForeignKey(d => d.LearnerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__CourseEnr__Learn__5BE2A6F2");
 
             entity.HasMany(d => d.Surveys).WithMany(p => p.CourseEnrollments)
@@ -390,17 +390,15 @@ public partial class EduDbContext : DbContext
                         .OnDelete(DeleteBehavior.ClientSetNull)
                         .HasConstraintName("FK__Tied__SurveyID__3F115E1A"),
                     l => l.HasOne<CourseEnrollment>().WithMany()
-                        .HasForeignKey("EnrollmentId", "LearnerId", "CourseId")
+                        .HasForeignKey("EnrollmentId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
                         .HasConstraintName("FK__Tied__3E1D39E1"),
                     j =>
                     {
-                        j.HasKey("EnrollmentId", "LearnerId", "CourseId", "SurveyId").HasName("PK__Tied__B611B1C446A51BE7");
+                        j.HasKey("EnrollmentId", "SurveyId").HasName("PK__Tied__B611B1C446A51BE7");
                         j.ToTable("Tied");
                         j.HasIndex(new[] { "SurveyId" }, "IX_Tied_SurveyID");
                         j.IndexerProperty<int>("EnrollmentId").HasColumnName("EnrollmentID");
-                        j.IndexerProperty<int>("LearnerId").HasColumnName("LearnerID");
-                        j.IndexerProperty<int>("CourseId").HasColumnName("CourseID");
                         j.IndexerProperty<int>("SurveyId").HasColumnName("SurveyID");
                     });
         });
