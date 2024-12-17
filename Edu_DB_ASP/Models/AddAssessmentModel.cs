@@ -4,6 +4,8 @@ namespace Edu_DB_ASP.Models
 {
     public class AddAssessmentModel
     {
+        [Required]
+        public int AssessmentId { get; set; }
 
         [Required]
         public string Title { get; set; }
@@ -26,6 +28,7 @@ namespace Edu_DB_ASP.Models
         [Required]
         public int PassingMarks { get; set; }
 
+        [Required]
         public int ModuleId { get; set; }
     }
 

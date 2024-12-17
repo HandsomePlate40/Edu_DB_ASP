@@ -6,23 +6,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Share Emotional Feedback</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #11111B;
+            color: #D9E0EE;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: #181825;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .page-title {
+            color: #cba6f7;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .feedback-form {
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-label {
+            color: #BAC2DE;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control {
+            background-color: #313244;
+            border: 1px solid #45475a;
+            color: #D9E0EE;
+            padding: 0.5rem;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #89b4fa;
+            box-shadow: 0 0 0 2px #89b4fa40;
+        }
+
+        .form-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #89b4fa;
+            color: #1e1e2e;
+        }
+
+        .btn-primary:hover {
+            background-color: #74c7ec;
+        }
+    </style>
 </head>
 <body>
-<div class="section-container">
-    <h2>Share Emotional Feedback</h2>
-    <form asp-action="ShareFeedback" method="post">
-        <div>
-            <label for="ActivityID">Activity ID:</label>
-            <input type="number" id="ActivityID" name="ActivityID" required />
-        </div>
-        <div>
-            <label for="EmotionalState">Emotional State:</label>
-            <input type="text" id="EmotionalState" name="EmotionalState" required />
-        </div>
-        <div>
-            <button type="submit">Submit Feedback</button>
-        </div>
-    </form>
+<div class="container">
+    <h2 class="page-title">Share Emotional Feedback</h2>
+    <div class="feedback-form">
+        <form asp-action="ShareFeedback" method="post">
+            <div class="form-group">
+                <label asp-for="ActivityID" class="control-label">Activity ID:</label>
+                <input type="number" asp-for="ActivityID" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label asp-for="EmotionalState" class="control-label">Emotional State:</label>
+                <select asp-for="EmotionalState" class="form-control" required>
+                    <option value="">Select an Emotion</option>
+                    <option value="Happy">Happy</option>
+                    <option value="Sad">Sad</option>
+                    <option value="Confused">Confused</option>
+                    <option value="Excited">Excited</option>
+                    <option value="Frustrated">Frustrated</option>
+                    <option value="Motivated">Motivated</option>
+                    <option value="Demotivated">Demotivated</option>
+                    <option value="Challenged">Challenged</option>
+                    <option value="Bored">Bored</option>
+                </select>
+            </div>
+            <div class="form-group form-buttons">
+                <button type="submit" class="btn btn-primary">Submit Feedback</button>
+            </div>
+        </form>
+    </div>
 </div>
 </body>
 </html>

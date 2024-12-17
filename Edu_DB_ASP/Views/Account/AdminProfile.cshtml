@@ -3,11 +3,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Meta tags -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Profile</title>
-    <!-- Styles -->
     <style>
         body {
             margin: 0;
@@ -100,6 +98,15 @@
             color: #BAC2DE; /* subtext1 */
         }
 
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: #181825;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
         .section-container {
             max-width: 1200px;
             margin: 2rem auto;
@@ -113,60 +120,20 @@
             margin-bottom: 1rem;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #181825;
-            border-radius: 15px;
-            overflow: hidden;
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Creates a 2-column grid */
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem auto;
+            max-width: 600px; /* Adjust as needed */
         }
 
-        table thead {
-            background: #313244;
-        }
-
-        table thead th {
-            text-align: left;
-            padding: 1rem;
-            color: #cdd6f4;
-            font-weight: 600;
-            border-bottom: 1px solid #45475a;
-        }
-
-        table tbody tr {
-            border-bottom: 1px solid #313244;
-        }
-
-        table tbody tr:hover {
-            background: #1e1e2e;
-        }
-
-        table tbody td {
-            padding: 1rem;
-            color: #a6adc8;
-        }
-
-        .tag {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin-right: 0.5rem;
-        }
-
-        .tag.active {
-            background: #A6E3A1; /* green */
-            color: #1E1E2E; /* base */
-        }
-
-        .tag.archived {
-            background: #F8BD96; /* peach */
-            color: #1E1E2E; /* base */
-        }
-
-        .table-section {
-            margin-bottom: 3rem;
+        .actions-grid a, .actions-grid .dropdown {
+            display: flex; /* Use flexbox to center content */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            text-align: center;
         }
 
         .back-to-index {
@@ -175,7 +142,7 @@
             margin-top: 2rem;
         }
 
-        .back-to-index button, .btn-primary {
+        .back-to-index button, .btn-primary, .btn-danger {
             background-color: #89b4fa;
             color: #1e1e2e;
             border: none;
@@ -185,18 +152,78 @@
             cursor: pointer;
             border-radius: 15px;
             transition: background-color 0.3s ease;
+            text-decoration: none;
         }
 
-        .back-to-index button:hover, .btn-primary:hover {
+        .back-to-index button:hover, .btn-primary:hover, .btn-danger:hover {
             background-color: #74c7ec;
+        }
+
+        .btn-danger {
+            background-color: #F38BA8;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc7791;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #313244;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .dropdown-content form {
+            padding: 12px 16px;
+        }
+
+        .dropdown-content label {
+            color: #D9E0EE;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .dropdown-content input[type="text"] {
+            width: calc(100% - 1rem);
+            padding: 0.5rem;
+            border: 1px solid #45475a;
+            background-color: #313244;
+            color: #D9E0EE;
+            border-radius: 8px;
+        }
+
+        .dropdown-content button {
+            margin-top: 0.5rem;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        h2 {
+            color: #cba6f7;
+            border-bottom: 2px solid #45475a;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
         }
     </style>
 </head>
 <body>
 
-<!-- Profile Header Section -->
 <div class="profile-container">
-    <!-- Profile Image and Upload Functionality -->
     <div class="profile-pic-form">
         <div class="profile-image">
             <img src="@Model.ProfilePictureUrl" alt="Admin Profile Picture" id="profileImg" />
@@ -211,50 +238,50 @@
     <div class="profile-info">
         <h1>@Model.FirstName @Model.LastName</h1>
         <p>@Model.Email</p>
+        <p>Welcome back Admin!</p>
     </div>
 </div>
 
-<!-- Hidden Form to Submit Uploaded File -->
 <form id="uploadForm" asp-action="UploadAdminProfilePicture" method="post" enctype="multipart/form-data" style="display:none;">
     <input type="file" id="hiddenProfilePicture" name="profilePicture" />
 </form>
 
-<!-- Back to Index Button -->
-<div class="back-to-index">
-    <a asp-action="Index" asp-controller="LearnerOptionsAdmin">
-        <button>Go to Learners Index</button>
-    </a>
-</div>
-
-<!-- Back to Index Button -->
-<div class="back-to-index">
-    <a asp-action="Index" asp-controller="PersonalizationProfiles">
-        <button>Go to Personalization Profile Index</button>
-    </a>
-</div>
-
-<!-- Back to Index Button -->
-<div class="back-to-index">
-    <a asp-action="Index" asp-controller="InstructorOptionsAdmin">
-        <button>Go to Instructor Index</button>
-    </a>
-</div>
-
-<div class="back-to-index">
-    <a asp-action="Index" asp-controller="Module">
-        <button>Module Manager</button>
-    </a>
-</div>
-
-<form asp-controller="InstructorOptions" asp-action="DeleteQuestsByCriteria" method="post">
-    <div>
-        <label for="criteria">Criteria:</label>
-        <input type="text" id="criteria" name="criteria" required style="color: black" />
+<div class="container">
+    <h2>Your Options:</h2>
+    <div class="actions-grid">
+        <a asp-action="Index" asp-controller="AdminOptions" class="btn-primary">
+            View your Info
+        </a>
+        <a asp-action="Index" asp-controller="LearnerOptionsAdmin" class="btn-primary">
+            See all Learners
+        </a>
+        <a asp-action="Index" asp-controller="PersonalizationProfiles" class="btn-primary">
+            See Personalization Profiles
+        </a>
+        <a asp-action="Index" asp-controller="InstructorOptionsAdmin" class="btn-primary">
+            See Instructors
+        </a>
+        <a asp-action="Index" asp-controller="Module" class="btn-primary">
+            See Modules
+        </a>
+        <a asp-action="AddDiscussion" asp-controller="InstructorOptions" class="btn-primary">
+            Add a discussion
+        </a>
+        <div class="dropdown">
+            <button class="btn-primary">Delete Quests by Criteria</button>
+            <div class="dropdown-content">
+                <form asp-controller="InstructorOptions" asp-action="DeleteQuestsByCriteria" method="post">
+                    <div>
+                        <label for="criteria">Criteria:</label>
+                        <input type="text" id="criteria" name="criteria" required/>
+                    </div>
+                    <button type="submit" class="btn-primary">Delete Quests</button>
+                </form>
+            </div>
+        </div>
     </div>
-    <button type="submit" class="btn-primary">Delete Quests</button>
-</form>
+</div>
 
-<!-- Scripts -->
 <script>
     function uploadProfilePicture() {
         var fileInput = document.getElementById('profilePicture');

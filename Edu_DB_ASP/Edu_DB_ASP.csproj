@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\AdminOptions\" />
     <Folder Include="Controllers\Course\" />
     <Folder Include="Controllers\Instructors\" />
     <Folder Include="Controllers\ModuleController\" />

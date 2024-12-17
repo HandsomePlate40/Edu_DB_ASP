@@ -25,7 +25,9 @@
         <button type="button" onclick="location.href='@Url.Action("InstructorAssessmentView")'">Reset</button>
         <button type="button" onclick="location.href='@Url.Action("TopView")'">Top</button>
         <button type="button" onclick="location.href='@Url.Action("AssessmentAnalysis")'">Assessment Analysis</button>
-        <button type="button" onclick="location.href='@Url.Action("AddAssessmentView")'"> AddAssessment </button>
+        <button type="button" onclick="location.href='@Url.Action("AssessmentNoti")'">Send Notification</button>
+        <button type="button" onclick="location.href='@Url.Action("UpdateScore")'">Score</button>
+        <button type="button" onclick="location.href='@Url.Action("AddAssessmentView")'">Add assesment</button>
     </form>
 
     @if (Model != null && Model.Any())
@@ -45,8 +47,8 @@
                 <tr>
                     <td>@assessment.LearnerId</td>
                     <td>@assessment.AssessmentName</td>
-                    <td>@assessment.Course</td>
-                    <td>@assessment.Score</td>
+                    <td>@assessment.course</td>
+                    <td>@assessment.score</td>
                 </tr>
             }
             </tbody>

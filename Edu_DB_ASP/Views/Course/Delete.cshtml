@@ -4,25 +4,137 @@
     ViewData["Title"] = "Delete Course";
 }
 
-<h1>Delete Course</h1>
+<div class="container">
+    <h1 class="page-title">Delete Course</h1>
 
-<h3>Are you sure you want to delete this course?</h3>
-<div>
-    <h4>@Model.Title</h4>
-    <p>@Model.CourseDescription</p>
+    <div class="delete-confirmation">
+        <h3 class="confirmation-message">Are you sure you want to delete this course?</h3>
+        <div class="course-details">
+            <h4>@Model.Title</h4>
+            <p>@Model.CourseDescription</p>
+        </div>
+
+        <form asp-action="DeleteCourse" method="post" class="delete-form">
+            <input type="hidden" asp-for="CourseId" />
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success">@TempData["Message"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Error"]</div>
+        }
+    </div>
 </div>
 
-<form asp-action="DeleteCourse" method="post">
-    <input type="hidden" asp-for="CourseId" />
-    <button type="submit" class="btn-primary">Delete</button>
-    <a asp-action="Index" class="btn-secondary">Cancel</a>
-</form>
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #11111B;
+        color: #D9E0EE;
+    }
 
-@if (TempData["Message"] != null)
-{
-    <div>@TempData["Message"]</div>
-}
-@if (TempData["Error"] != null)
-{
-    <div>@TempData["Error"]</div>
-}
+    .container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 1rem;
+        background: #181825;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .page-title {
+        color: #cba6f7;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .delete-confirmation {
+        text-align: center;
+    }
+
+    .confirmation-message {
+        color: #F38BA8;
+        margin-bottom: 1rem;
+    }
+
+    .course-details {
+        margin-bottom: 2rem;
+        background-color: #313244;
+        padding: 1rem;
+        border-radius: 8px;
+    }
+
+    .course-details h4 {
+        color: #cba6f7;
+        margin-top: 0;
+    }
+
+    .delete-form {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .btn {
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+    }
+
+    .btn-primary {
+        background-color: #89b4fa;
+        color: #1e1e2e;
+    }
+
+    .btn-primary:hover {
+        background-color: #74c7ec;
+    }
+
+    .btn-secondary {
+        background-color: #45475a;
+        color: #D9E0EE;
+    }
+
+    .btn-secondary:hover {
+        background-color: #585b70;
+    }
+
+    .btn-danger {
+        background-color: #F38BA8;
+        color: #1E1E2E;
+    }
+
+    .btn-danger:hover {
+        background-color: #dc7791;
+    }
+
+    .alert {
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .alert-success {
+        background-color: #A6E3A1;
+        color: #1E1E2E;
+    }
+
+    .alert-danger {
+        background-color: #F38BA8;
+        color: #1E1E2E;
+    }
+</style>

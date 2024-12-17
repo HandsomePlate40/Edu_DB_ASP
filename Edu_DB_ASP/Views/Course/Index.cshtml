@@ -195,14 +195,6 @@
                             <input type="hidden" name="id" value="@item.CourseId" />
                             <button type="submit" class="btn">Edit</button>
                         </form>
-                        <form asp-action="Details" method="get" style="display:inline;">
-                            <input type="hidden" name="id" value="@item.CourseId" />
-                            <button type="submit" class="btn">Details</button>
-                        </form>
-                        <form asp-action="Delete" method="get" style="display:inline;">
-                            <input type="hidden" name="id" value="@item.CourseId" />
-                            <button type="submit" class="btn">Delete</button>
-                        </form>
                         <form asp-action="Enroll" method="post" style="display:inline;">
                             <input type="hidden" name="courseId" value="@item.CourseId" />
                             <button type="submit" class="btn">Enroll</button>

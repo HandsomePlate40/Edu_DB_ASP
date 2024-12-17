@@ -9,53 +9,52 @@
 </head>
 <body>
 
-    <header>
-        <h1>Learner Assessment View</h1>
-    </header>
+<header>
+    <h1>Learner Assessment View</h1>
+</header>
 
-    <main>
-        <form method="post" action="@Url.Action("LearnerAssessmentView")">
-            <label for="title">Filter by Assessment Title:</label>
-            <input type="text" id="title" name="Title" placeholder="Enter assessment title..." />
-            <button type="submit">Search</button>
-            <button type="button" onclick="location.href='@Url.Action("LearnerAssessmentView")'">Reset</button> <!-- Reset button -->
-            <button type="button" onclick="location.href='@Url.Action("TopView")'">Top</button> <!-- Top button -->
-        </form>
+<main>
+    <form method="post" action="@Url.Action("LearnerAssessmentView")">
+        <label for="title">Filter by Assessment Title:</label>
+        <input type="text" id="title" name="Title" placeholder="Enter assessment title..." />
+        <button type="submit">Search</button>
+        <button type="button" onclick="location.href='@Url.Action("LearnerAssessmentView")'">Reset</button> <!-- Reset button -->
+        <button type="button" onclick="location.href='@Url.Action("TopView")'">Top</button> <!-- Top button -->
+    </form>
 
-        @if (Model != null && Model.Any())
-        {
-            <table>
-                <thead>
-                    <tr>
-                        <th>Assessment ID</th>
-                        <th>Assessment Name</th>
-                        <th>Course</th>
-                        <th>Score</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var assessment in Model)
-                    {
-                        <tr>
-                            <td>@assessment.AssessmentId</td>
-                            <td>@assessment.AssessmentName</td>
-                            <td>@assessment.Course</td>
-                            <td>@assessment.Score</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        else
-        {
-            <p>No assessments found.</p> <!-- Message when no assessments are available -->
-        }
-    </main>
+    @if (Model != null && Model.Any())
+    {
+        <table>
+            <thead>
+            <tr>
+                <th>Assessment ID</th>
+                <th>Assessment Name</th>
+                <th>Course</th>
+                <th>Score</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var assessment in Model)
+            {
+                <tr>
+                    <td>@assessment.AssessmentId</td>
+                    <td>@assessment.AssessmentName</td>
+                    <td>@assessment.course</td>
+                    <td>@assessment.score</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No assessments found.</p> <!-- Message when no assessments are available -->
+    }
+</main>
 
-    <footer>
-        <p>&copy; 2024 Your Learning Platform</p> <!-- Footer content -->
-    </footer>
+<footer>
+    <p>&copy; 2024 Your Learning Platform</p> <!-- Footer content -->
+</footer>
 
 </body>
 </html>
-

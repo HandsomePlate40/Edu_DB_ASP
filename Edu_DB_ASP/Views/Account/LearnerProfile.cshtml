@@ -309,7 +309,7 @@
     <div class="profile-info">
         <h1>@Model.Learner.FirstName @Model.Learner.LastName</h1>
         <p>@Model.Learner.Email</p>
-        <p>Followers: 3 | Following: 2</p>
+        <p>Welcome back, @Model.Learner.FirstName</p>
     </div>
 </div>
 
@@ -418,41 +418,45 @@
         <h2>Learning Goals</h2>
         <table>
             <thead>
-                <tr class="table-header-row">
-                    <th>Objective Type</th>
-                    <th>Progress Status</th>
-                    <th>Goal Description</th>
-                    <th>Time Bound</th>
-                </tr>
+            <tr class="table-header-row">
+                <th>Objective Type</th>
+                <th>Progress Status</th>
+                <th>Goal Description</th>
+                <th>Time Bound</th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var goal in Model.LearningGoals)
-                {
-                    <tr>
-                        <td>@goal.ObjectiveType</td>
-                        <td>@goal.ProgressStatus</td>
-                        <td>@goal.GoalDescription</td>
-                        <td>@goal.TimeBound?.ToString("yyyy-MM-dd")</td>
-                    </tr>
-                }
+            @foreach (var goal in Model.LearningGoals)
+            {
+                <tr>
+                    <td>@goal.ObjectiveType</td>
+                    <td>@goal.ProgressStatus</td>
+                    <td>@goal.GoalDescription</td>
+                    <td>@goal.TimeBound?.ToString("yyyy-MM-dd")</td>
+                </tr>
+            }
             </tbody>
         </table>
+        <h2>Your Options</h2>
     </div>
 </div>
 
 <div class="actions-grid">
+    
     <a asp-action="Index" asp-controller="Learners" class="btn-primary">View your Info</a>
     <a asp-action="JoinCollabQuest" asp-controller="Learners" class="btn-primary">Join a Quest</a>
     <a asp-action="AddGoal" asp-controller="Learners" class="btn-primary">Add a Goal</a>
     <a asp-action="QuestMembers" asp-controller="Learners" class="btn-primary">Show Members in Active Quest</a>
     <a asp-action="LearnerAssessmentView" asp-controller="Assessment" class="btn-primary">Show your Assessments Options</a>
-    <a asp-action="ViewPreviousCourses" asp-controller="Course" class="btn-primary">View Previous Courses</a>
     <a asp-action="Unenroll" asp-controller="Course" class="btn-primary">Remove enrollment from your Courses</a>
-    <a asp-action="RemovedCourses" asp-controller="Course" class="btn-primary">View Removed Courses</a>
+    <a asp-action="RemovedCourses" asp-controller="Course" class="btn-primary">View Previous Courses</a>
     <a asp-action="TrackProgress" asp-controller="Learners" class="btn-primary">Track Progress</a>
     <a asp-action="ShareFeedback" asp-controller="Learners" class="btn-primary">Share Emotional Feedback</a>
     <a asp-action="ViewLearnerIndex" asp-controller="Module" class="btn-primary">
         See Modules
+    </a>
+    <a asp-action="LearnerAssessmentView" asp-controller="Assessment" class="btn-primary">
+        Assessments
     </a>
 </div>
 

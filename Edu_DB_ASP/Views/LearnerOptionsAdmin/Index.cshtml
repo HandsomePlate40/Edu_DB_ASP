@@ -1,15 +1,15 @@
 @model IEnumerable<Edu_DB_ASP.Models.Learner>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Learners";
 }
 
-<h1>Index</h1>
+<div class="container">
+    <h1 class="page-title">Learners</h1>
 
-
-<table class="table">
-    <thead>
-        <tr>
+    <table class="table">
+        <thead>
+        <tr class="table-header-row">
             <th>
                 @Html.DisplayNameFor(model => model.FirstName)
             </th>
@@ -22,10 +22,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.CountryOfOrigin)
             </th>
-            <th></th>
+            <th class="actions-column">Actions</th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         @foreach (var item in Model)
         {
             <tr>
@@ -41,10 +41,145 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.CountryOfOrigin)
                 </td>
-                <td>
-                    <a asp-action="Delete" asp-route-id="@item.LearnerId">Delete</a>
+                <td class="actions-cell">
+                    <a asp-action="Delete" asp-route-id="@item.LearnerId" class="btn btn-danger btn-sm">Delete</a>
                 </td>
             </tr>
         }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #11111B;
+        color: #D9E0EE;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 1rem;
+        background: #181825;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .page-title {
+        color: #cba6f7;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .table-controls {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 1rem;
+    }
+
+    .btn {
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+    }
+
+    .btn-primary {
+        background-color: #89b4fa;
+        color: #1e1e2e;
+    }
+
+    .btn-primary:hover {
+        background-color: #74c7ec;
+    }
+
+    .btn-secondary {
+        background-color: #45475a;
+        color: #D9E0EE;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-secondary:hover {
+        background-color: #585b70;
+    }
+
+    .btn-danger {
+        background-color: #F38BA8;
+        color: #1E1E2E;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-danger:hover {
+        background-color: #dc7791;
+    }
+
+    .btn-sm {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-bottom: 2rem;
+        border-radius: 15px;
+        overflow: hidden;
+        border: 1px solid #313244;
+    }
+
+    .table-header-row {
+        background-color: #313244;
+    }
+
+    th {
+        text-align: left;
+        padding: 0.75rem;
+        color: #cba6f7;
+        border-bottom: 2px solid #45475a;
+    }
+
+    td {
+        padding: 0.75rem;
+        border-bottom: 1px solid #313244;
+    }
+
+    /* Remove the right border from the last th and td in each row */
+    th:last-child,
+    td:last-child {
+        border-right: none;
+    }
+
+    tr:hover {
+        background-color: #1e1e2e;
+    }
+
+    .actions-column {
+        width: 150px;
+        text-align: center;
+    }
+
+    .actions-cell {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+
+    .content-link {
+        color: #89b4fa;
+        text-decoration: none;
+    }
+
+    .content-link:hover {
+        text-decoration: underline;
+    }
+</style>

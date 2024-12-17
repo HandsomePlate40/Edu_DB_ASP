@@ -72,17 +72,38 @@ namespace Edu_DB_ASP.Controllers.Assessments
         [HttpPost]
         public async Task<IActionResult> UpdateScore(AssessmentUpdateModel model)
         {
+            // Find the assessment by title
             var assessment = await _context.Assessments
                 .FirstOrDefaultAsync(a => a.AssessmentId == model.AssessmentId);
 
             if (assessment == null)
             {
-                return NotFound($"The LearnerID/Assessment title is incorrect. Please Re-enter");
+                return NotFound($"The LearnerID/Assessment title is incorrect. Please re-enter.");
+            }
+
+            var takenAssessment = await _context.TakenAssessments
+                .FirstOrDefaultAsync(ta => ta.LearnerId == model.LearnerId && ta.AssessmentId == assessment.AssessmentId);
+
+            if (takenAssessment == null)
+            {
+                var newTakenAssessment = new TakenAssessment
+                {
+                    LearnerId = model.LearnerId,
+                    AssessmentId = assessment.AssessmentId,
+                    ScoredPoints = model.score 
+                };
+
+                _context.TakenAssessments.Add(newTakenAssessment);
+            }
+            else
+            {
+                takenAssessment.ScoredPoints = model.score;
+                _context.TakenAssessments.Update(takenAssessment);
             }
 
             var learnerIdP = new SqlParameter("@LearnerID", model.LearnerId);
             var assessmentId = new SqlParameter("@AssessmentID", assessment.AssessmentId);
-            var scoreP = new SqlParameter("@Score", model.score);
+            var scoreP = new SqlParameter("@points", model.score);
 
             await _context.Database.ExecuteSqlRawAsync(
                 "EXEC GradeUpdate @LearnerID, @AssessmentID, @points",
@@ -90,11 +111,11 @@ namespace Edu_DB_ASP.Controllers.Assessments
                 assessmentId,
                 scoreP
             );
-            _context.SaveChangesAsync();
 
-            return RedirectToAction("InstructorAssessmentView");
+            await _context.SaveChangesAsync(); 
+
+            return RedirectToAction("InstructorAssessmentView"); 
         }
-
 
 
         public async Task<List<TakenAssessment>> InstructorGetTakenAssessments(int? learnerId , string title = null)
@@ -275,14 +296,24 @@ namespace Edu_DB_ASP.Controllers.Assessments
             {
                 try
                 {
-                   if(model.ModuleId ==null)
-                    {
-                        AddAssessment(model.Title, model.AssessmentDescription, model.GradingCriteria, model.Weightage, model.MaxScore, model.TotalMarks, model.PassingMarks);
-                    }
-                    else
-                    {
-                        AddAssessment(model.Title, model.AssessmentDescription, model.GradingCriteria, model.Weightage, model.MaxScore, model.TotalMarks, model.PassingMarks, model.ModuleId);
-                    }
+                    
+     
+                        var assessment = new Assessment
+                        {
+                            AssessmentId = model.AssessmentId,
+                            Title = model.Title,
+                            AssessmentDescription = model.AssessmentDescription,
+                            GradingCriteria = model.GradingCriteria,
+                            Weightage = model.Weightage,
+                            MaxScore = model.Weightage,
+                            TotalMarks = model.TotalMarks,
+                            PassingMarks = model.PassingMarks,
+                            ModuleId = model.ModuleId
+
+
+                        };
+                        _context.Assessments.Add(assessment);
+                    
 
                     await _context.SaveChangesAsync();
                     return RedirectToAction("InstructorAssessmentView");
@@ -331,41 +362,29 @@ namespace Edu_DB_ASP.Controllers.Assessments
         [HttpPost]
         public async Task<IActionResult> AssessmentNoti(AssessmentNotiModel model)
         {
-            if(ModelState.IsValid)
+            try
             {
-                try
-                {
-                    if (model.Message == null)
-                    {
-                        var date = DateTime.Now.ToString("MM/dd/yyyy");
-                        await _context.Database.ExecuteSqlRawAsync(
-                         "EXEC AssessmentNot @timestamp, @message, @urgencylevel, @LearnerID",
-                         new SqlParameter("@timestamp", date),
-                         new SqlParameter("@message", ""),
-                         new SqlParameter("@urgencylevel", model.UrgencyLevel),
-                         new SqlParameter("@LearnerID", model.LearnerId)
-                         
-                     );
-                    }
-                    else
-                    {
-                        var date = DateTime.Now.ToString("MM/dd/yyyy");
-                        await _context.Database.ExecuteSqlRawAsync(
-                        "EXEC AssessmentNot @timestamp, @message, @urgencylevel, @LearnerID",
-                        new SqlParameter("@timestamp", date),
-                        new SqlParameter("@message", model.Message),
-                        new SqlParameter("@urgencylevel", model.UrgencyLevel),
-                        new SqlParameter("@LearnerID", model.LearnerId)
-    );
-                    }
+                var date = DateTime.Now.ToString("MM/dd/yyyy");
+                var result = await _context.Database.ExecuteSqlRawAsync(
+                    "EXEC AssessmentNot @timestamp, @message, @urgencylevel, @LearnerID",
+                    new SqlParameter("@timestamp", date),
+                    new SqlParameter("@message", model.Message),
+                    new SqlParameter("@urgencylevel", model.UrgencyLevel),
+                    new SqlParameter("@LearnerID", model.LearnerId)
+                );
 
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("InstructorAssessmentView");
-                }
-                catch (Exception ex)
+                if (result == 0)
                 {
-                    ModelState.AddModelError("", $"An error occurred: {ex.Message}");
+                    ModelState.AddModelError("", "No rows were affected. Please check the stored procedure.");
                 }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction("InstructorAssessmentView");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"An error occurred: {ex.Message}");
+                // Optionally log the exception here
             }
 
             return View(model);

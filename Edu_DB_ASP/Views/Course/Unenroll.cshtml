@@ -1,29 +1,120 @@
 ﻿@model int
 
 @{
-    Layout = "_Layout";
+    ViewData["Title"] = "Confirm Unenrollment";
 }
 
-<h2>Confirm Unenrollment</h2>
+<div class="container">
+    <h2 class="page-title">Confirm Unenrollment</h2>
 
-<p>Are you sure you want to unenroll from this course?</p>
+    <div class="unenroll-confirmation">
+        <p class="confirmation-message">Are you sure you want to unenroll from this course?</p>
 
-<form asp-action="ConfirmUnenroll" method="post">
-    <input type="hidden" name="courseId" value="@Model" />
-    <button type="submit" class="btn btn-danger">Yes, Unenroll</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+        <form asp-action="ConfirmUnenroll" method="post" class="unenroll-form">
+            <input type="hidden" name="courseId" value="@Model" />
+            <button type="submit" class="btn btn-danger">Yes, Unenroll</button>
+            <a asp-action="Index" asp-controller="LearnerProfileOptions" class="btn btn-secondary">Cancel</a>
+        </form>
 
-@if (TempData["Message"] != null)
-{
-    <div class="alert alert-success">
-        @TempData["Message"]
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["Message"]
+            </div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["Error"]
+            </div>
+        }
     </div>
-}
+</div>
 
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">
-        @TempData["Error"]
-    </div>
-}
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #11111B;
+        color: #D9E0EE;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 1rem;
+        background: #181825;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .page-title {
+        color: #cba6f7;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .unenroll-confirmation {
+        text-align: center;
+    }
+
+    .confirmation-message {
+        color: #F38BA8;
+        margin-bottom: 1rem;
+    }
+
+    .unenroll-form {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .btn {
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+    }
+
+    .btn-danger {
+        background-color: #F38BA8;
+        color: #1E1E2E;
+    }
+
+    .btn-danger:hover {
+        background-color: #dc7791;
+    }
+
+    .btn-secondary {
+        background-color: #45475a;
+        color: #D9E0EE;
+    }
+
+    .btn-secondary:hover {
+        background-color: #585b70;
+    }
+
+    .alert {
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .alert-success {
+        background-color: #A6E3A1;
+        color: #1E1E2E;
+    }
+
+    .alert-danger {
+        background-color: #F38BA8;
+        color: #1E1E2E;
+    }
+</style>
