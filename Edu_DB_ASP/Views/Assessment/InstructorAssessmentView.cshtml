@@ -1,0 +1,62 @@
+﻿@model IEnumerable<dynamic>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor Assessment View</title>
+</head>
+<body>
+
+    <header>
+        <h1>Instructor Assessment View</h1>
+    </header>
+
+    <main>
+        <form method="post" action="@Url.Action("InstructorAssessmentView")">
+            <label for="learnerId">Learner ID:</label>
+            <input type="number" id="learnerId" name="LearnerId" placeholder="Enter learner ID..." />
+
+            <label for="title">Filter by Assessment Title:</label>
+            <input type="text" id="title" name="Title" placeholder="Enter assessment title..." />
+
+            <button type="submit">Search</button>
+            <button type="button" onclick="location.href='@Url.Action("InstructorAssessmentView")'">Reset</button> <!-- Reset button -->
+            <button type="button" onclick="location.href='@Url.Action("TopView")'">Top</button> <!-- Top button -->
+            <button type="button" onclick="location.href='@Url.Action("AssessmentAnalysis")'">Assessment Analysis</button> <!-- Assessment Analysis button -->
+        </form>
+
+        @if (Model != null && Model.Any())
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th>Learner ID</th>
+                        <th>Assessment Name</th>
+                        <th>Course</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var assessment in Model)
+                    {
+                        <tr>
+                            <td>@assessment.LearnerId</td>
+                            <td>@assessment.AssessmentName</td>
+                            <td>@assessment.Course</td>
+                            <td>@assessment.Score</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No assessments found.</p> <!-- Message when no assessments are available -->
+        }
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Your Learning Plat
+

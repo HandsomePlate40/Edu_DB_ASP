@@ -1,0 +1,48 @@
+﻿@model YourNamespace.Models.AssessmentUpdateModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Assessment Score</title>
+</head>
+<body>
+
+    <header>
+        <h1>Update Assessment Score</h1>
+    </header>
+
+    <main>
+        <form method="post" action="@Url.Action("UpdateScore")">
+            <div>
+                <label for="learnerId">Learner ID:</label>
+                <input type="number" id="learnerId" name="LearnerId" placeholder="Enter Learner ID..." required />
+                @Html.ValidationMessageFor(model => model.LearnerId) <!-- Display validation error if any -->
+            </div>
+
+            <div>
+                <label for="title">Assessment Title:</label>
+                <input type="text" id="title" name="AssessmentId" placeholder="Enter Assessment Title..." required />
+                @Html.ValidationMessageFor(model => model.AssessmentId) <!-- Display validation error if any -->
+            </div>
+
+            <div>
+                <label for="score">Score:</label>
+                <input type="number" id="score" name="score" placeholder="Enter Score..." required />
+                @Html.ValidationMessageFor(model => model.score) <!-- Display validation error if any -->
+            </div>
+
+            <button type="submit">Update Score</button> <!-- Submit button -->
+            <button type="button" onclick="location.href='@Url.Action("InstructorAssessmentView")'">Cancel</button> <!-- Cancel button -->
+        </form>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Your Learning Platform</p> <!-- Footer content -->
+    </footer>
+
+</body>
+</html>
+
