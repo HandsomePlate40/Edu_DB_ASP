@@ -625,6 +625,7 @@ public async Task<IActionResult> UploadInstructorProfilePicture(IFormFile profil
             {
                 HttpContext.Session.SetString("UserEmail", instructor.Email);
                 HttpContext.Session.SetString("UserRole", "Instructor");
+                HttpContext.Session.SetInt32("InstructorId", instructor.InstructorId); // Set InstructorId in session
 
                 return RedirectToAction("InstructorProfile", "Account");
             }

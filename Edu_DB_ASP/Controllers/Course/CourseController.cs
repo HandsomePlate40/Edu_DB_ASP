@@ -332,6 +332,36 @@ namespace Edu_DB_ASP.Controllers.Course
             TempData["Message"] = message;
             return RedirectToAction("InstructorProfile", "Account");
         }
+        
+        public async Task<IActionResult> Teach()
+        {
+            var courses = await _context.Courses.ToListAsync();
+            return View(courses);
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegisterAsTeacher(int courseId)
+        {
+            var instructorId = HttpContext.Session.GetInt32("InstructorId");
+            if (instructorId == null)
+            {
+                return RedirectToAction("InstructorLogin", "Account");
+            }
+
+            try
+            {
+                await _context.Database.ExecuteSqlRawAsync(
+                    "EXEC InsertInstructorToTeach @InstructorID = {0}, @CourseID = {1}", instructorId, courseId);
+                TempData["Message"] = "Successfully registered as a teacher for the course.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error registering as a teacher for the course: " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
 
