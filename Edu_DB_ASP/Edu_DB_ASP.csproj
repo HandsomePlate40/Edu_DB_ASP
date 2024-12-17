@@ -25,4 +25,12 @@
     <Folder Include="Models\Account\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\ModuleOptions\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\ModuleOptions\Delete.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\ModuleOptions\Details.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\ModuleOptions\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\ModuleOptions\Index.cshtml" />
+  </ItemGroup>
+
 </Project>

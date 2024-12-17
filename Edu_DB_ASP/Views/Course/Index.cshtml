@@ -127,6 +127,20 @@
 
 <h1>Check out our Courses!</h1>
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}
+
 <p class="create-link">
     <a asp-action="Create" class="btn">Create New</a>
 </p>
@@ -135,24 +149,12 @@
     <table class="table">
         <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CourseDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DifficultyLevel)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Prerequisites)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreditPoints)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LearningObjectives)
-            </th>
+            <th>@Html.DisplayNameFor(model => model.Title)</th>
+            <th>@Html.DisplayNameFor(model => model.CourseDescription)</th>
+            <th>@Html.DisplayNameFor(model => model.DifficultyLevel)</th>
+            <th>@Html.DisplayNameFor(model => model.Prerequisites)</th>
+            <th>@Html.DisplayNameFor(model => model.CreditPoints)</th>
+            <th>@Html.DisplayNameFor(model => model.LearningObjectives)</th>
             <th></th>
         </tr>
         </thead>
@@ -160,28 +162,20 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CourseDescription)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DifficultyLevel)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Prerequisites)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreditPoints)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LearningObjectives)
-                </td>
+                <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                <td>@Html.DisplayFor(modelItem => item.CourseDescription)</td>
+                <td>@Html.DisplayFor(modelItem => item.DifficultyLevel)</td>
+                <td>@Html.DisplayFor(modelItem => item.Prerequisites)</td>
+                <td>@Html.DisplayFor(modelItem => item.CreditPoints)</td>
+                <td>@Html.DisplayFor(modelItem => item.LearningObjectives)</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.CourseId" class="btn btn-link">Edit</a>
                     <a asp-action="Details" asp-route-id="@item.CourseId" class="btn btn-link">Details</a>
                     <a asp-action="Delete" asp-route-id="@item.CourseId" class="btn btn-link">Delete</a>
+                    <form asp-action="Enroll" method="post" style="display:inline;">
+                        <input type="hidden" name="courseId" value="@item.CourseId" />
+                        <button type="submit" class="btn">Enroll</button>
+                    </form>
                 </td>
             </tr>
         }

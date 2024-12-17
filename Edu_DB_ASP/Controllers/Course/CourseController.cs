@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Edu_DB_ASP.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Edu_DB_ASP.Controllers.Course
 {
     public class CourseController : Controller
     {
         private readonly EduDbContext _context;
+        
 
         public CourseController(EduDbContext context)
         {
             _context = context;
+            
         }
 
         // GET: Course
@@ -54,7 +57,9 @@ namespace Edu_DB_ASP.Controllers.Course
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CourseId,Title,CourseDescription,DifficultyLevel,Prerequisites,CreditPoints,LearningObjectives")] Models.Course course)
+        public async Task<IActionResult> Create(
+            [Bind("CourseId,Title,CourseDescription,DifficultyLevel,Prerequisites,CreditPoints,LearningObjectives")]
+            Models.Course course)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +67,7 @@ namespace Edu_DB_ASP.Controllers.Course
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             return View(course);
         }
 
@@ -78,6 +84,7 @@ namespace Edu_DB_ASP.Controllers.Course
             {
                 return NotFound();
             }
+
             return View(course);
         }
 
@@ -86,7 +93,9 @@ namespace Edu_DB_ASP.Controllers.Course
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CourseId,Title,CourseDescription,DifficultyLevel,Prerequisites,CreditPoints,LearningObjectives")] Models.Course course)
+        public async Task<IActionResult> Edit(int id,
+            [Bind("CourseId,Title,CourseDescription,DifficultyLevel,Prerequisites,CreditPoints,LearningObjectives")]
+            Models.Course course)
         {
             if (id != course.CourseId)
             {
@@ -111,8 +120,10 @@ namespace Edu_DB_ASP.Controllers.Course
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
             return View(course);
         }
 
@@ -133,7 +144,7 @@ namespace Edu_DB_ASP.Controllers.Course
 
             return View(course);
         }
-        
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -148,12 +159,48 @@ namespace Edu_DB_ASP.Controllers.Course
                 // Log the exception (you can use a logging framework or simply output to console)
                 Console.WriteLine(ex.Message);
                 // Optionally, return an error view or message
-                return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                return View("Error",
+                    new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
             }
         }
+
         private bool CourseExists(int id)
         {
             return _context.Courses.Any(e => e.CourseId == id);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Enroll(int courseId)
+        {
+            var learnerId = HttpContext.Session.GetInt32("LearnerId");
+            if (learnerId == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var isEnrolled = await _context.CourseEnrollments
+                .AnyAsync(e => e.LearnerId == learnerId && e.CourseId == courseId);
+
+            if (isEnrolled)
+            {
+                TempData["Error"] = "Already enrolled in this course.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            try
+            {
+                await _context.Database.ExecuteSqlRawAsync(
+                    "EXEC EnrollLearnerToCourse @LearnerID = {0}, @CourseID = {1}", learnerId, courseId);
+                TempData["Message"] = "Successfully enrolled in the course.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error enrolling in the course: " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
+

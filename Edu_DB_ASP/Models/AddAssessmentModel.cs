@@ -27,8 +27,6 @@ namespace Edu_DB_ASP.Models
         public int PassingMarks { get; set; }
 
         public int ModuleId { get; set; }
-
-
     }
 
 }
