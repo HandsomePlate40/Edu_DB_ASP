@@ -1,0 +1,77 @@
+﻿@model AddAssessmentModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Assessment</title>
+</head>
+<body>
+
+    <header>
+        <h1>Add New Assessment</h1>
+    </header>
+
+    <main>
+        <form method="post" action="@Url.Action("AddAssessmentView")">
+            <div>
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="Title" placeholder="Enter Assessment Title..." required />
+                @Html.ValidationMessageFor(model => model.Title) <!-- Display validation error if any -->
+            </div>
+
+            <div>
+                <label for="assessmentDescription">Description:</label>
+                <textarea id="assessmentDescription" name="AssessmentDescription" placeholder="Enter Assessment Description..." required></textarea>
+                @Html.ValidationMessageFor(model => model.AssessmentDescription) <!-- Display validation error if any -->
+            </div>
+
+            <div>
+                <label for="gradingCriteria">Grading Criteria:</label>
+                <textarea id="gradingCriteria" name="GradingCriteria" placeholder="Enter Grading Criteria..." required></textarea>
+                @Html.ValidationMessageFor(model => model.GradingCriteria) <!-- Display validation error if any -->
+            </div>
+
+            <div>
+                <label for="weightage">Weightage:</label>
+                <input type="number" id="weightage" name="Weightage" placeholder="Enter Weightage..." required />
+                @Html.ValidationMessageFor(model => model.Weightage) <!-- Display validation error if any -->
+            </div>
+
+            <div>
+                <label for="maxScore">Max Score:</label>
+                <input type="number" id="maxScore" name="MaxScore" placeholder="Enter Max Score..." required />
+                @Html.ValidationMessageFor(model => model.MaxScore) <!-- Display validation error if any -->
+            </div>
+
+            <div>
+                <label for="totalMarks">Total Marks:</label>
+                <input type="number" id="totalMarks" name="TotalMarks" placeholder="Enter Total Marks..." required />
+                @Html.ValidationMessageFor(model => model.TotalMarks) <!-- Display validation error if any -->
+            </div>
+
+            <div>
+                <label for="passingMarks">Passing Marks:</label>
+                <input type="number" id="passingMarks" name="PassingMarks" placeholder="Enter Passing Marks..." required />
+                @Html.ValidationMessageFor(model => model.PassingMarks) <!-- Display validation error if any -->
+            </div>
+
+            <div>
+                <label for="moduleId">Module ID (optional):</label>
+                <input type="number" id="moduleId" name="ModuleId" placeholder="Enter Module ID..." />
+                @Html.ValidationMessageFor(model => model.ModuleId) <!-- Display validation error if any -->
+            </div>
+
+            <button type="submit">Add Assessment</button> <!-- Submit button -->
+            <button type="button" onclick="location.href='@Url.Action("InstructorAssessmentView")'">Cancel</button> <!-- Cancel button -->
+        </form>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Your Learning Platform</p> <!-- Footer content -->
+    </footer>
+
+</body>
+</html>
+

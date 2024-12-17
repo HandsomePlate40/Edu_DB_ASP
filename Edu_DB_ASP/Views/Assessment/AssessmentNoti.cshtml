@@ -1,0 +1,55 @@
+﻿@model AssessmentNotiModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Notification</title>
+</head>
+<body>
+
+    <header>
+        <h1>Create Assessment Notification</h1>
+    </header>
+
+    <main>
+        <form method="post" action="@Url.Action("AssessmentNoti")">
+            <div>
+                <label for="learnerId">Learner ID:</label>
+                <input type="number" id="learnerId" name="LearnerId" placeholder="Enter Learner ID..." required />
+                @Html.ValidationMessageFor(model => model.LearnerId) <!-- Display validation error if any -->
+            </div>
+
+            <div>
+                <label for="message">Notification Message:</label>
+                <textarea id="message" name="Message" placeholder="Enter your notification message..." required></textarea>
+                @Html.ValidationMessageFor(model => model.Message) <!-- Display validation error if any -->
+            </div>
+
+            <div>
+                <label for="urgencyLevel">Urgency Level:</label>
+                <select id="urgencyLevel" name="UrgencyLevel" required>
+                    <option value="">Select Urgency Level</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+                @Html.ValidationMessageFor(model => model.UrgencyLevel) <!-- Display validation error if any -->
+            </div>
+
+            <button type="submit">Submit Notification</button> <!-- Submit button -->
+            <button type="button" onclick="location.href='@Url.Action("InstructorAssessmentView")'">Cancel</button> <!-- Cancel button -->
+        </form>
+
+        <!-- Optional: Add a link to go back to another view -->
+        <p><a href="@Url.Action("InstructorAssessmentView")">Back to Instructor Assessment View</a></p>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Your Learning Platform</p> <!-- Footer content -->
+    </footer>
+
+</body>
+</html>
+

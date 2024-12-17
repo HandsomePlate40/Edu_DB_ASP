@@ -1,0 +1,60 @@
+﻿@model IEnumerable<dynamic>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Analysis</title>
+</head>
+<body>
+
+    <header>
+        <h1>Assessment Analysis</h1>
+    </header>
+
+    <main>
+        <form method="post" action="@Url.Action("AssessmentAnalysis")">
+            <label for="assessmentId">Enter Assessment ID:</label>
+            <input type="number" id="assessmentId" name="assessmentId" placeholder="Enter Assessment ID..." />
+            <button type="submit">Analyze</button> <!-- Submit button for analysis -->
+            <button type="button" onclick="location.href='@Url.Action("InstructorAssessmentView")'">Cancel</button> <!-- Cancel button -->
+        </form>
+
+        @if (Model != null && Model.Any())
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th>Assessment ID</th>
+                        <th>Assessment Title</th>
+                        <th>Highest Score</th>
+                        <th>Average Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var assessment in Model)
+                    {
+                        <tr>
+                            <td>@assessment.AssessmentId</td>
+                            <td>@assessment.AssessmentTitle</td>
+                            <td>@assessment.HighestScore</td>
+                            <td>@assessment.AverageScore</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No assessments found.</p> <!-- Message when no assessments are available -->
+        }
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Your Learning Platform</p> <!-- Footer content -->
+    </footer>
+
+</body>
+</html>
+
