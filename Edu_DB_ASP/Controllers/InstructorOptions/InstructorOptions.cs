@@ -236,5 +236,59 @@ namespace Edu_DB_ASP.Controllers.InstructorOptions
                 }
             }
         }
+        
+        public IActionResult AddAchievement()
+        {
+            if (HttpContext.Session.GetString("UserRole") != "Instructor")
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            return View();
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> AddAchievement(AchievementViewModel model)
+        {
+            if (HttpContext.Session.GetString("UserRole") != "Instructor")
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                // Log ModelState errors
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine(error.ErrorMessage);
+                }
+                return View(model);
+            }
+
+            var sql = "EXEC NewAchievement @LearnerID, @BadgeID, @AchievmentDescription, @type";
+            var parameters = new[]
+            {
+                new SqlParameter("@LearnerID", model.LearnerID),
+                new SqlParameter("@BadgeID", model.BadgeID),
+                new SqlParameter("@AchievmentDescription", model.AchievmentDescription),
+                new SqlParameter("@type", model.Type)
+            };
+
+            try
+            {
+                await _context.Database.ExecuteSqlRawAsync(sql, parameters);
+                TempData["SuccessMessage"] = "Achievement added successfully.";
+                Console.WriteLine("Achievement added successfully.");
+            }
+            catch (SqlException ex)
+            {
+                var refinedErrorMessage = $"An error occurred while adding the achievement: {ex.Message}";
+                ModelState.AddModelError(string.Empty, refinedErrorMessage);
+                Console.WriteLine(refinedErrorMessage);
+                return View(model);
+            }
+
+            return RedirectToAction("AddAchievement", "InstructorOptions");
+        }
     }
 }

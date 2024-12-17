@@ -1,0 +1,117 @@
+﻿@model AchievementViewModel
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #11111B;
+        color: #D9E0EE;
+    }
+
+    .section-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    h1 {
+        color: #cba6f7;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .form-container {
+        background: #181825;
+        border-radius: 15px;
+        padding: 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    label {
+        color: #cdd6f4;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    input[type="number"],
+    input[type="text"],
+    textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #45475a;
+        border-radius: 10px;
+        background: #313244;
+        color: #a6adc8;
+        box-sizing: border-box;
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    .text-danger {
+        color: #f38ba8;
+    }
+
+    .btn-primary {
+        background-color: #89b4fa;
+        color: #1e1e2e;
+        border: none;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 10px;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .btn-primary:hover {
+        background-color: #74c7ec;
+    }
+</style>
+
+<div class="section-container">
+    <h1>Add Achievement</h1>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+        TempData["SuccessMessage"] = null; <!-- Clear the success message after displaying it -->
+    }
+
+    <div class="form-container">
+        <form asp-action="AddAchievement" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label for="LearnerID">Learner ID:</label>
+                <input type="number" id="LearnerID" name="LearnerID" required />
+            </div>
+            <div class="form-group">
+                <label for="BadgeID">Badge ID:</label>
+                <input type="number" id="BadgeID" name="BadgeID" required />
+            </div>
+            <div class="form-group">
+                <label for="AchievmentDescription">Achievement Description:</label>
+                <textarea id="AchievmentDescription" name="AchievmentDescription" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="type">Type:</label>
+                <input type="text" id="type" name="type" required />
+            </div>
+
+            <button type="submit" class="btn-primary">Add Achievement</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

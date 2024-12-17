@@ -9,7 +9,7 @@ public partial class Achievement
 
     public string AchievementType { get; set; } = null!;
 
-    public DateOnly? DateEarned { get; set; }
+    public DateTime? DateEarned { get; set; }
 
     public int LearnerId { get; set; }
 
