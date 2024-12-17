@@ -1,0 +1,290 @@
+@model IEnumerable<Edu_DB_ASP.Models.Instructor>
+
+@{
+    ViewData["Title"] = "Your Profile";
+}
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #11111B;
+        /* base */
+        color: #D9E0EE;
+        /* text */
+    }
+
+    .profile-container {
+        display: flex;
+        align-items: center;
+        padding: 2rem;
+        background: #181825;
+        /* mantle */
+        border-bottom: 1px solid #313244;
+        /* surface0 */
+        position: relative;
+        border-radius: 15px;
+        margin: 2rem;
+    }
+
+    .profile-pic-form {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        margin-right: 1.5rem;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    .profile-image {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: #313244;
+        /* surface0 */
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .profile-image img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    /* Hidden label appears on hover */
+    .profile-upload-label {
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        color: #D9E0EE;
+        font-size: 0.9rem;
+        font-weight: 500;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.3s;
+        cursor: pointer;
+        display: flex;
+    }
+
+    .profile-image:hover .profile-upload-label {
+        opacity: 1;
+    }
+
+    .profile-upload-label:hover {
+        background: rgba(0,0,0,0.6);
+    }
+
+    .profile-upload-label input[type="file"] {
+        display: none;
+    }
+
+    .profile-info {
+        flex: 1;
+    }
+
+    .profile-info h1 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: #D9E0EE;
+        /* text */
+    }
+
+    .profile-info p {
+        margin: 0.5rem 0 0;
+        color: #BAC2DE;
+        /* subtext1 */
+    }
+
+    .section-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    h1 {
+        color: #cba6f7;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    h2 {
+        color: #cba6f7;
+        border-bottom: 2px solid #45475a;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #181825;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    table thead {
+        background: #313244;
+    }
+
+    table thead th {
+        text-align: left;
+        padding: 1rem;
+        color: #cdd6f4;
+        font-weight: 600;
+        border-bottom: 1px solid #45475a;
+    }
+
+    table tbody tr {
+        border-bottom: 1px solid #313244;
+    }
+
+    table tbody tr:hover {
+        background: #1e1e2e;
+    }
+
+    table tbody td {
+        padding: 1rem;
+        color: #a6adc8;
+    }
+
+    .tag {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-right: 0.5rem;
+    }
+
+    .tag.active {
+        background: #A6E3A1;
+        /* green */
+        color: #1E1E2E;
+        /* base */
+    }
+
+    .tag.archived {
+        background: #F8BD96;
+        /* peach */
+        color: #1E1E2E;
+        /* base */
+    }
+
+    .table-section {
+        margin-bottom: 3rem;
+    }
+
+    .back-to-index {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .back-to-index button,
+    .btn-primary,
+    .btn-secondary,
+    .btn-tertiary {
+        background-color: #89b4fa;
+        color: #1e1e2e;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 15px;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+        /* Remove underline from links */
+    }
+
+    .btn-secondary {
+        background-color: #A6E3A1;
+    }
+
+    .btn-tertiary {
+        background-color: #fab387;
+    }
+
+    .back-to-index button:hover,
+    .btn-primary:hover,
+    .btn-secondary:hover,
+    .btn-tertiary:hover {
+        background-color: #74c7ec;
+    }
+
+    .btn-primary {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .status-new {
+        background-color: #a6e3a1;
+        /* green */
+        color: #1e1e2e;
+        /* base/black */
+        padding: 0.25rem 0.5rem;
+        border-radius: 5px;
+        font-weight: 600;
+        text-transform: lowercase;
+    }
+
+    .status-in-progress {
+        background-color: #fab387;
+        /* yellow */
+        color: #1e1e2e;
+        /* base/black */
+        padding: 0.25rem 0.5rem;
+        border-radius: 5px;
+        font-weight: 600;
+        text-transform: lowercase;
+    }
+</style>
+
+<div class="section-container">
+    <h1>Your Profile</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.InstructorName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Qualifications)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.InstructorName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Qualifications)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.InstructorId" class="btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.InstructorId" class="btn-tertiary">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
