@@ -5,25 +5,142 @@
 }
 
 <style>
-    .centered-container {
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #11111B;
+        /* base */
+        color: #D9E0EE;
+        /* text */
+    }
+
+    .section-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    h1 {
+        color: #cba6f7;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    h4 {
+        color: #cba6f7;
+        margin-bottom: 1rem;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #181825;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    table thead {
+        background: #313244;
+    }
+
+    table thead th {
+        text-align: left;
+        padding: 1rem;
+        color: #cdd6f4;
+        font-weight: 600;
+        border-bottom: 1px solid #45475a;
+    }
+
+    table tbody tr {
+        border-bottom: 1px solid #313244;
+    }
+
+    table tbody tr:hover {
+        background: #1e1e2e;
+    }
+
+    table tbody td {
+        padding: 1rem;
+        color: #a6adc8;
+    }
+
+    .back-to-index {
         display: flex;
         justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        min-height: 100vh;
+        margin-top: 2rem;
+    }
+
+    .back-to-index a,
+    .btn-primary,
+    .btn-secondary,
+    .btn-tertiary {
+        background-color: #89b4fa;
+        color: #1e1e2e;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 15px;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+        /* Remove underline from links */
+    }
+
+    .btn-secondary {
+        background-color: #A6E3A1;
+    }
+
+    .btn-tertiary {
+        background-color: #fab387;
+    }
+
+    .back-to-index a:hover,
+    .btn-primary:hover,
+    .btn-secondary:hover,
+    .btn-tertiary:hover {
+        background-color: #74c7ec;
+    }
+
+    .btn-primary {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
     }
 
     .form-container {
+        background-color: #181825;
+        border-radius: 25px;
+        padding: 2rem;
         width: 50%;
-        margin: auto;
-        background-color: var(--surface0);
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px var(--overlay0);
+        margin: 2rem auto;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .control-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #cba6f7;
+        font-weight: 500;
+    }
+
+    .form-control {
+        width: calc(100% - 1rem);
+        padding: 0.5rem;
+        border: 1px solid #45475a;
+        border-radius: 8px;
+        background-color: #313244;
+        color: #cdd6f4;
+    }
+    .text-danger{
+        color: #f38ba8;
+        font-weight: 500;
     }
 </style>
 
-<div class="centered-container">
+<div class="section-container">
     <h1>Edit</h1>
 
     <h4>Learner</h4>
@@ -98,12 +215,12 @@
                 <span asp-validation-for="ProfilePictureUrl" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn-primary" />
             </div>
         </form>
     </div>
 
-    <div>
+    <div class="back-to-index">
         <a asp-action="Index">Back to List</a>
     </div>
 </div>

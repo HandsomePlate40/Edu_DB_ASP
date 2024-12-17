@@ -5,23 +5,100 @@
 }
 
 <style>
-	.back-to-index button {
-		background-color: #313244; /* surface0 */
-		color: #D9E0EE; /* text */
+	body {
+		margin: 0;
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		background: #11111B;
+		/* base */
+		color: #D9E0EE;
+		/* text */
+	}
+
+	.section-container {
+		max-width: 1200px;
+		margin: 2rem auto;
+		padding: 0 1rem;
+	}
+
+	h1 {
+		color: #cba6f7;
+		padding-bottom: 0.5rem;
+		margin-bottom: 1rem;
+	}
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		background: #181825;
+		border-radius: 15px;
+		overflow: hidden;
+	}
+
+	table thead {
+		background: #313244;
+	}
+
+	table thead th {
+		text-align: left;
+		padding: 1rem;
+		color: #cdd6f4;
+		font-weight: 600;
+		border-bottom: 1px solid #45475a;
+	}
+
+	table tbody tr {
+		border-bottom: 1px solid #313244;
+	}
+
+	table tbody tr:hover {
+		background: #1e1e2e;
+	}
+
+	table tbody td {
+		padding: 1rem;
+		color: #a6adc8;
+	}
+
+	.back-to-index {
+		display: flex;
+		justify-content: center;
+		margin-top: 2rem;
+	}
+
+	.back-to-index button,
+	.btn-primary,
+	.btn-secondary,
+	.btn-tertiary {
+		background-color: #89b4fa;
+		color: #1e1e2e;
 		border: none;
 		padding: 0.75rem 1.5rem;
 		font-size: 1rem;
+		font-weight: 600;
 		cursor: pointer;
-		border-radius: 4px;
-		transition: background-color 0.3s;
+		border-radius: 15px;
+		transition: background-color 0.3s ease;
+		text-decoration: none;
+		/* Remove underline from links */
 	}
 
-	.back-to-index button:hover {
-		background-color: #45475A; /* surface1 */
+	.btn-secondary {
+		background-color: #A6E3A1;
+	}
+
+	.btn-tertiary {
+		background-color: #fab387;
+	}
+
+	.back-to-index button:hover,
+	.btn-primary:hover,
+	.btn-secondary:hover,
+	.btn-tertiary:hover {
+		background-color: #74c7ec;
 	}
 </style>
 
-<div class="centered-container">
+<div class="section-container">
 	<h1>Profile</h1>
 
 	<table class="table">
@@ -32,7 +109,6 @@
 			<th>@Html.DisplayNameFor(model => model.Gender)</th>
 			<th>@Html.DisplayNameFor(model => model.CountryOfOrigin)</th>
 			<th>@Html.DisplayNameFor(model => model.Email)</th>
-			<th>@Html.DisplayNameFor(model => model.ProfilePictureUrl)</th>
 			<th></th>
 		</tr>
 		</thead>
@@ -43,11 +119,10 @@
 			<td>@Html.DisplayFor(model => model.Gender)</td>
 			<td>@Html.DisplayFor(model => model.CountryOfOrigin)</td>
 			<td>@Html.DisplayFor(model => model.Email)</td>
-			<td>@Html.DisplayFor(model => model.ProfilePictureUrl)</td>
+			
 			<td>
-				<a asp-action="Edit" asp-route-id="@Model.LearnerId">Edit</a> |
-				<a asp-action="Details" asp-route-id="@Model.LearnerId">Details</a> |
-				<a asp-action="Delete" asp-route-id="@Model.LearnerId">Delete</a>
+				<a asp-action="Edit" asp-route-id="@Model.LearnerId" class="btn-primary">Edit</a> |
+				<a asp-action="Delete" asp-route-id="@Model.LearnerId" class="btn-tertiary">Delete</a>
 			</td>
 		</tr>
 		</tbody>
@@ -58,5 +133,4 @@
 			<button>Go to Your Personalization Details</button>
 		</a>
 	</div>
-	
 </div>

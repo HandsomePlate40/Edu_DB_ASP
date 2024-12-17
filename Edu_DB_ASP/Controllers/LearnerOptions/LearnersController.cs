@@ -370,11 +370,14 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
                 .Where(lg => lg.LearnerId == learnerId)
                 .ToListAsync();
 
+            var availableForums = await _context.DiscussionForums.ToListAsync();
+
             var viewModel = new LearnerProfileViewModel
             {
                 Learner = learner,
                 LearningPath = learningPath ?? new List<LearningPath>(),
-                LearningGoals = learningGoals ?? new List<LearningGoal>()
+                LearningGoals = learningGoals ?? new List<LearningGoal>(),
+                AvailableForums = availableForums ?? new List<DiscussionForum>()
             };
 
             return View(viewModel);

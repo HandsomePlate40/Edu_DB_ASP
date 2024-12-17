@@ -195,11 +195,23 @@
             font-size: 1rem;
             padding: 0.5rem 1rem;
         }
-        .status-done {
-            color: #A6E3A1; /* green */
+
+        .status-new {
+            background-color: #a6e3a1; /* green */
+            color: #1e1e2e; /* base/black */
+            padding: 0.25rem 0.5rem;
+            border-radius: 5px;
+            font-weight: 600;
+            text-transform: uppercase;
         }
+
         .status-in-progress {
-            color: #F8BD96; /* yellow */
+            background-color: #fab387; /* yellow */
+            color: #1e1e2e; /* base/black */
+            padding: 0.25rem 0.5rem;
+            border-radius: 5px;
+            font-weight: 600;
+            text-transform: uppercase;
         }
     </style>
 </head>
@@ -247,8 +259,19 @@
                 <tr>
                     <td>@path.PathId</td>
                     <td>@path.LearningPathDescription</td>
-                    <td class="@(path.CompletionStatus == "done" ? "status-done" : path.CompletionStatus == "in progress" ? "status-in-progress" : "")">
-                        @path.CompletionStatus
+                    <td>
+                        @if (path.CompletionStatus.ToLower() == "new")
+                        {
+                            <span class="status-new">@path.CompletionStatus.ToUpper()</span>
+                        }
+                        else if (path.CompletionStatus.ToLower() == "in progress")
+                        {
+                            <span class="status-in-progress">@path.CompletionStatus.ToUpper()</span>
+                        }
+                        else
+                        {
+                            @path.CompletionStatus
+                        }
                     </td>
                 </tr>
             }
@@ -257,14 +280,6 @@
     </div>
 </div>
 
-<style>
-    .status-done {
-        color: #A6E3A1; /* green */
-    }
-    .status-in-progress {
-        color: #F8BD96; /* yellow */
-    }
-</style>
 <!-- Enrolled Courses Table -->
 <div class="section-container">
     <div class="table-section">
