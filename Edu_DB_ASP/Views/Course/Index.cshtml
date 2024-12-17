@@ -35,8 +35,8 @@
     }
 
     body {
-        background-color: var(--ctp-mocha-base);
-        color: var(--ctp-mocha-text);
+        background-color: #11111b;
+        color: #cdd6f4;
         font-family: sans-serif;
     }
 
@@ -58,7 +58,8 @@
         overflow: hidden;
     }
 
-    th, td {
+    th,
+    td {
         text-align: left;
         padding: 0.75rem;
         color: var(--ctp-mocha-subtext1);
@@ -99,7 +100,8 @@
         transition: background-color 0.3s, color 0.3s;
         cursor: pointer;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        margin-right: 0.5rem; /* Add spacing between buttons */
+        margin-right: 0.5rem;
+        /* Add spacing between buttons */
     }
 
     .btn:hover {
@@ -110,8 +112,10 @@
     /* Link Styles within Buttons (for Edit, Details, Delete) */
     .btn-link {
         color: var(--ctp-mocha-base);
-        text-decoration: none; /* Remove underline from links */
-        display: block; /* Make the link fill the button */
+        text-decoration: none;
+        /* Remove underline from links */
+        display: block;
+        /* Make the link fill the button */
         width: 100%;
         height: 100%;
     }
@@ -123,6 +127,28 @@
         margin-bottom: 1rem;
     }
 
+    .alert {
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 1rem;
+        border: 1px solid transparent;
+        border-radius: 0.25rem;
+    }
+
+    .alert-danger {
+        color: var(--ctp-mocha-red);
+        background-color: var(--ctp-mocha-maroon);
+        border-color: var(--ctp-mocha-red);
+    }
+
+    .alert-success {
+        color: var(--ctp-mocha-green);
+        background-color: var(--ctp-mocha-teal);
+        border-color: var(--ctp-mocha-green);
+    }
+
+    td .btn {
+        margin-bottom: 0.5rem; /* Add margin between buttons in the same cell */
+    }
 </style>
 
 <h1>Check out our Courses!</h1>
@@ -144,37 +170,46 @@
 <div class="table-container">
     <table class="table">
         <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.Title)</th>
-            <th>@Html.DisplayNameFor(model => model.CourseDescription)</th>
-            <th>@Html.DisplayNameFor(model => model.DifficultyLevel)</th>
-            <th>@Html.DisplayNameFor(model => model.Prerequisites)</th>
-            <th>@Html.DisplayNameFor(model => model.CreditPoints)</th>
-            <th>@Html.DisplayNameFor(model => model.LearningObjectives)</th>
-            <th></th>
-        </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Title)</th>
+                <th>@Html.DisplayNameFor(model => model.CourseDescription)</th>
+                <th>@Html.DisplayNameFor(model => model.DifficultyLevel)</th>
+                <th>@Html.DisplayNameFor(model => model.Prerequisites)</th>
+                <th>@Html.DisplayNameFor(model => model.CreditPoints)</th>
+                <th>@Html.DisplayNameFor(model => model.LearningObjectives)</th>
+                <th></th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.Title)</td>
-                <td>@Html.DisplayFor(modelItem => item.CourseDescription)</td>
-                <td>@Html.DisplayFor(modelItem => item.DifficultyLevel)</td>
-                <td>@Html.DisplayFor(modelItem => item.Prerequisites)</td>
-                <td>@Html.DisplayFor(modelItem => item.CreditPoints)</td>
-                <td>@Html.DisplayFor(modelItem => item.LearningObjectives)</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.CourseId" class="btn btn-link">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.CourseId" class="btn btn-link">Details</a>
-                    <a asp-action="Delete" asp-route-id="@item.CourseId" class="btn btn-link">Delete</a>
-                    <form asp-action="Enroll" method="post" style="display:inline;">
-                        <input type="hidden" name="courseId" value="@item.CourseId" />
-                        <button type="submit" class="btn">Enroll</button>
-                    </form>
-                </td>
-            </tr>
-        }
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CourseDescription)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DifficultyLevel)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Prerequisites)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CreditPoints)</td>
+                    <td>@Html.DisplayFor(modelItem => item.LearningObjectives)</td>
+                    <td>
+                        <form asp-action="Edit" method="get" style="display:inline;">
+                            <input type="hidden" name="id" value="@item.CourseId" />
+                            <button type="submit" class="btn">Edit</button>
+                        </form>
+                        <form asp-action="Details" method="get" style="display:inline;">
+                            <input type="hidden" name="id" value="@item.CourseId" />
+                            <button type="submit" class="btn">Details</button>
+                        </form>
+                        <form asp-action="Delete" method="get" style="display:inline;">
+                            <input type="hidden" name="id" value="@item.CourseId" />
+                            <button type="submit" class="btn">Delete</button>
+                        </form>
+                        <form asp-action="Enroll" method="post" style="display:inline;">
+                            <input type="hidden" name="courseId" value="@item.CourseId" />
+                            <button type="submit" class="btn">Enroll</button>
+                        </form>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
