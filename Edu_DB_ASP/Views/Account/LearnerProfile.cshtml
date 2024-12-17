@@ -292,37 +292,37 @@
     </div>
 </div>
 
-    <!-- Enrolled Courses Table -->
-    <div class="section-container">
-        <div class="table-section">
-            <h2>Enrolled Courses</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Course Title</th>
-                        <th>Description</th>
-                        <th>Difficulty Level</th>
-                        <th>Credit Points</th>
-                        <th>Actions</th> <!-- Add this header for actions -->
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var course in Model.EnrolledCourses)
-                    {
-                        <tr>
-                            <td>@course.Title</td>
-                            <td>@course.CourseDescription</td>
-                            <td>@course.DifficultyLevel</td>
-                            <td>@course.CreditPoints</td>
-                            <td>
-                                <a href="@Url.Action("ViewModules", "Module", new { courseId = course.CourseId })" class="module-manager-button">View Modules</a>
-                            </td> <!-- Add this cell for the buttons -->
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+<!-- Enrolled Courses Table -->
+<div class="section-container">
+    <div class="table-section">
+        <h2>Enrolled Courses</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Course Title</th>
+                <th>Description</th>
+                <th>Difficulty Level</th>
+                <th>Credit Points</th>
+                <th>Actions</th> <!-- Add this header for actions -->
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var course in Model.EnrolledCourses)
+            {
+                <tr>
+                    <td>@course.Title</td>
+                    <td>@course.CourseDescription</td>
+                    <td>@course.DifficultyLevel</td>
+                    <td>@course.CreditPoints</td>
+                    <td>
+                        <a href="@Url.Action("ViewModules", "Module", new { courseId = course.CourseId })" class="module-manager-button">View Modules</a>
+                    </td> <!-- Add this cell for the buttons -->
+                </tr>
+            }
+            </tbody>
+        </table>
     </div>
+</div>
 <div class="section-container">
     <!-- Discussion Forums Table -->
     <div class="table-section">
@@ -412,11 +412,11 @@
     </a>
 </div>
 
-    <div class="back-to-index">
-        <a asp-action="ViewPreviousCourses" asp-controller="Course">
-            <button>View Previous Courses</button>
-        </a>
-    </div>
+<div class="back-to-index">
+    <a asp-action="ViewPreviousCourses" asp-controller="Course">
+        <button>View Previous Courses</button>
+    </a>
+</div>
 
 <!-- Scripts -->
 <script>
@@ -431,3 +431,13 @@
 </script>
 </body>
 </html>
+<div class="back-to-index">
+    <a asp-action="TrackProgress" asp-controller="Learners">
+        <button>Track Progress</button>
+    </a>
+</div>
+<div class="back-to-index">
+    <a asp-action="ShareFeedback" asp-controller="Learners">
+        <button>Share Emotional Feedback</button>
+    </a>
+</div>

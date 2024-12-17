@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -298,8 +299,6 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
             return View(participants);
         }
 
-
-
         [HttpGet]
         public IActionResult AddGoal()
         {
@@ -344,6 +343,101 @@ namespace Edu_DB_ASP.Controllers.LearnerOptions
             }
 
             return View(model);
+        }
+
+        public async Task<IActionResult> TrackProgress()
+        {
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (email == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var learner = await _context.Learners.SingleOrDefaultAsync(u => u.Email == email);
+            if (learner == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var learnerId = learner.LearnerId;
+            var progressData = new List<QuestProgressViewModel>();
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var command = new SqlCommand("QuestProgress", connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.AddWithValue("@LearnerID", learnerId);
+
+                connection.Open();
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        progressData.Add(new QuestProgressViewModel
+                        {
+                            QuestID = reader.GetInt32(0),
+                            QuestTitle = reader.GetString(1),
+                            QuestDescription = reader.GetString(2),
+                            QuestStatus = reader.GetString(3),
+                            BadgeID = reader.IsDBNull(4) ? (int?)null : reader.GetInt32(4),
+                            BadgeTitle = reader.IsDBNull(5) ? null : reader.GetString(5),
+                            BadgeDescription = reader.IsDBNull(6) ? null : reader.GetString(6),
+                            BadgeStatus = reader.GetString(7)
+                        });
+                    }
+                }
+            }
+
+            return View(progressData);
+        }
+
+        [HttpGet]
+        public IActionResult ShareFeedback()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ShareFeedback(EmotionalFeedbackViewModel model)
+        {
+            var learnerEmail = HttpContext.Session.GetString("UserEmail");
+            if (learnerEmail == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var learner = await _context.Learners.SingleOrDefaultAsync(u => u.Email == learnerEmail);
+            if (learner == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            // Check if the ActivityID exists in the LearningActivity table
+            var activityExists = await _context.LearningActivities.AnyAsync(a => a.ActivityId == model.ActivityID);
+            if (!activityExists)
+            {
+                ModelState.AddModelError(string.Empty, "The specified Activity ID does not exist.");
+                return View(model);
+            }
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var command = new SqlCommand("ActivityEmotionalFeedback", connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.AddWithValue("@ActivityID", model.ActivityID);
+                command.Parameters.AddWithValue("@LearnerID", learner.LearnerId);
+                command.Parameters.AddWithValue("@timestamp", DateTime.Now);
+                command.Parameters.AddWithValue("@emotionalstate", model.EmotionalState);
+
+                connection.Open();
+                await command.ExecuteNonQueryAsync();
+            }
+
+            return RedirectToAction("LearnerProfile", "Account");
         }
     }
 }
