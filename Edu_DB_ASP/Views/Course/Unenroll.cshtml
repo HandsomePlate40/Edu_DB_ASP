@@ -1,0 +1,29 @@
+﻿@model int
+
+@{
+    Layout = "_Layout";
+}
+
+<h2>Confirm Unenrollment</h2>
+
+<p>Are you sure you want to unenroll from this course?</p>
+
+<form asp-action="ConfirmUnenroll" method="post">
+    <input type="hidden" name="courseId" value="@Model" />
+    <button type="submit" class="btn btn-danger">Yes, Unenroll</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Message"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}

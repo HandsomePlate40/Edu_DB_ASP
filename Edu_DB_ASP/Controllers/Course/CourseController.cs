@@ -130,43 +130,6 @@ namespace Edu_DB_ASP.Controllers.Course
             return View(course);
         }
 
-        // GET: Course/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var course = await _context.Courses
-                .FirstOrDefaultAsync(m => m.CourseId == id);
-            if (course == null)
-            {
-                return NotFound();
-            }
-
-            return View(course);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            try
-            {
-                await _context.Database.ExecuteSqlRawAsync("EXEC CourseRemove @courseID = {0}", id);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
-            {
-                // Log the exception (you can use a logging framework or simply output to console)
-                Console.WriteLine(ex.Message);
-                // Optionally, return an error view or message
-                return View("Error",
-                    new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-            }
-        }
-
         private bool CourseExists(int id)
         {
             return _context.Courses.Any(e => e.CourseId == id);
@@ -204,33 +167,7 @@ namespace Edu_DB_ASP.Controllers.Course
 
             return RedirectToAction(nameof(Index));
         }
-
-        [HttpPost]
-        public IActionResult DeleteCourse(int courseId)
-        {
-            string message;
-            using (SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
-            {
-                using (SqlCommand cmd = new SqlCommand("CourseRemove", conn))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@courseID", courseId);
-                    SqlParameter outputMessage = new SqlParameter("@Message", SqlDbType.NVarChar, 100)
-                    {
-                        Direction = ParameterDirection.Output
-                    };
-                    cmd.Parameters.Add(outputMessage);
-
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                    message = outputMessage.Value.ToString();
-                }
-            }
-
-            TempData["Message"] = message;
-            return RedirectToAction("InstructorProfile", "Account");
-        }
-
+        
         [HttpGet]
         public async Task<IActionResult> CheckPrerequisites(int learnerId, int courseId)
         {
@@ -304,7 +241,97 @@ namespace Edu_DB_ASP.Controllers.Course
 
             return View(previousCourses);
         }
+        [HttpGet]
+        public IActionResult Unenroll(int courseId)
+        {
+            var learnerId = HttpContext.Session.GetInt32("LearnerId");
+            if (learnerId == null)
+            {
+                TempData["Error"] = "Learner not logged in.";
+                return RedirectToAction("LearnerLogin", "Account");
+            }
 
+            return View(courseId);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmUnenroll(int courseId)
+        {
+            var learnerId = HttpContext.Session.GetInt32("LearnerId");
+            if (learnerId == null)
+            {
+                TempData["Error"] = "Learner not logged in.";
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            try
+            {
+                var enrollment = await _context.CourseEnrollments
+                    .FirstOrDefaultAsync(e => e.LearnerId == learnerId && e.CourseId == courseId);
+
+                if (enrollment == null)
+                {
+                    TempData["Error"] = "Enrollment not found.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                _context.CourseEnrollments.Remove(enrollment);
+                await _context.SaveChangesAsync();
+                TempData["Message"] = "Successfully unenrolled from the course.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error unenrolling from the course: " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var course = await _context.Courses
+                .FirstOrDefaultAsync(m => m.CourseId == id);
+            if (course == null)
+            {
+                return NotFound();
+            }
+
+            return View(course);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteCourse(int courseId)
+        {
+            string message;
+            using (SqlConnection conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                using (SqlCommand cmd = new SqlCommand("CourseRemove", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@courseID", courseId);
+                    SqlParameter outputMessage = new SqlParameter("@Message", SqlDbType.NVarChar, 100)
+                    {
+                        Direction = ParameterDirection.Output
+                    };
+                    cmd.Parameters.Add(outputMessage);
+
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    message = outputMessage.Value.ToString();
+                }
+            }
+
+            TempData["Message"] = message;
+            return RedirectToAction("InstructorProfile", "Account");
+        }
     }
 }
 

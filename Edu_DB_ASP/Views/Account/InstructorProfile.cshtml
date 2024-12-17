@@ -221,8 +221,8 @@
                     <td>@course.LearningObjectives</td>
                     <td>@course.Prerequisites</td>
                     <td>
-                        <form asp-action="DeleteCourse" method="post">
-                            <input type="hidden" name="courseId" value="@course.CourseId" />
+                        <form asp-action="Delete" asp-controller="Course" method="get">
+                            <input type="hidden" name="id" value="@course.CourseId" />
                             <button type="submit" class="btn-primary">Delete</button>
                         </form>
                     </td>

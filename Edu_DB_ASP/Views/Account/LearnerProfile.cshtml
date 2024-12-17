@@ -291,9 +291,8 @@
         </table>
     </div>
 </div>
-
-<!-- Enrolled Courses Table -->
 <div class="section-container">
+    <!-- Enrolled Courses Table -->
     <div class="table-section">
         <h2>Enrolled Courses</h2>
         <table>
@@ -303,7 +302,7 @@
                 <th>Description</th>
                 <th>Difficulty Level</th>
                 <th>Credit Points</th>
-                <th>Actions</th> <!-- Add this header for actions -->
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -315,8 +314,8 @@
                     <td>@course.DifficultyLevel</td>
                     <td>@course.CreditPoints</td>
                     <td>
-                        <a href="@Url.Action("ViewModules", "Module", new { courseId = course.CourseId })" class="module-manager-button">View Modules</a>
-                    </td> <!-- Add this cell for the buttons -->
+                        <a href="@Url.Action("Unenroll", "Course", new { courseId = course.CourseId })" class="btn btn-danger">Unenroll</a>
+                    </td>
                 </tr>
             }
             </tbody>
@@ -418,6 +417,12 @@
     </a>
 </div>
 
+<div class="back-to-index">
+    <a asp-action="Unenroll" asp-controller="Course">
+        <button>Remove enrollment from your Courses</button>
+    </a>
+</div>
+
 <!-- Scripts -->
 <script>
     function uploadProfilePicture() {
@@ -431,13 +436,3 @@
 </script>
 </body>
 </html>
-<div class="back-to-index">
-    <a asp-action="TrackProgress" asp-controller="Learners">
-        <button>Track Progress</button>
-    </a>
-</div>
-<div class="back-to-index">
-    <a asp-action="ShareFeedback" asp-controller="Learners">
-        <button>Share Emotional Feedback</button>
-    </a>
-</div>
