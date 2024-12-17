@@ -51,6 +51,7 @@
         padding: 2rem;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         margin: 2rem auto;
+        width: fit-content;
     }
 
     .form-group {
@@ -68,6 +69,8 @@
         border: 1px solid var(--ctp-mocha-overlay0);
         border-radius: 5px;
         padding: 0.5rem;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .form-control:focus {
@@ -111,6 +114,11 @@
     .back-to-list a:hover {
         text-decoration: underline;
     }
+
+    .row {
+        display: flex;
+        justify-content: center;
+    }
 </style>
 
 <h1>Create</h1>
@@ -119,7 +127,7 @@
 <hr />
 
 <div class="row">
-    <div class="col-md-4 offset-md-4">
+    <div class="col-md-4">
         <div class="form-container">
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
