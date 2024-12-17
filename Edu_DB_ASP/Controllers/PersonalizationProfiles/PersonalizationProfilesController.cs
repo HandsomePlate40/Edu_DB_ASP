@@ -202,13 +202,25 @@ namespace Edu_DB_ASP.Controllers.PersonalizationProfiles
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var personalizationProfile = await _context.PersonalizationProfiles.FindAsync(id);
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (email == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var learner = await _context.Learners.SingleOrDefaultAsync(u => u.Email == email);
+            if (learner == null)
+            {
+                return RedirectToAction("LearnerLogin", "Account");
+            }
+
+            var personalizationProfile = await _context.PersonalizationProfiles.FindAsync(id, learner.LearnerId);
             if (personalizationProfile != null)
             {
                 _context.PersonalizationProfiles.Remove(personalizationProfile);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
     }

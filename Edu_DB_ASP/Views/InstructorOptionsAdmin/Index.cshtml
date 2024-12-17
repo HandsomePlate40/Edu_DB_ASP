@@ -4,13 +4,103 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #11111B;
+        /* base */
+        color: #D9E0EE;
+        /* text */
+    }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
+    .section-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    h1 {
+        color: #cba6f7;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #181825;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    table thead {
+        background: #313244;
+    }
+
+    table thead th {
+        text-align: left;
+        padding: 1rem;
+        color: #cdd6f4;
+        font-weight: 600;
+        border-bottom: 1px solid #45475a;
+    }
+
+    table tbody tr {
+        border-bottom: 1px solid #313244;
+    }
+
+    table tbody tr:hover {
+        background: #1e1e2e;
+    }
+
+    table tbody td {
+        padding: 1rem;
+        color: #a6adc8;
+    }
+
+    .button-container {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: flex-end;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-tertiary {
+        background-color: #89b4fa;
+        color: #1e1e2e;
+        border: none;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 10px;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    .btn-secondary {
+        background-color: #A6E3A1;
+    }
+
+    .btn-tertiary {
+        background-color: #fab387;
+    }
+
+    .btn-primary:hover,
+    .btn-secondary:hover,
+    .btn-tertiary:hover {
+        background-color: #74c7ec;
+    }
+</style>
+
+<div class="section-container">
+    <h1>Instructors</h1>
+
+    <table class="table">
+        <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.InstructorName)
@@ -29,31 +119,31 @@
             </th>
             <th></th>
         </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.InstructorName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Qualifications)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PasswordHash)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProfilePictureUrl)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.InstructorId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.InstructorId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.InstructorId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InstructorName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Qualifications)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PasswordHash)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProfilePictureUrl)
+                </td>
+                <td class="button-container">
+                    <a asp-action="Delete" asp-route-id="@item.InstructorId" class="btn-tertiary">Delete</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
