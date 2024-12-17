@@ -316,10 +316,6 @@
                             <td>@course.CreditPoints</td>
                             <td>
                                 <a href="@Url.Action("ViewModules", "Module", new { courseId = course.CourseId })" class="module-manager-button">View Modules</a>
-                                <form asp-action="Unregister" method="post" style="display:inline;">
-                                    <input type="hidden" name="courseId" value="@course.CourseId" />
-                                    <button type="submit" class="btn-primary">Unregister</button>
-                                </form>
                             </td> <!-- Add this cell for the buttons -->
                         </tr>
                     }

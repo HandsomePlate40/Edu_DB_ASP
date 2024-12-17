@@ -6,7 +6,6 @@ namespace Edu_DB_ASP.Models;
 public partial class Learner
 {
     public int LearnerId { get; set; }
-    public string IdentityUserId { get; set; }
 
 public string? FirstName { get; set; }
 

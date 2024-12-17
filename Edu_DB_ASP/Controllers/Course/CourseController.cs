@@ -305,34 +305,6 @@ namespace Edu_DB_ASP.Controllers.Course
             return View(previousCourses);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Unregister(int courseId)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
-
-            var learner = await _context.Learners
-                .Include(l => l.CourseEnrollments)
-                .FirstOrDefaultAsync(l => l.IdentityUserId == userId); // Corrected property name
-
-            if (learner == null)
-            {
-                return NotFound();
-            }
-
-            var enrollment = learner.CourseEnrollments.FirstOrDefault(e => e.CourseId == courseId);
-            if (enrollment != null)
-            {
-                _context.CourseEnrollments.Remove(enrollment);
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToAction("LearnerProfile", "Account");
-        }
     }
 }
 
