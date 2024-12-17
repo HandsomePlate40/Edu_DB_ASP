@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Edu_DB_ASP.Models.Course>
+
+@{
+    ViewData["Title"] = "Teach";
+}
+
+<h2>Register as a Teacher for a Course</h2>
+<style>
+    /* Existing styles from InstructorProfile */
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #11111B; /* base */
+        color: #D9E0EE; /* text */
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #181825;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    table thead {
+        background: #313244;
+    }
+    table thead th {
+        text-align: left;
+        padding: 1rem;
+        color: #cdd6f4;
+        font-weight: 600;
+        border-bottom: 1px solid #45475a;
+    }
+    table tbody tr {
+        border-bottom: 1px solid #313244;
+    }
+    table tbody tr:hover {
+        background: #1e1e2e;
+    }
+    table tbody td {
+        padding: 1rem;
+        color: #a6adc8;
+    }
+    .btn-primary {
+        background-color: #89b4fa;
+        color: #1e1e2e;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 15px;
+        transition: background-color 0.3s ease;
+    }
+    .btn-primary:hover {
+        background-color: #74c7ec;
+    }
+</style>
+<table>
+    <thead>
+    <tr>
+        <th>Course Title</th>
+        <th>Description</th>
+        <th>Difficulty Level</th>
+        <th>Credit Points</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var course in Model)
+    {
+        <tr>
+            <td>@course.Title</td>
+            <td>@course.CourseDescription</td>
+            <td>@course.DifficultyLevel</td>
+            <td>@course.CreditPoints</td>
+            <td>
+                <form asp-action="RegisterAsTeacher" asp-controller="Course" method="post">
+                    <input type="hidden" name="courseId" value="@course.CourseId" />
+                    <button type="submit" class="btn-primary">Register</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@if (TempData["Message"] != null)
+{
+    <div>@TempData["Message"]</div>
+}
+
