@@ -479,30 +479,22 @@ public partial class EduDbContext : DbContext
 
         modelBuilder.Entity<Evaluate>(entity =>
         {
-            entity.HasKey(e => new { e.CourseId, e.ModuleId, e.AssessmentId }).HasName("PK__Evaluate__94A71D07350C7833");
+            entity.HasKey(e => new { e.CourseId, e.ModuleId, e.AssessmentId });
 
-            entity.HasIndex(e => e.AssessmentId, "IX_Evaluates_AssessmentID");
+            entity.HasOne(e => e.Assessment)
+                .WithMany()
+                .HasForeignKey(e => e.AssessmentId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasIndex(e => e.ModuleId, "IX_Evaluates_ModuleID");
+            entity.HasOne(e => e.Course)
+                .WithMany()
+                .HasForeignKey(e => e.CourseId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-            entity.Property(e => e.CourseId).HasColumnName("CourseID");
-            entity.Property(e => e.ModuleId).HasColumnName("ModuleID");
-            entity.Property(e => e.AssessmentId).HasColumnName("AssessmentID");
-
-            entity.HasOne(d => d.Assessment).WithMany(p => p.Evaluates)
-                .HasForeignKey(d => d.AssessmentId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Evaluates__Asses__503BEA1C");
-
-            entity.HasOne(d => d.Course).WithMany(p => p.Evaluates)
-                .HasForeignKey(d => d.CourseId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Evaluates__Cours__4E53A1AA");
-
-            entity.HasOne(d => d.Module).WithMany(p => p.Evaluates)
-                .HasForeignKey(d => d.ModuleId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Evaluates__Modul__4F47C5E3");
+            entity.HasOne(e => e.Module)
+                .WithMany()
+                .HasForeignKey(e => e.ModuleId)
+                .OnDelete(DeleteBehavior.NoAction);
         });
 
         modelBuilder.Entity<Expertise>(entity =>
@@ -524,30 +516,22 @@ public partial class EduDbContext : DbContext
 
         modelBuilder.Entity<Express>(entity =>
         {
-            entity.HasKey(e => new { e.LearnerId, e.ActivityId, e.FeedbackId }).HasName("PK__Expresse__949EFD6813931B30");
+            entity.HasKey(e => new { e.LearnerId, e.ActivityId, e.FeedbackId });
 
-            entity.HasIndex(e => e.ActivityId, "IX_Expresses_ActivityID");
+            entity.HasOne(e => e.Activity)
+                .WithMany()
+                .HasForeignKey(e => e.ActivityId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasIndex(e => e.FeedbackId, "IX_Expresses_FeedbackID");
+            entity.HasOne(e => e.Feedback)
+                .WithMany()
+                .HasForeignKey(e => e.FeedbackId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            entity.Property(e => e.LearnerId).HasColumnName("LearnerID");
-            entity.Property(e => e.ActivityId).HasColumnName("ActivityID");
-            entity.Property(e => e.FeedbackId).HasColumnName("FeedbackID");
-
-            entity.HasOne(d => d.Activity).WithMany(p => p.Expresses)
-                .HasForeignKey(d => d.ActivityId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Expresses__Activ__42E1EEFE");
-
-            entity.HasOne(d => d.Feedback).WithMany(p => p.Expresses)
-                .HasForeignKey(d => d.FeedbackId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Expresses__Feedb__43D61337");
-
-            entity.HasOne(d => d.Learner).WithMany(p => p.Expresses)
-                .HasForeignKey(d => d.LearnerId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK__Expresses__Learn__41EDCAC5");
+            entity.HasOne(e => e.Learner)
+                .WithMany()
+                .HasForeignKey(e => e.LearnerId)
+                .OnDelete(DeleteBehavior.NoAction);
         });
 
         modelBuilder.Entity<HealthCondition>(entity =>
