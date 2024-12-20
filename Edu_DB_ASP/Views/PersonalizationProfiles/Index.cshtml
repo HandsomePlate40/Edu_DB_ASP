@@ -106,6 +106,10 @@
 
 <div class="section-container">
     <h1>Personalization Profile</h1>
+    
+    <p>
+        <a asp-action="Create" class="btn-primary">Create New</a>
+    </p>
 
     <table class="table">
         <thead>
@@ -131,8 +135,11 @@
                     <td>@Html.DisplayFor(modelItem => item.Learner.LearnerId)</td>
                     <td>@Html.DisplayFor(modelItem => item.Notification.NotificationId)</td>
                     <td>@Html.DisplayFor(modelItem => item.Path.PathId)</td>
-                    <td class="button-container">
-                        <a asp-action="Delete" asp-route-id="@item.LearnerId" class="btn-tertiary">Delete</a>
+                    <td class="btn-secondary">
+                        <a asp-action="Delete" asp-route-creationOrder="@item.CreationOrder" asp-route-learnerId="@item.LearnerId">Delete</a>
+                    </td>
+                    <td class="btn-tertiary">
+                    <a asp-action="Edit" asp-route-creationOrder="@item.CreationOrder" asp-route-learnerId="@item.LearnerId">Edit</a>
                     </td>
                 </tr>
             }

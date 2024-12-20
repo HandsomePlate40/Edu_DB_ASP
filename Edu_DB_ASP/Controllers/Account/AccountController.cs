@@ -377,7 +377,7 @@ namespace Edu_DB_ASP.Controllers.Account
             return View(viewModel);
         }
 
- [HttpPost]
+[HttpPost]
 public async Task<IActionResult> UploadInstructorProfilePicture(IFormFile profilePicture)
 {
     try
@@ -413,70 +413,72 @@ public async Task<IActionResult> UploadInstructorProfilePicture(IFormFile profil
             _context.Instructors.Update(instructor);
             await _context.SaveChangesAsync();
 
-            var taughtCourses = _context.Courses
+            var taughtCourses = await _context.Courses
                 .FromSqlRaw("EXEC InstructorCourses @InstructorID = {0}", instructor.InstructorId)
-                .ToList();
+                .ToListAsync();
+
+            var availableForums = await _context.DiscussionForums.ToListAsync();
 
             var viewModel = new InstructorProfileViewModel
             {
                 Instructor = instructor,
-                TaughtCourses = taughtCourses
+                TaughtCourses = taughtCourses,
+                AvailableForums = availableForums ?? new List<DiscussionForum>(),
             };
 
             return View("InstructorProfile", viewModel);
         }
 
         ViewBag.ErrorMessage = "No profile picture was selected. Please choose a file and try again.";
-        var noEmail = HttpContext.Session.GetString("UserEmail");
-        if (noEmail != null)
-        {
-            var noPicInstructor = _context.Instructors.SingleOrDefault(u => u.Email == noEmail);
-            var taughtCourses = _context.Courses
-                .FromSqlRaw("EXEC InstructorCourses @InstructorID = {0}", noPicInstructor.InstructorId)
-                .ToList();
-
-            var viewModel = new InstructorProfileViewModel
-            {
-                Instructor = noPicInstructor,
-                TaughtCourses = taughtCourses
-            };
-
-            return View("InstructorProfile", viewModel);
-        }
-        else
-        {
-            return RedirectToAction("InstructorLogin");
-        }
+        return RedirectToAction("InstructorProfile");
     }
     catch (Exception ex)
     {
         ViewBag.ErrorMessage = $"An error occurred while uploading the profile picture: {ex.Message}";
-
-        var email = HttpContext.Session.GetString("UserEmail");
-        if (email != null)
-        {
-            var instructor = _context.Instructors.SingleOrDefault(u => u.Email == email);
-            var taughtCourses = _context.Courses
-                .FromSqlRaw("EXEC InstructorCourses @InstructorID = {0}", instructor.InstructorId)
-                .ToList();
-
-            var viewModel = new InstructorProfileViewModel
-            {
-                Instructor = instructor,
-                TaughtCourses = taughtCourses
-            };
-
-            return View("InstructorProfile", viewModel);
-        }
-        else
-        {
-            return RedirectToAction("InstructorLogin");
-        }
+        return RedirectToAction("InstructorProfile");
     }
 }
 
-        [HttpGet]
-        public IActionResult AdminProfile()
+[HttpGet]
+public async Task<IActionResult> AdminProfile()
+{
+    var email = HttpContext.Session.GetString("UserEmail");
+    if (email == null)
+    {
+        return RedirectToAction("AdminLogin");
+    }
+
+    var admin = await _context.Admins.SingleOrDefaultAsync(u => u.Email == email);
+    if (admin == null)
+    {
+        return RedirectToAction("AdminLogin");
+    }
+
+    var firstFiveLearners = await _context.Learners
+        .OrderBy(l => l.LearnerId)
+        .Take(5)
+        .ToListAsync();
+
+    var firstFiveInstructors = await _context.Instructors
+        .OrderBy(i => i.InstructorId)
+        .Take(5)
+        .ToListAsync();
+
+    var viewModel = new AdminProfileViewModel
+    {
+        Admin = admin,
+        FirstFiveLearners = firstFiveLearners,
+        FirstFiveInstructors = firstFiveInstructors
+    };
+
+    return View(viewModel);
+}
+ [HttpPost]
+public async Task<IActionResult> UploadAdminProfilePicture(IFormFile profilePicture)
+{
+    try
+    {
+        if (profilePicture != null && profilePicture.Length > 0)
         {
             var email = HttpContext.Session.GetString("UserEmail");
             if (email == null)
@@ -490,76 +492,105 @@ public async Task<IActionResult> UploadInstructorProfilePicture(IFormFile profil
                 return RedirectToAction("AdminLogin");
             }
 
-            return View(admin);
+            var directoryPath = Path.Combine("wwwroot", "images");
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            var filePath = Path.Combine(directoryPath, profilePicture.FileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await profilePicture.CopyToAsync(stream);
+            }
+
+            admin.ProfilePictureUrl = $"/images/{profilePicture.FileName}";
+            _context.Admins.Update(admin);
+            await _context.SaveChangesAsync();
+
+            var firstFiveLearners = await _context.Learners
+                .OrderBy(l => l.LearnerId)
+                .Take(5)
+                .ToListAsync();
+
+            var firstFiveInstructors = await _context.Instructors
+                .OrderBy(i => i.InstructorId)
+                .Take(5)
+                .ToListAsync();
+
+            var viewModel = new AdminProfileViewModel
+            {
+                Admin = admin,
+                FirstFiveLearners = firstFiveLearners,
+                FirstFiveInstructors = firstFiveInstructors
+            };
+
+            return View("AdminProfile", viewModel);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UploadAdminProfilePicture(IFormFile profilePicture)
+        ViewBag.ErrorMessage = "No profile picture was selected. Please choose a file and try again.";
+        var noEmail = HttpContext.Session.GetString("UserEmail");
+        if (noEmail != null)
         {
-            try
+            var noPicAdmin = _context.Admins.SingleOrDefault(u => u.Email == noEmail);
+            var firstFiveLearners = await _context.Learners
+                .OrderBy(l => l.LearnerId)
+                .Take(5)
+                .ToListAsync();
+
+            var firstFiveInstructors = await _context.Instructors
+                .OrderBy(i => i.InstructorId)
+                .Take(5)
+                .ToListAsync();
+
+            var viewModel = new AdminProfileViewModel
             {
-                if (profilePicture != null && profilePicture.Length > 0)
-                {
-                    var email = HttpContext.Session.GetString("UserEmail");
-                    if (email == null)
-                    {
-                        return RedirectToAction("AdminLogin");
-                    }
+                Admin = noPicAdmin,
+                FirstFiveLearners = firstFiveLearners,
+                FirstFiveInstructors = firstFiveInstructors
+            };
 
-                    var admin = _context.Admins.SingleOrDefault(u => u.Email == email);
-                    if (admin == null)
-                    {
-                        return RedirectToAction("AdminLogin");
-                    }
-
-                    var directoryPath = Path.Combine("wwwroot", "images");
-                    if (!Directory.Exists(directoryPath))
-                    {
-                        Directory.CreateDirectory(directoryPath);
-                    }
-
-                    var filePath = Path.Combine(directoryPath, profilePicture.FileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await profilePicture.CopyToAsync(stream);
-                    }
-
-                    admin.ProfilePictureUrl = $"/images/{profilePicture.FileName}";
-                    _context.Admins.Update(admin);
-                    await _context.SaveChangesAsync();
-
-                    return RedirectToAction("AdminProfile");
-                }
-
-                ViewBag.ErrorMessage = "No profile picture was selected. Please choose a file and try again.";
-                var noEmail = HttpContext.Session.GetString("UserEmail");
-                if (noEmail != null)
-                {
-                    var noPicAdmin = _context.Admins.SingleOrDefault(u => u.Email == noEmail);
-                    return View("AdminProfile", noPicAdmin);
-                }
-                else
-                {
-                    return RedirectToAction("AdminLogin");
-                }
-            }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorMessage = $"An error occurred while uploading the profile picture: {ex.Message}";
-
-                var email = HttpContext.Session.GetString("UserEmail");
-                if (email != null)
-                {
-                    var admin = _context.Admins.SingleOrDefault(u => u.Email == email);
-                    return View("AdminProfile", admin);
-                }
-                else
-                {
-                    return RedirectToAction("AdminLogin");
-                }
-            }
+            return View("AdminProfile", viewModel);
         }
+        else
+        {
+            return RedirectToAction("AdminLogin");
+        }
+    }
+    catch (Exception ex)
+    {
+        ViewBag.ErrorMessage = $"An error occurred while uploading the profile picture: {ex.Message}";
+
+        var email = HttpContext.Session.GetString("UserEmail");
+        if (email != null)
+        {
+            var admin = _context.Admins.SingleOrDefault(u => u.Email == email);
+            var firstFiveLearners = await _context.Learners
+                .OrderBy(l => l.LearnerId)
+                .Take(5)
+                .ToListAsync();
+
+            var firstFiveInstructors = await _context.Instructors
+                .OrderBy(i => i.InstructorId)
+                .Take(5)
+                .ToListAsync();
+
+            var viewModel = new AdminProfileViewModel
+            {
+                Admin = admin,
+                FirstFiveLearners = firstFiveLearners,
+                FirstFiveInstructors = firstFiveInstructors
+            };
+
+            return View("AdminProfile", viewModel);
+        }
+        else
+        {
+            return RedirectToAction("AdminLogin");
+        }
+    }
+}
 
         [HttpGet]
         public IActionResult LearnerIndex()
@@ -646,6 +677,7 @@ public async Task<IActionResult> UploadInstructorProfilePicture(IFormFile profil
             {
                 HttpContext.Session.SetString("UserEmail", admin.Email);
                 HttpContext.Session.SetString("UserRole", "Admin");
+                HttpContext.Session.SetInt32("AdminId", admin.AdminId);
 
                 return RedirectToAction("AdminProfile", "Account");
             }

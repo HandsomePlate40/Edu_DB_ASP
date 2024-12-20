@@ -198,7 +198,6 @@ namespace Edu_DB_ASP.Controllers.DiscussionForums
             return View(viewModel);
         }
 
-        // File: Edu_DB_ASP/Controllers/DiscussionForums/DiscussionForumsController.cs
         [HttpPost]
         public async Task<IActionResult> PostMessage(PostMessageViewModel model)
         {
@@ -219,6 +218,7 @@ namespace Edu_DB_ASP.Controllers.DiscussionForums
                     if (existingPost != null)
                     {
                         ModelState.AddModelError("", "You have already posted in this forum.");
+                        await ReloadMessages(model);
                         return View(model);
                     }
 
@@ -226,11 +226,7 @@ namespace Edu_DB_ASP.Controllers.DiscussionForums
                         "EXEC Post @LearnerID = {0}, @DiscussionID = {1}, @Post = {2}",
                         learnerId, model.ForumId, model.Post);
 
-                    if (result == -1)
-                    {
-                        ModelState.AddModelError("", "An error occurred while posting the message.");
-                        return View(model);
-                    }
+              
                 }
                 else if (userRole == "Instructor")
                 {
@@ -246,107 +242,137 @@ namespace Edu_DB_ASP.Controllers.DiscussionForums
                     if (existingPost != null)
                     {
                         ModelState.AddModelError("", "You have already posted in this forum.");
+                        await ReloadMessages(model);
                         return View(model);
                     }
 
                     var result = await _context.Database.ExecuteSqlRawAsync(
                         "EXEC PostInstructor @InstructorID = {0}, @DiscussionID = {1}, @Post = {2}",
                         instructorId, model.ForumId, model.Post);
-
-                    if (result == -1)
-                    {
-                        ModelState.AddModelError("", "An error occurred while posting the message.");
-                        return View(model);
-                    }
+                    
                 }
 
                 return RedirectToAction("PostMessage", new { forumId = model.ForumId });
             }
 
+            await ReloadMessages(model);
             return View(model);
         }
-        
-[HttpGet]
-public async Task<IActionResult> EditMessage(int userId, string userRole)
-{
-    if (userRole == "Learner")
-    {
-        var post = await _context.Joins
-            .Where(j => j.LearnerId == userId)
-            .Select(j => new MessageViewModel
+
+        private async Task ReloadMessages(PostMessageViewModel model)
+        {
+            var learnerMessages = await _context.Joins
+                .Where(j => j.ForumId == model.ForumId)
+                .Select(j => new MessageViewModel
+                {
+                    UserName = j.Learner.FirstName + " " + j.Learner.LastName,
+                    Content = j.Post,
+                    ProfilePictureUrl = j.Learner.ProfilePictureUrl,
+                    UserRole = "Learner"
+                })
+                .ToListAsync();
+
+            var instructorMessages = await _context.InstructorJoins
+                .Where(ij => ij.ForumId == model.ForumId)
+                .Select(ij => new MessageViewModel
+                {
+                    UserName = ij.Instructor.InstructorName,
+                    Content = ij.Post,
+                    ProfilePictureUrl = ij.Instructor.ProfilePictureUrl,
+                    UserRole = "Instructor"
+                })
+                .ToListAsync();
+
+            model.Messages = learnerMessages.Concat(instructorMessages).ToList();
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditMessage(int userId, string userRole)
+        {
+            if (userRole == "Learner")
             {
-                UserId = j.LearnerId,
-                UserName = j.Learner.FirstName + " " + j.Learner.LastName,
-                Content = j.Post,
-                ProfilePictureUrl = j.Learner.ProfilePictureUrl,
-                UserRole = "Learner"
-            })
-            .FirstOrDefaultAsync();
+                var post = await _context.Joins
+                    .Where(j => j.LearnerId == userId)
+                    .Select(j => new MessageViewModel
+                    {
+                        UserId = j.LearnerId,
+                        UserName = j.Learner.FirstName + " " + j.Learner.LastName,
+                        Content = j.Post,
+                        ProfilePictureUrl = j.Learner.ProfilePictureUrl,
+                        UserRole = "Learner"
+                    })
+                    .FirstOrDefaultAsync();
 
-        if (post == null)
-        {
-            return NotFound();
-        }
+                if (post == null)
+                {
+                    return NotFound();
+                }
 
-        return View(post);
-    }
-    else if (userRole == "Instructor")
-    {
-        var post = await _context.InstructorJoins
-            .Where(ij => ij.InstructorId == userId)
-            .Select(ij => new MessageViewModel
+                return View(post);
+            }
+            else if (userRole == "Instructor")
             {
-                UserId = ij.InstructorId,
-                UserName = ij.Instructor.InstructorName,
-                Content = ij.Post,
-                ProfilePictureUrl = ij.Instructor.ProfilePictureUrl,
-                UserRole = "Instructor"
-            })
-            .FirstOrDefaultAsync();
+                var post = await _context.InstructorJoins
+                    .Where(ij => ij.InstructorId == userId)
+                    .Select(ij => new MessageViewModel
+                    {
+                        UserId = ij.InstructorId,
+                        UserName = ij.Instructor.InstructorName,
+                        Content = ij.Post,
+                        ProfilePictureUrl = ij.Instructor.ProfilePictureUrl,
+                        UserRole = "Instructor"
+                    })
+                    .FirstOrDefaultAsync();
 
-        if (post == null)
-        {
-            return NotFound();
+                if (post == null)
+                {
+                    return NotFound();
+                }
+
+                return View(post);
+            }
+
+            return BadRequest();
         }
 
-        return View(post);
-    }
-
-    return BadRequest();
-}
-
-[HttpPost]
-[ValidateAntiForgeryToken]
-public async Task<IActionResult> EditMessage(int userId, string userRole, string content)
-{
-    if (userRole == "Learner")
-    {
-        var post = await _context.Joins.FirstOrDefaultAsync(j => j.LearnerId == userId);
-        if (post == null)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditMessage(int userId, string userRole, string content)
         {
-            return NotFound();
+            if (userRole == "Learner")
+            {
+                var post = await _context.Joins.FirstOrDefaultAsync(j => j.LearnerId == userId);
+                if (post == null)
+                {
+                    return NotFound();
+                }
+
+                post.Post = content;
+                await _context.SaveChangesAsync();
+                return RedirectToAction("PostMessage", new { forumId = post.ForumId });
+            }
+            else if (userRole == "Instructor")
+            {
+                var post = await _context.InstructorJoins.FirstOrDefaultAsync(ij => ij.InstructorId == userId);
+                if (post == null)
+                {
+                    return NotFound();
+                }
+
+                post.Post = content;
+                await _context.SaveChangesAsync();
+                return RedirectToAction("PostMessage", new { forumId = post.ForumId });
+            }
+
+            return BadRequest();
         }
 
-        post.Post = content;
-        await _context.SaveChangesAsync();
-        return RedirectToAction("PostMessage", new { forumId = post.ForumId });
-    }
-    else if (userRole == "Instructor")
-    {
-        var post = await _context.InstructorJoins.FirstOrDefaultAsync(ij => ij.InstructorId == userId);
-        if (post == null)
+
+        public IActionResult DeleteDiscussion(int id)
         {
-            return NotFound();
+            return RedirectToAction("Delete", new { id });
         }
-
-        post.Post = content;
-        await _context.SaveChangesAsync();
-        return RedirectToAction("PostMessage", new { forumId = post.ForumId });
-    }
-
-    return BadRequest();
-}
-
     }
 }
     

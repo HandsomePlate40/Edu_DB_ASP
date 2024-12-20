@@ -74,9 +74,9 @@ namespace Edu_DB_ASP.Controllers.InstructorOptions
         [HttpGet]
         public IActionResult AddDiscussion()
         {
-            if (HttpContext.Session.GetString("UserRole") != "Instructor")
+            if (HttpContext.Session.GetString("UserRole") == "Learner")
             {
-                return RedirectToAction("LearnerLogin", "Account");
+                return RedirectToAction("InstructorLogin", "Account");
             }
 
             return View();
@@ -85,9 +85,9 @@ namespace Edu_DB_ASP.Controllers.InstructorOptions
         [HttpPost]
         public async Task<IActionResult> AddDiscussion(int moduleId, int courseId, string title, string description)
         {
-            if (HttpContext.Session.GetString("UserRole") != "Instructor")
+            if (HttpContext.Session.GetString("UserRole") == "Learner")
             {
-                return RedirectToAction("LearnerLogin", "Account");
+                return RedirectToAction("InstructorLogin", "Account");
             }
 
             string confirmationMessage = string.Empty;

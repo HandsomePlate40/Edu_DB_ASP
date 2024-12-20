@@ -85,18 +85,27 @@ namespace Edu_DB_ASP.Controllers.AdminOptions
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AdminId,FirstName,LastName,Email,PasswordHash,ProfilePictureUrl")] Admin admin)
+        public async Task<IActionResult> Edit(int id, [Bind("AdminId,FirstName,LastName,Email")] Admin admin)
         {
             if (id != admin.AdminId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var existingAdmin = await _context.Admins.FindAsync(id);
+            if (existingAdmin == null)
             {
+                return NotFound();
+            }
+
+       
+                existingAdmin.FirstName = admin.FirstName;
+                existingAdmin.LastName = admin.LastName;
+                existingAdmin.Email = admin.Email;
+
                 try
                 {
-                    _context.Update(admin);
+                    _context.Update(existingAdmin);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -111,7 +120,7 @@ namespace Edu_DB_ASP.Controllers.AdminOptions
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            }
+            
             return View(admin);
         }
 

@@ -98,33 +98,39 @@ namespace Edu_DB_ASP.Controllers.PersonalizationProfiles
             return View(personalizationProfile);
         }
         
-        [Route("PersonalizationProfiles/Edit/{id1}/{id2}")]
-        public async Task<IActionResult> Edit(int? id1, int? id2)
+        // GET: PersonalizationProfiles/Edit/5
+public async Task<IActionResult> Edit(int? creationOrder, int? learnerId)
+{
+    if (creationOrder == null || learnerId == null)
+    {
+        return NotFound();
+    }
+
+    var personalizationProfile = await _context.PersonalizationProfiles
+        .Include(p => p.Learner)
+        .FirstOrDefaultAsync(m => m.CreationOrder == creationOrder && m.LearnerId == learnerId);
+    if (personalizationProfile == null)
+    {
+        return NotFound();
+    }
+
+    return View(personalizationProfile);
+}
+
+// POST: PersonalizationProfiles/Edit/5
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Edit(int creationOrder, int learnerId, [Bind("CreationOrder,PersonalityType,EmotionalState,AccessibilityPreferences,PreferredContentTypes")] PersonalizationProfile personalizationProfile)
+{
+    if (creationOrder != personalizationProfile.CreationOrder || learnerId != personalizationProfile.LearnerId)
+    {
+        return BadRequest();
+    }
+
+    if (ModelState.IsValid)
+    {
+        try
         {
-            if (id1 == null || id2 == null)
-            {
-                return NotFound();
-            }
-
-            var personalizationProfile = await _context.PersonalizationProfiles.FindAsync(id1, id2);
-            if (personalizationProfile == null)
-            {
-                return NotFound();
-            }
-            ViewData["LearnerId"] = new SelectList(_context.Learners, "LearnerId", "LearnerId", personalizationProfile.LearnerId);
-            return View(personalizationProfile);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("PersonalizationProfiles/Edit/{id1}/{id2}")]
-        public async Task<IActionResult> Edit(int id1, int id2, [Bind("CreationOrder,PersonalityType,EmotionalState,AccessibilityPreferences,PreferredContentTypes")] PersonalizationProfile profile)
-        {
-            if (id1 != profile.CreationOrder || id2 != profile.LearnerId) //ISSUE HERE
-            {
-                return NotFound();
-            }
-
             var email = HttpContext.Session.GetString("UserEmail");
             if (email == null)
             {
@@ -137,49 +143,37 @@ namespace Edu_DB_ASP.Controllers.PersonalizationProfiles
                 return RedirectToAction("LearnerLogin", "Account");
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var learnerId = learner.LearnerId;
-                    var profileId = profile.CreationOrder;
-                    var preferredContentType = profile.PreferredContentTypes;
-                    var emotionalState = profile.EmotionalState;
-                    var personalityType = profile.PersonalityType;
+            await _context.Database.ExecuteSqlRawAsync(
+                "EXEC ProfileUpdate @LearnerID = {0}, @ProfileID = {1}, @PreferredContentType = {2}, @EmotionalState = {3}, @PersonalityType = {4}",
+                learnerId, creationOrder, personalizationProfile.PreferredContentTypes, personalizationProfile.EmotionalState, personalizationProfile.PersonalityType);
 
-                    await _context.Database.ExecuteSqlRawAsync(
-                        "EXEC ProfileUpdate @LearnerID = {0}, @ProfileID = {1}, @PreferredContentType = {2}, @EmotionalState = {3}, @PersonalityType = {4}",
-                        learnerId, profileId, preferredContentType, emotionalState, personalityType);
-
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("An error occurred while updating the profile: " + ex.Message);
-                }
-            }
-            else
-            {
-                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    Console.WriteLine("Model error: " + error.ErrorMessage);
-                }
-            }
-
-            ViewData["LearnerId"] = new SelectList(_context.Learners, "LearnerId", "LearnerId", profile.LearnerId);
-            return View(profile);
+            return RedirectToAction(nameof(Index));
         }
-        
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, "An error occurred while updating the profile: " + ex.Message);
+        }
+    }
+    else
+    {
+        foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+        {
+            ModelState.AddModelError(string.Empty, error.ErrorMessage);
+        }
+    }
+
+    return View(personalizationProfile);
+}
         
         private bool PersonalizationProfileExists(int id)
         {
             return _context.PersonalizationProfiles.Any(e => e.CreationOrder == id);
         }
 
-        // GET: PersonalizationProfiles/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: PersonalizationProfiles/Delete/5/1
+        public async Task<IActionResult> Delete(int? creationOrder, int? learnerId)
         {
-            if (id == null)
+            if (creationOrder == null || learnerId == null)
             {
                 return NotFound();
             }
@@ -188,7 +182,7 @@ namespace Edu_DB_ASP.Controllers.PersonalizationProfiles
                 .Include(p => p.Learner)
                 .Include(p => p.Notification)
                 .Include(p => p.Path)
-                .FirstOrDefaultAsync(m => m.CreationOrder == id);
+                .FirstOrDefaultAsync(m => m.CreationOrder == creationOrder && m.LearnerId == learnerId);
             if (personalizationProfile == null)
             {
                 return NotFound();
@@ -197,10 +191,9 @@ namespace Edu_DB_ASP.Controllers.PersonalizationProfiles
             return View(personalizationProfile);
         }
 
-        // POST: PersonalizationProfiles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int creationOrder, int learnerId)
         {
             var email = HttpContext.Session.GetString("UserEmail");
             if (email == null)
@@ -214,7 +207,7 @@ namespace Edu_DB_ASP.Controllers.PersonalizationProfiles
                 return RedirectToAction("LearnerLogin", "Account");
             }
 
-            var personalizationProfile = await _context.PersonalizationProfiles.FindAsync(id, learner.LearnerId);
+            var personalizationProfile = await _context.PersonalizationProfiles.FindAsync(creationOrder, learnerId);
             if (personalizationProfile != null)
             {
                 _context.PersonalizationProfiles.Remove(personalizationProfile);

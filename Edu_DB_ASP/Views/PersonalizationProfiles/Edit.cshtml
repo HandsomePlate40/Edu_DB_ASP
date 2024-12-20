@@ -4,124 +4,47 @@
     ViewData["Title"] = "Edit Personalization Profile";
 }
 
-<h2 class="text-center">EDIT PERSONALIZATION PROFILE</h2>
+<h1>Edit Personalization Profile</h1>
 
+<h4>Personalization Profile</h4>
+<hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit" asp-route-id1="@Model.CreationOrder" asp-route-id2="@Model.LearnerId" class="register-form">
+        <form asp-action="Edit" asp-route-creationOrder="@Model.CreationOrder" asp-route-learnerId="@Model.LearnerId">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CreationOrder" />
             <input type="hidden" asp-for="LearnerId" />
-
             <div class="form-group">
-                <label asp-for="PersonalityType" class="form-label"></label>
-                <input asp-for="PersonalityType" class="form-control form-input" />
+                <label asp-for="PersonalityType" class="control-label"></label>
+                <input asp-for="PersonalityType" class="form-control" />
                 <span asp-validation-for="PersonalityType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="EmotionalState" class="form-label"></label>
-                <input asp-for="EmotionalState" class="form-control form-input" />
+                <label asp-for="EmotionalState" class="control-label"></label>
+                <input asp-for="EmotionalState" class="form-control" />
                 <span asp-validation-for="EmotionalState" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AccessibilityPreferences" class="form-label"></label>
-                <input asp-for="AccessibilityPreferences" class="form-control form-input" />
+                <label asp-for="AccessibilityPreferences" class="control-label"></label>
+                <input asp-for="AccessibilityPreferences" class="form-control" />
                 <span asp-validation-for="AccessibilityPreferences" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PreferredContentTypes" class="form-label"></label>
-                <input asp-for="PreferredContentTypes" class="form-control form-input" />
+                <label asp-for="PreferredContentTypes" class="control-label"></label>
+                <input asp-for="PreferredContentTypes" class="form-control" />
                 <span asp-validation-for="PreferredContentTypes" class="text-danger"></span>
             </div>
-
-            <!-- Submit Button -->
-            <div style='text-align: center; margin-top: 20px;'>
-                <input type='submit' value='Save' class='btn btn-primary btn-lg' />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
+    </div>
+</div>
 
-        <!-- Back to List Link -->
-        <div style='text-align: center; margin-top: 10px;'>
-            <a href="@Url.Action("Index")">Back to List</a>
-        </div>
+<div class="back-to-index">
+    <a asp-action="Index" class="btn-secondary">Back to List</a>
+</div>
 
-    </div> <!-- End of col-md-4 -->
-</div> <!-- End of row -->
-
-<style>
-    .register-form {
-        max-width: 310px;
-        margin: 50px auto; /* to center the form horizontally */
-        padding: 15px;
-        background-color: #2e3440;
-        border-radius: 15px;
-        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
-        font-family: 'Roboto', sans-serif;
-        padding-right: 35px; /* adds extra padding to the right for a bigger look */
-    }
-
-    /* Center the heading */
-    h2.text-center {
-        text-align: center;
-        color: #cdd6f4;
-    }
-
-    /* Label Styling */
-    .form-label {
-        display: block;
-        font-size: 1.2rem;
-        margin-left: 7px;
-        font-weight: 500;
-        color: #e0e0e0;
-        margin-bottom: 4px; /* Space between label and input */
-    }
-
-    /* Input Groups */
-    .form-group {
-        margin-bottom: 5px;
-    }
-
-    /* Input Styling */
-    .form-control.form-input {
-        width: 100%;
-        padding: 5px;
-        margin-left: 5px;
-        border: 1px solid #4c566a; /* Border color */
-        border-radius: 5px;
-        background-color: #3b4252;
-        color: #cdd6f4; /* Text color */
-        font-size: 1em;
-    }
-
-    .form-control.form-input:focus {
-        border-color: #88c0d0;
-        outline: none;
-        box-shadow: 0 0 5px rgba(136, 192, 208, 0.5);
-    }
-
-    /* Validation Error Styling */
-    .text-danger {
-        color: #f5c2e7;
-        font-size: 0.9rem;
-        margin-top: 5px;
-    }
-
-    /* Button Styling */
-     .btn-lg {
-        width: 100%;
-        padding: 10px;
-        margin-left: 10px;
-        background-color: #88c0d0;
-        color: #2e3440;
-        border: none;
-        border-radius: 5px;
-        font-size: 1em;
-        font-weight: bold;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .btn-lg:hover {
-        background-color: #5e81ac;
-    }
-</style>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,4 +1,4 @@
-﻿@model Edu_DB_ASP.Models.Admin
+﻿@model Edu_DB_ASP.Models.AdminProfileViewModel
 
 <!DOCTYPE html>
 <html lang="en">
@@ -120,6 +120,42 @@
             margin-bottom: 1rem;
         }
 
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 2rem;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #313244;
+        }
+
+        .table-header-row {
+            background-color: #313244;
+        }
+
+        th {
+            text-align: left;
+            padding: 0.75rem;
+            color: #cba6f7;
+            border-bottom: 2px solid #45475a;
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #313244;
+        }
+
+        /* Remove the right border from the last th and td in each row */
+        th:last-child,
+        td:last-child {
+            border-right: none;
+        }
+
+        tr:hover {
+            background-color: #1e1e2e;
+        }
+
         .actions-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr); /* Creates a 2-column grid */
@@ -213,12 +249,6 @@
         .dropdown:hover .dropdown-content {
             display: block;
         }
-        h2 {
-            color: #cba6f7;
-            border-bottom: 2px solid #45475a;
-            padding-bottom: 0.5rem;
-            margin-bottom: 1rem;
-        }
     </style>
 </head>
 <body>
@@ -226,7 +256,7 @@
 <div class="profile-container">
     <div class="profile-pic-form">
         <div class="profile-image">
-            <img src="@Model.ProfilePictureUrl" alt="Admin Profile Picture" id="profileImg" />
+            <img src="@Model.Admin.ProfilePictureUrl" alt="Admin Profile Picture" id="profileImg" />
 
             <label class="profile-upload-label">
                 Change Profile Picture
@@ -236,8 +266,8 @@
     </div>
 
     <div class="profile-info">
-        <h1>@Model.FirstName @Model.LastName</h1>
-        <p>@Model.Email</p>
+        <h1>@Model.Admin.FirstName @Model.Admin.LastName</h1>
+        <p>@Model.Admin.Email</p>
         <p>Welcome back Admin!</p>
     </div>
 </div>
@@ -246,41 +276,76 @@
     <input type="file" id="hiddenProfilePicture" name="profilePicture" />
 </form>
 
+<div class="section-container">
+    <h2>Available Learners</h2>
+    <table>
+        <thead>
+        <tr class="table-header-row">
+            <th>Learner ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var learner in Model.FirstFiveLearners)
+        {
+            <tr>
+                <td>@learner.LearnerId</td>
+                <td>@learner.FirstName</td>
+                <td>@learner.LastName</td>
+                <td>@learner.Email</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<div class="section-container">
+    <h2>Available Instructors</h2>
+    <table>
+        <thead>
+        <tr class="table-header-row">
+            <th>Instructor ID</th>
+            <th>Instructor Name</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var instructor in Model.FirstFiveInstructors)
+        {
+            <tr>
+                <td>@instructor.InstructorId</td>
+                <td>@instructor.InstructorName</td>
+                <td>@instructor.Email</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
 <div class="container">
     <h2>Your Options:</h2>
     <div class="actions-grid">
-        <a asp-action="Index" asp-controller="AdminOptions" class="btn-primary">
-            View your Info
-        </a>
-        <a asp-action="Index" asp-controller="LearnerOptionsAdmin" class="btn-primary">
-            See all Learners
-        </a>
-        <a asp-action="Index" asp-controller="PersonalizationProfiles" class="btn-primary">
-            See Personalization Profiles
-        </a>
-        <a asp-action="Index" asp-controller="InstructorOptionsAdmin" class="btn-primary">
-            See Instructors
-        </a>
-        <a asp-action="Index" asp-controller="Module" class="btn-primary">
-            See Modules
-        </a>
-        <a asp-action="AddDiscussion" asp-controller="InstructorOptions" class="btn-primary">
-            Add a discussion
-        </a>
+        <a asp-action="Index" asp-controller="AdminOptions" class="btn-primary">Your information</a>
+        <a asp-action="Index" asp-controller="LearnerOptionsAdmin" class="btn-primary">Learner Options</a>
+        <a asp-action="Index" asp-controller="PersonalizationProfiles" class="btn-primary">Personalization Profiles</a>
+        <a asp-action="Index" asp-controller="InstructorOptionsAdmin" class="btn-primary">Instructor Options</a>
+        <a asp-action="Index" asp-controller="Module" class="btn-primary">Modules</a>
+        <a asp-action="AddDiscussion" asp-controller="InstructorOptions" class="btn-primary">Add Discussion</a>
         <div class="dropdown">
-            <button class="btn-primary">Delete Quests by Criteria</button>
+            <button class="btn-primary">More Options</button>
             <div class="dropdown-content">
-                <form asp-controller="InstructorOptions" asp-action="DeleteQuestsByCriteria" method="post">
-                    <div>
-                        <label for="criteria">Criteria:</label>
-                        <input type="text" id="criteria" name="criteria" required/>
-                    </div>
-                    <button type="submit" class="btn-primary">Delete Quests</button>
+                <form asp-action="SomeAction" method="post">
+                    <label for="someInput">Some Input</label>
+                    <input type="text" id="someInput" name="someInput" />
+                    <button type="submit" class="btn-primary">Submit</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 
 <script>
     function uploadProfilePicture() {
