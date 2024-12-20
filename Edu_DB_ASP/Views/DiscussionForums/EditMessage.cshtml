@@ -1,9 +1,7 @@
-﻿@model PostMessageViewModel
+﻿@model MessageViewModel
 
 @{
-    ViewData["Title"] = "Post Message";
-    var userRole = Context.Session.GetString("UserRole");
-    var userId = userRole == "Learner" ? Context.Session.GetInt32("LearnerId") : Context.Session.GetInt32("InstructorId");
+    ViewData["Title"] = "Edit Message";
 }
 
 <style>
@@ -297,78 +295,17 @@
     h1 {
         color: #cba6f7;
         margin-bottom: 1rem;
+        text-align: center;
     }
-
-    .forum-description {
-        background-color: #181825;
-        padding: 1rem;
-        border-radius: 15px;
-        margin-bottom: 2rem;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    }
-    .forum-description p{
-        color: #A6E3A1;
-        margin: 0;
-    }
-
-    .messages-area {
-        background-color: #181825;
-        max-height: 400px;
-        overflow-y: auto;
-        margin-bottom: 2rem;
-        border: none;
-        border-radius: 15px;
-        padding: 1rem;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    }
-
-    .message {
-        display: flex;
-        align-items: center;
+    .form-group{
         margin-bottom: 1rem;
-        padding: 0.5rem;
-        border-bottom: 1px solid #45475a;
     }
-
-    .message img {
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        margin-right: 1rem;
+    label{
+        color: #cba6f7;
+        margin-bottom: 0.5rem;
+        display: block;
     }
-    .message strong{
-        color: #f38ba8;
-    }
-
-    .message div p{
-        color: #BAC2DE;
-        margin: 0;
-        margin-top: 0.2rem;
-    }
-
-    .message-content {
-        display: flex;
-        flex-direction: column;
-
-    }
-
-    .post-form {
-        margin-top: 2rem;
-        background-color: transparent;
-        border-radius: 15px;
-        padding: 0px;
-        box-shadow: none;
-        width: 50%;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .form-group {
-        margin-bottom: 1rem;
-        width: 100%;
-    }
-
-    textarea.form-control {
+    textarea.form-control{
         background-color: #313244;
         color: #D9E0EE;
         border: none;
@@ -377,114 +314,22 @@
         min-height: 120px;
         resize: none;
         width: calc(100% - 2rem);
-        margin: 0px;
     }
-
-    textarea.form-control:focus {
-        border-color: #b4befe;
-        box-shadow: 0 0 5px rgba(180, 190, 254, 0.5);
-        outline: none;
-    }
-
-    .alert-danger {
-        background-color: #181825;
-        border-radius: 15px;
-        padding: 1rem;
-        margin-top: 2rem;
-        color: #fab387;
-    }
-
-    .text-danger {
-        color: #f38ba8;
-    }
-
-    .btn-secondary{
-        background-color: #A6E3A1; /* green */
-        color: #1E1E2E; /* base */
-        border: none;
-        padding: 0.75rem 1.5rem;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        border-radius: 15px;
-        transition: background-color 0.3s ease;
-        text-decoration: none;
-        margin-top: 1rem;
-    }
-
-    .btn-secondary:hover{
-        background-color: #90d78c;
-    }
-    .badge {
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        font-size: 0.85rem;
-        font-weight: 500;
-        margin-left: 0.5rem;
-    }
-
-    .badge.learner {
-        background-color: #A6E3A1; /* green */
-        color: #1E1E2E; /* base */
-    }
-
-    .badge.instructor {
-        background-color: #F8BD96; /* peach */
-        color: #1E1E2E; /* base */
+    .edit-form{
+        width: 50%;
+        margin: 0 auto;
     }
 </style>
 
 <div class="section-container">
     <h1>@ViewData["Title"]</h1>
-
-    <div class="forum-description">
-        <p>@Model.Post</p>
-    </div>
-
-    <div class="messages-area">
-        @foreach (var message in Model.Messages)
-        {
-            <div class="message">
-                <img src="@message.ProfilePictureUrl" alt="Profile Picture" />
-                <div class="message-content">
-                    <div>
-                        <strong class="@(message.UserRole.ToLower() + "-name")">@message.UserName</strong>
-                        <span class="badge badge-@(message.UserRole.ToLower())">@message.UserRole</span>
-                    </div>
-                    <p>@message.Content</p>
-                </div>
-            </div>
-        }
-    </div>
-
-    @if (userRole == "Learner" || userRole == "Instructor")
-    {
-        <form asp-action="PostMessage" method="post" class="post-form">
-            <div class="form-group">
-                <textarea asp-for="Post" class="form-control" placeholder="Enter your message here..."></textarea>
-                <span asp-validation-for="Post" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="ForumId" />
-            <div class="form-group" style="display: flex; justify-content: flex-end;">
-                <input type="submit" value="Post" class="btn btn-primary" />
-            </div>
-        </form>
-    }
-
-    @if (userRole == "Learner" || userRole == "Instructor")
-    {
-        <div style="text-align: center; margin-top: 20px;">
-            <a asp-action="EditMessage" asp-route-userId="@userId" asp-route-userRole="@userRole" class="btn btn-secondary">Edit your existing message</a>
+    <form asp-action="EditMessage" method="post" class="edit-form">
+        <div class="form-group">
+            <label for="content">Message</label>
+            <textarea id="content" name="content" class="form-control">@Model.Content</textarea>
         </div>
-    }
-
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <div class="alert-danger">
-            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-            {
-                <p>@error.ErrorMessage</p>
-            }
-        </div>
-    }
+        <input type="hidden" name="userId" value="@Model.UserId" />
+        <input type="hidden" name="userRole" value="@Model.UserRole" />
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
 </div>

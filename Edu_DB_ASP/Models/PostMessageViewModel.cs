@@ -13,8 +13,10 @@ namespace Edu_DB_ASP.Models
 
     public class MessageViewModel
     {
-        public string LearnerName { get; set; }
+        public int UserId { get; set; }
+        public string UserName { get; set; }
         public string Content { get; set; }
         public string ProfilePictureUrl { get; set; }
+        public string UserRole { get; set; }
     }
 }

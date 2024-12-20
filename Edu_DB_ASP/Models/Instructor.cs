@@ -24,4 +24,6 @@ public partial class Instructor
     public virtual ICollection<EmotionalFeedback> Feedbacks { get; set; } = new List<EmotionalFeedback>();
 
     public virtual ICollection<LearningPath> Paths { get; set; } = new List<LearningPath>();
+    
+    public virtual ICollection<InstructorJoin> InstructorJoins { get; set; } = new List<InstructorJoin>(); // Add this line
 }

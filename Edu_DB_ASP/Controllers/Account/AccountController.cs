@@ -347,7 +347,7 @@ namespace Edu_DB_ASP.Controllers.Account
         }
 
         [HttpGet]
-        public IActionResult InstructorProfile()
+        public async Task<IActionResult> InstructorProfile()
         {
             var email = HttpContext.Session.GetString("UserEmail");
             if (email == null)
@@ -355,20 +355,23 @@ namespace Edu_DB_ASP.Controllers.Account
                 return RedirectToAction("InstructorLogin");
             }
 
-            var instructor = _context.Instructors.SingleOrDefault(u => u.Email == email);
+            var instructor = await _context.Instructors.SingleOrDefaultAsync(u => u.Email == email);
             if (instructor == null)
             {
                 return RedirectToAction("InstructorLogin");
             }
 
-            var taughtCourses = _context.Courses
+            var taughtCourses = await _context.Courses
                 .FromSqlRaw("EXEC InstructorCourses @InstructorID = {0}", instructor.InstructorId)
-                .ToList();
+                .ToListAsync();
+
+            var availableForums = await _context.DiscussionForums.ToListAsync();
 
             var viewModel = new InstructorProfileViewModel
             {
                 Instructor = instructor,
-                TaughtCourses = taughtCourses
+                TaughtCourses = taughtCourses,
+                AvailableForums = availableForums ?? new List<DiscussionForum>(),
             };
 
             return View(viewModel);

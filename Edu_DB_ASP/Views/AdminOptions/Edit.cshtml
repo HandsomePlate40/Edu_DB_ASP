@@ -1,0 +1,140 @@
+@model Edu_DB_ASP.Models.Admin
+
+@{
+    ViewData["Title"] = "Edit Admin";
+}
+
+<div class="container">
+    <h1 class="page-title">Edit Admin</h1>
+
+    <div class="edit-form">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="AdminId" />
+
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ProfilePictureUrl" class="control-label"></label>
+                <input asp-for="ProfilePictureUrl" class="form-control" type="url" />
+                <span asp-validation-for="ProfilePictureUrl" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-buttons">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #11111B;
+        color: #D9E0EE;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 1rem;
+        background: #181825;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .page-title {
+        color: #cba6f7;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .edit-form {
+        margin-bottom: 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .control-label {
+        color: #BAC2DE;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-control {
+        background-color: #313244;
+        border: 1px solid #45475a;
+        color: #D9E0EE;
+        padding: 0.5rem;
+        border-radius: 8px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #89b4fa;
+        box-shadow: 0 0 0 2px #89b4fa40;
+    }
+
+    .text-danger {
+        color: #F38BA8;
+        font-size: 0.9rem;
+    }
+
+    .form-buttons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .btn {
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+    }
+
+    .btn-primary {
+        background-color: #89b4fa;
+        color: #1e1e2e;
+    }
+
+    .btn-primary:hover {
+        background-color: #74c7ec;
+    }
+
+    .btn-secondary {
+        background-color: #45475a;
+        color: #D9E0EE;
+    }
+
+    .btn-secondary:hover {
+        background-color: #585b70;
+    }
+</style>

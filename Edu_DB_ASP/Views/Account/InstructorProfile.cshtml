@@ -306,6 +306,35 @@
     </div>
 </div>
 
+<div class="section-container">
+    <div class="table-section">
+        <h2>Discussion Forums</h2>
+        <table>
+            <thead>
+            <tr class="table-header-row">
+                <th>Forum Title</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var forum in Model.AvailableForums)
+            {
+                <tr>
+                    <td>@forum.Title</td>
+                    <td>@forum.Description</td>
+                    <td class="actions-cell">
+                        <a asp-action="PostMessage" asp-controller="DiscussionForums" asp-route-forumId="@forum.ForumId">
+                            <button class="btn-primary">Post</button>
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
 @if (TempData["Message"] != null)
 {
     <div>@TempData["Message"]</div>

@@ -12,7 +12,9 @@ public partial class DiscussionForum
     public string? Description { get; set; }
 
     public DateTime? LastActiveTimestamp { get; set; }
-
+    
+    public virtual ICollection<InstructorJoin> InstructorJoins { get; set; } = new List<InstructorJoin>(); // Add this line
+    
     public int ModuleId { get; set; }
 
     public virtual ICollection<Join> Joins { get; set; } = new List<Join>();

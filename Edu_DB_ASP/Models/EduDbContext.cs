@@ -97,6 +97,8 @@ public partial class EduDbContext : DbContext
     
     public virtual DbSet<RemovedCourse> RemovedCourses { get; set; }
     
+    public virtual DbSet<InstructorJoin> InstructorJoins { get; set; } = null!; // Add this line
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=edu_DB;Trusted_Connection=True;");
@@ -110,6 +112,28 @@ public partial class EduDbContext : DbContext
             entity.HasKey(e => e.RemovedCourseId);
             entity.Property(e => e.Title).HasMaxLength(255).IsUnicode(false);
             entity.Property(e => e.Description).HasMaxLength(500).IsUnicode(false);
+        });
+        
+        
+        modelBuilder.Entity<InstructorJoin>(entity => // Add this block
+        {
+            entity.HasKey(e => new { e.InstructorId, e.ForumId });
+
+            entity.ToTable("InstructorJoins");
+
+            entity.Property(e => e.Post).HasMaxLength(255);
+
+            entity.HasOne(d => d.Forum)
+                .WithMany(p => p.InstructorJoins)
+                .HasForeignKey(d => d.ForumId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_InstructorJoins_DiscussionForum");
+
+            entity.HasOne(d => d.Instructor)
+                .WithMany(p => p.InstructorJoins)
+                .HasForeignKey(d => d.InstructorId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_InstructorJoins_Instructor");
         });
         
         modelBuilder.Entity<Achievement>(entity =>
