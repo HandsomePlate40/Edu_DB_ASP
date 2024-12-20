@@ -29,18 +29,16 @@
             <tr>
                 <th>Assessment ID</th>
                 <th>Assessment Name</th>
-                <th>Course</th>
                 <th>Score</th>
             </tr>
             </thead>
             <tbody>
-            @foreach (var assessment in Model)
+            @foreach (var assessmentList in Model)
             {
                 <tr>
-                    <td>@assessment.AssessmentId</td>
-                    <td>@assessment.AssessmentName</td>
-                    <td>@assessment.course</td>
-                    <td>@assessment.score</td>
+                    <td>@assessmentList.AssessmentId</td>
+                    <td>@assessmentList.AssessmentName</td>
+                    <td>@assessmentList.score</td>
                 </tr>
             }
             </tbody>
@@ -51,10 +49,5 @@
         <p>No assessments found.</p> <!-- Message when no assessments are available -->
     }
 </main>
-
-<footer>
-    <p>&copy; 2024 Your Learning Platform</p> <!-- Footer content -->
-</footer>
-
 </body>
 </html>

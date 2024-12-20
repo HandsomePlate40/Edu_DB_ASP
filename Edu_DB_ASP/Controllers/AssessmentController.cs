@@ -14,40 +14,7 @@ namespace Edu_DB_ASP.Controllers.Assessments
             _context = context;
         }
         
-        public void AddAssessment(string Title, string description, string criteria, decimal weightage, decimal max,int marks, int pass )
-        {
-            var assessment = new Assessment
-            {
-                Title = Title,
-                AssessmentDescription = description,
-                GradingCriteria = criteria,
-                Weightage = weightage,
-                MaxScore = max,
-                TotalMarks = marks,
-                PassingMarks = pass,
-            };
-            _context.Assessments.Add(assessment);
-            _context.SaveChangesAsync();
-           
-        }
-        public void AddAssessment(string Title, string description, string criteria, decimal weightage, decimal max, int marks, int pass, int module)
-        {
-            var assessment = new Assessment
-            {
-                Title = Title,
-                AssessmentDescription = description,
-                GradingCriteria = criteria,
-                Weightage = weightage,
-                MaxScore = max,
-                TotalMarks = marks,
-                PassingMarks = pass,
-                ModuleId = module
-
-            };
-            _context.Assessments.Add(assessment);
-            _context.SaveChangesAsync();
-
-        }
+   
 
 
         public async Task<List<TakenAssessment>> LearnerGetTakenAssessments(int learnerId, string title = null )
@@ -64,21 +31,31 @@ namespace Edu_DB_ASP.Controllers.Assessments
             }
             return assessments; 
         }
+        
+        
         [HttpGet]
         public  IActionResult UpdateScore()
         {
             return View();
         }
+        
+        
         [HttpPost]
         public async Task<IActionResult> UpdateScore(AssessmentUpdateModel model)
         {
             // Find the assessment by title
             var assessment = await _context.Assessments
                 .FirstOrDefaultAsync(a => a.AssessmentId == model.AssessmentId);
+            var learner = await _context.Learners
+                .FirstOrDefaultAsync(a => a.LearnerId == model.LearnerId);
 
             if (assessment == null)
             {
-                return NotFound($"The LearnerID/Assessment title is incorrect. Please re-enter.");
+                return NotFound($"The Assessment isn't available. Please re-enter.");
+            }
+            if (learner == null)
+            {
+                return NotFound($"There isn't a learner with such ID. Please re-enter.");
             }
 
             var takenAssessment = await _context.TakenAssessments
@@ -103,10 +80,10 @@ namespace Edu_DB_ASP.Controllers.Assessments
 
             var learnerIdP = new SqlParameter("@LearnerID", model.LearnerId);
             var assessmentId = new SqlParameter("@AssessmentID", assessment.AssessmentId);
-            var scoreP = new SqlParameter("@points", model.score);
+            var scoreP = new SqlParameter("@Score", model.score);
 
             await _context.Database.ExecuteSqlRawAsync(
-                "EXEC GradeUpdate @LearnerID, @AssessmentID, @points",
+                "EXEC GradeUpdate @LearnerID, @AssessmentID, @Score",
                 learnerIdP,
                 assessmentId,
                 scoreP
@@ -116,7 +93,6 @@ namespace Edu_DB_ASP.Controllers.Assessments
 
             return RedirectToAction("InstructorAssessmentView"); 
         }
-
 
         public async Task<List<TakenAssessment>> InstructorGetTakenAssessments(int? learnerId , string title = null)
         {
@@ -151,80 +127,88 @@ namespace Edu_DB_ASP.Controllers.Assessments
 
             var learnerId = _context.Learners
                 .Where(l => l.Email == userEmail)
-                .Select(l => l.LearnerId) 
+                .Select(l => l.LearnerId)
                 .FirstOrDefault();
             var assessmentlist = await LearnerGetTakenAssessments(learnerId);
             var learnerAssessmentList = assessmentlist.Select(ta => new
             {
                 AssessmentId = ta.AssessmentId,
-                AssessmentName = ta.Assessment.Title,
-                course = ta.Assessment.Module.Course.Title,
-                score = ta.ScoredPoints + "/" + ta.Assessment.MaxScore
-                
-
+                AssessmentName = ta.Assessment?.Title ?? "N/A",
+                score = ta.ScoredPoints + "/" + (ta.Assessment?.TotalMarks ?? 0)
             }).ToList();
 
             return View(learnerAssessmentList);
         }
+
         [HttpPost]
         public async Task<IActionResult> LearnerAssessmentView(LearnerAssessmentFilter filter)
         {
+            var assessment = await _context.Assessments
+                .FirstOrDefaultAsync(a => a.Title == filter.Title);
+
+            if (assessment == null)
+            {
+                return NotFound($"The Assessment isn't available. Please re-enter.");
+            }
+
             var userEmail = HttpContext.Session.GetString("UserEmail");
-            var learnerId = await _context.Learners
+            int learnerId = await _context.Learners
                 .Where(l => l.Email == userEmail)
                 .Select(l => l.LearnerId)
                 .FirstOrDefaultAsync();
-
-            if (!string.IsNullOrEmpty(filter.Title))
             {
                 var filteredList = await LearnerGetTakenAssessments(learnerId, filter.Title);
-                var assessmentList = filteredList.Select(ta => new
+                var learnerAssessmentList = filteredList.Select(ta => new
                 {
                     AssessmentId = ta.AssessmentId,
                     AssessmentName = ta.Assessment.Title,
                     Course = ta.Assessment.Module.Course.Title,
-                    Score = ta.ScoredPoints + "/" + ta.Assessment.MaxScore
+                    Score = ta.ScoredPoints + "/" + ta.Assessment.TotalMarks
                 }).ToList();
 
-                return View(assessmentList); 
+                return View(learnerAssessmentList);
+
+
             }
-
-            var defaultAssessmentList = await LearnerGetTakenAssessments(learnerId);
-            var learnerAssessmentList = defaultAssessmentList.Select(ta => new
-            {
-                AssessmentId = ta.AssessmentId,
-                AssessmentName = ta.Assessment.Title,
-                Course = ta.Assessment.Module.Course.Title,
-                Score = ta.ScoredPoints + "/" + ta.Assessment.MaxScore
-            }).ToList();
-
-            return View(learnerAssessmentList); 
         }
 
         [HttpGet]
-        public async Task<IActionResult> InstructorAssessmentView()   
+        public async Task<IActionResult> InstructorAssessmentView(int? learnerId = null, string title = null)
         {
-            var assessmentlist = await InstructorGetTakenAssessments(null);
+            var assessmentlist = await InstructorGetTakenAssessments(learnerId, title);
             var learnerAssessmentList = assessmentlist.Select(ta => new
             {
                 LearnerId = ta.LearnerId,
-                AssessmentName = ta.Assessment.Title,
-                course = ta.Assessment.Module.Course.Title,
-                score = ta.ScoredPoints+"/"+ta.Assessment.MaxScore
+                AssessmentName = ta.Assessment?.Title ?? "N/A",
+                score = ta.ScoredPoints + "/" + (ta.Assessment?.TotalMarks ?? 0)
             }).ToList();
 
             return View(learnerAssessmentList);
         }
+        
         [HttpPost]
         public async Task<IActionResult> InstructorAssessmentView(InstructorAssessmentFilter filter)
         {
+            var assessment = await _context.Assessments
+                .FirstOrDefaultAsync(a => a.Title == filter.Title);
+            var learner = await _context.Learners
+                .FirstOrDefaultAsync(a => a.LearnerId == filter.LearnerId);
+
+            if (assessment == null)
+            {
+                return NotFound($"The Assessment isn't available. Please re-enter.");
+            }
+            if (learner == null)
+            {
+                return NotFound($"There isn't a learner with such ID. Please re-enter.");
+            }
 
             var assessmentlist = await InstructorGetTakenAssessments(filter.LearnerId,filter.Title);
             var learnerAssessmentList = assessmentlist.Select(ta => new
             {
                 LearnerId = ta.LearnerId,
                 AssessmentName = ta.Assessment.Title,
-                score = ta.ScoredPoints + "/" + ta.Assessment.MaxScore
+                score = ta.ScoredPoints + "/" + ta.Assessment.TotalMarks
             }).ToList();
 
             return View(learnerAssessmentList);
@@ -292,12 +276,9 @@ namespace Edu_DB_ASP.Controllers.Assessments
         [HttpPost]
         public async Task<IActionResult> AddAssessmentView(AddAssessmentModel model)
         {
-            if (ModelState.IsValid)
-            {
+         
                 try
                 {
-                    
-     
                         var assessment = new Assessment
                         {
                             AssessmentId = model.AssessmentId,
@@ -305,7 +286,7 @@ namespace Edu_DB_ASP.Controllers.Assessments
                             AssessmentDescription = model.AssessmentDescription,
                             GradingCriteria = model.GradingCriteria,
                             Weightage = model.Weightage,
-                            MaxScore = model.Weightage,
+                            MaxScore = 0,
                             TotalMarks = model.TotalMarks,
                             PassingMarks = model.PassingMarks,
                             ModuleId = model.ModuleId
@@ -313,8 +294,7 @@ namespace Edu_DB_ASP.Controllers.Assessments
 
                         };
                         _context.Assessments.Add(assessment);
-                    
-
+                        
                     await _context.SaveChangesAsync();
                     return RedirectToAction("InstructorAssessmentView");
                 }
@@ -322,7 +302,7 @@ namespace Edu_DB_ASP.Controllers.Assessments
                 {
                     ModelState.AddModelError("", $"An error occurred: {ex.Message}");
                 }
-            }
+            
 
             return View(model);
         }
@@ -333,14 +313,15 @@ namespace Edu_DB_ASP.Controllers.Assessments
             var assessments = await _context.Assessments.FromSqlRaw("EXEC Highestgrade").ToListAsync();
             var fassessments = assessments.Select(a => new
             {
-                ID =a.AssessmentId,
-                title =a.Title,
-                max =a.MaxScore,
-                course =a.Module.Course.CourseId
-            }
-            );
+                ID = a.AssessmentId,
+                title = a.Title ?? "N/A",
+                max = a.MaxScore,
+                course = a.Module?.Course?.CourseId ?? 0
+            }).ToList();
             return View(fassessments);
         }
+        
+        
         [HttpGet]
         public IActionResult LearnerReset()
         {
@@ -389,8 +370,8 @@ namespace Edu_DB_ASP.Controllers.Assessments
 
             return View(model);
         }
-
-
+        
+        
 
     }
  }

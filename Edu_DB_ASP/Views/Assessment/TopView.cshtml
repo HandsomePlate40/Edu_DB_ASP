@@ -14,7 +14,6 @@
     </header>
 
     <main>
-        <button type="button" onclick="location.href='@Url.Action("InstructorAssessmentView")'">Back</button> <!-- Back button -->
         @if (Model != null && Model.Any())
         {
             <table>
@@ -31,9 +30,9 @@
                     {
                         <tr>
                             <td>@fassessment.ID</td>
-                            <td>@fassessment.Title</td>
-                            <td>@fassessment.Max</td>
-                            <td>@fassessment.Course</td>
+                            <td>@fassessment.title</td>
+                            <td>@fassessment.max</td>
+                            <td>@fassessment.course</td>
                         </tr>
                     }
                 </tbody>

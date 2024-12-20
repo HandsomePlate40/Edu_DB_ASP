@@ -114,25 +114,7 @@ namespace Edu_DB_ASP.Controllers.Instructors
             }
             return View(instructor);
         }
-
-        // GET: InstructorProfileOptions/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var instructor = await _context.Instructors
-                .FirstOrDefaultAsync(m => m.InstructorId == id);
-            if (instructor == null)
-            {
-                return NotFound();
-            }
-
-            return View(instructor);
-        }
-
+        
         // POST: InstructorProfileOptions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

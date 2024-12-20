@@ -7,6 +7,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instructor Assessment View</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+    </style>
 </head>
 <body>
 <header>
@@ -16,7 +36,7 @@
 <main>
     <form method="post" action="@Url.Action("InstructorAssessmentView")">
         <label for="learnerId">Learner ID:</label>
-        <input type="number" id="learnerId" name="LearnerId" placeholder="Enter learner ID..." />
+        <input type="number" id="learnerId" name="LearnerId" placeholder="Enter learner ID..." required />
 
         <label for="title">Filter by Assessment Title:</label>
         <input type="text" id="title" name="Title" placeholder="Enter assessment title..." />
@@ -27,7 +47,7 @@
         <button type="button" onclick="location.href='@Url.Action("AssessmentAnalysis")'">Assessment Analysis</button>
         <button type="button" onclick="location.href='@Url.Action("AssessmentNoti")'">Send Notification</button>
         <button type="button" onclick="location.href='@Url.Action("UpdateScore")'">Score</button>
-        <button type="button" onclick="location.href='@Url.Action("AddAssessmentView")'">Add assesment</button>
+        <button type="button" onclick="location.href='@Url.Action("AddAssessmentView")'">Add assessment</button>
     </form>
 
     @if (Model != null && Model.Any())
@@ -37,18 +57,16 @@
             <tr>
                 <th>Learner ID</th>
                 <th>Assessment Name</th>
-                <th>Course</th>
                 <th>Score</th>
             </tr>
             </thead>
             <tbody>
-            @foreach (var assessment in Model)
+            @foreach (var learnerAssessmentList in Model)
             {
                 <tr>
-                    <td>@assessment.LearnerId</td>
-                    <td>@assessment.AssessmentName</td>
-                    <td>@assessment.course</td>
-                    <td>@assessment.score</td>
+                    <td>@learnerAssessmentList.LearnerId</td>
+                    <td>@learnerAssessmentList.AssessmentName</td>
+                    <td>@learnerAssessmentList.score</td>
                 </tr>
             }
             </tbody>

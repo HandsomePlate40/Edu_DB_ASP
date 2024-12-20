@@ -6,6 +6,8 @@ namespace Edu_DB_ASP.Models
     {
 
         public string Title { get; set; }
+        
+        
 
     }
 
