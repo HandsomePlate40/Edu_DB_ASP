@@ -298,7 +298,7 @@
 <div class="profile-container">
     <div class="profile-pic-form">
         <div class="profile-image">
-            <img src="@Model.Learner.ProfilePictureUrl" alt="User Profile Picture" id="profileImg" />
+            <img src="@(string.IsNullOrEmpty(Model.Learner.ProfilePictureUrl) ? Url.Content("/images/profile-user.png") : Model.Learner.ProfilePictureUrl)" alt="User Profile Picture" id="profileImg" />
             <label class="profile-upload-label">
                 Change Profile Picture
                 <input type="file" id="profilePicture" name="profilePicture" accept="image/*" onchange="uploadProfilePicture()" />

@@ -17,19 +17,18 @@ namespace Edu_DB_ASP.Controllers.Assessments
    
 
 
-        public async Task<List<TakenAssessment>> LearnerGetTakenAssessments(int learnerId, string title = null )
+        public async Task<List<TakenAssessment>> LearnerGetTakenAssessments(int learnerId, string title = null)
         {
-            var assessments = await _context.TakenAssessments
-                   .Where(a => a.LearnerId == learnerId )
-                   .ToListAsync();
-            if (title!=null && title != "") 
+            var query = _context.TakenAssessments
+                .Include(ta => ta.Assessment)
+                .Where(a => a.LearnerId == learnerId);
+
+            if (!string.IsNullOrEmpty(title))
             {
-                 assessments = await _context.TakenAssessments
-                    .Where(ta => ta.LearnerId == learnerId && ta.Assessment.Title == title)
-                    .ToListAsync();
-                
+                query = query.Where(ta => ta.Assessment.Title == title);
             }
-            return assessments; 
+
+            return await query.ToListAsync();
         }
         
         
@@ -91,25 +90,26 @@ namespace Edu_DB_ASP.Controllers.Assessments
 
             await _context.SaveChangesAsync(); 
 
+            
             return RedirectToAction("InstructorAssessmentView"); 
         }
 
-        public async Task<List<TakenAssessment>> InstructorGetTakenAssessments(int? learnerId , string title = null)
+        public async Task<List<TakenAssessment>> InstructorGetTakenAssessments(int? learnerId , int? AssessmentId)
         {
             var assessments = await _context.TakenAssessments.ToListAsync();
 
-            if (title!=null && title != "" && learnerId !=null) 
+            if (AssessmentId!=null && learnerId !=null) 
             {
                  assessments = await _context.TakenAssessments
-                    .Where(ta => ta.LearnerId == learnerId && ta.Assessment.Title == title)
+                    .Where(ta => ta.LearnerId == learnerId && ta.Assessment.AssessmentId == AssessmentId)
                     .ToListAsync();
                 
-            }else if(title!=null && title !=""&& learnerId == null)
+            }else if(AssessmentId!=null&& learnerId == null)
             {
                    assessments = await _context.TakenAssessments
-                   .Where(a => a.Assessment.Title == title)
+                   .Where(a => a.Assessment.AssessmentId == AssessmentId)
                    .ToListAsync();
-            }else if(title == null && learnerId != null)
+            }else if(AssessmentId == null && learnerId != null)
             {
                 assessments = await _context.TakenAssessments
                    .Where(a => a.LearnerId == learnerId)
@@ -134,7 +134,7 @@ namespace Edu_DB_ASP.Controllers.Assessments
             {
                 AssessmentId = ta.AssessmentId,
                 AssessmentName = ta.Assessment?.Title ?? "N/A",
-                score = ta.ScoredPoints + "/" + (ta.Assessment?.TotalMarks ?? 0)
+                Score = $"{ta.ScoredPoints}/{ta.Assessment?.TotalMarks ?? 0}"
             }).ToList();
 
             return View(learnerAssessmentList);
@@ -143,44 +143,36 @@ namespace Edu_DB_ASP.Controllers.Assessments
         [HttpPost]
         public async Task<IActionResult> LearnerAssessmentView(LearnerAssessmentFilter filter)
         {
-            var assessment = await _context.Assessments
-                .FirstOrDefaultAsync(a => a.Title == filter.Title);
-
-            if (assessment == null)
-            {
-                return NotFound($"The Assessment isn't available. Please re-enter.");
-            }
-
             var userEmail = HttpContext.Session.GetString("UserEmail");
             int learnerId = await _context.Learners
                 .Where(l => l.Email == userEmail)
                 .Select(l => l.LearnerId)
                 .FirstOrDefaultAsync();
+
+            var filteredList = await LearnerGetTakenAssessments(learnerId, filter.Title);
+            var learnerAssessmentList = filteredList.Select(ta => new
             {
-                var filteredList = await LearnerGetTakenAssessments(learnerId, filter.Title);
-                var learnerAssessmentList = filteredList.Select(ta => new
-                {
-                    AssessmentId = ta.AssessmentId,
-                    AssessmentName = ta.Assessment.Title,
-                    Course = ta.Assessment.Module.Course.Title,
-                    Score = ta.ScoredPoints + "/" + ta.Assessment.TotalMarks
-                }).ToList();
+                AssessmentId = ta.AssessmentId,
+                AssessmentName = ta.Assessment?.Title ?? "N/A",
+                Course = ta.Assessment?.Module?.Course?.Title ?? "N/A",
+                Score = $"{ta.ScoredPoints}/{ta.Assessment?.TotalMarks ?? 0}"
+            }).ToList();
 
-                return View(learnerAssessmentList);
-
-
-            }
+            return View(learnerAssessmentList);
         }
 
         [HttpGet]
-        public async Task<IActionResult> InstructorAssessmentView(int? learnerId = null, string title = null)
+        public async Task<IActionResult> InstructorAssessmentView()
         {
-            var assessmentlist = await InstructorGetTakenAssessments(learnerId, title);
+            var assessmentlist = await _context.TakenAssessments
+                .Include(ta => ta.Assessment)
+                .ToListAsync();
+
             var learnerAssessmentList = assessmentlist.Select(ta => new
             {
                 LearnerId = ta.LearnerId,
-                AssessmentName = ta.Assessment?.Title ?? "N/A",
-                score = ta.ScoredPoints + "/" + (ta.Assessment?.TotalMarks ?? 0)
+                AssessmentName = ta.Assessment.Title,
+                score = $"{ta.ScoredPoints}/{ta.Assessment.TotalMarks}"
             }).ToList();
 
             return View(learnerAssessmentList);
@@ -190,7 +182,7 @@ namespace Edu_DB_ASP.Controllers.Assessments
         public async Task<IActionResult> InstructorAssessmentView(InstructorAssessmentFilter filter)
         {
             var assessment = await _context.Assessments
-                .FirstOrDefaultAsync(a => a.Title == filter.Title);
+                .FirstOrDefaultAsync(a => a.AssessmentId == filter.AssessmentId);
             var learner = await _context.Learners
                 .FirstOrDefaultAsync(a => a.LearnerId == filter.LearnerId);
 
@@ -203,17 +195,18 @@ namespace Edu_DB_ASP.Controllers.Assessments
                 return NotFound($"There isn't a learner with such ID. Please re-enter.");
             }
 
-            var assessmentlist = await InstructorGetTakenAssessments(filter.LearnerId,filter.Title);
+            var assessmentlist = await InstructorGetTakenAssessments(filter.LearnerId,filter.AssessmentId);
             var learnerAssessmentList = assessmentlist.Select(ta => new
             {
                 LearnerId = ta.LearnerId,
                 AssessmentName = ta.Assessment.Title,
-                score = ta.ScoredPoints + "/" + ta.Assessment.TotalMarks
+                score = $"{ta.ScoredPoints}/{ta.Assessment.TotalMarks}"
             }).ToList();
 
             return View(learnerAssessmentList);
         }
-
+        
+        
         [HttpGet]
         public IActionResult AssessmentAnalysis()
         {
@@ -310,7 +303,7 @@ namespace Edu_DB_ASP.Controllers.Assessments
         [HttpGet]
         public async Task<IActionResult> TopView()
         {
-            var assessments = await _context.Assessments.FromSqlRaw("EXEC Highestgrade").ToListAsync();
+            var assessments = await _context.Assessments.ToListAsync();
             var fassessments = assessments.Select(a => new
             {
                 ID = a.AssessmentId,

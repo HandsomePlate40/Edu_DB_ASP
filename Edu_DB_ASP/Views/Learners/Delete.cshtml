@@ -4,96 +4,420 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+<style>
+    /* Existing styles from the first page */
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #11111B; /* base */
+        color: #D9E0EE; /* text */
+    }
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Learner</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Gender)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Gender)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CountryOfOrigin)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CountryOfOrigin)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CulturalBackground)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CulturalBackground)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PersonalityTraits)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PersonalityTraits)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EmotionalProfile)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EmotionalProfile)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhysicalHealth)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhysicalHealth)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MentalHealth)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MentalHealth)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ExperienceLevel)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ExperienceLevel)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PasswordHash)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PasswordHash)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProfilePictureUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProfilePictureUrl)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="LearnerId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+    .profile-container {
+        display: flex;
+        align-items: center;
+        padding: 2rem;
+        background: #181825; /* mantle */
+        border-bottom: 1px solid #313244; /* surface0 */
+        position: relative;
+        border-radius: 15px;
+        margin: 2rem;
+    }
+
+    .profile-pic-form {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        margin-right: 1.5rem;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    .profile-image {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: #313244; /* surface0 */
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    .profile-image img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    /* Hidden label appears on hover */
+    .profile-upload-label {
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        color: #D9E0EE;
+        font-size: 0.9rem;
+        font-weight: 500;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.3s;
+        cursor: pointer;
+        display: flex;
+    }
+
+    .profile-image:hover .profile-upload-label {
+        opacity: 1;
+    }
+
+    .profile-upload-label:hover {
+        background: rgba(0,0,0,0.6);
+    }
+
+    .profile-upload-label input[type="file"] {
+        display: none;
+    }
+
+    .profile-info {
+        flex: 1;
+    }
+
+    .profile-info h1 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: #D9E0EE; /* text */
+    }
+
+    .profile-info p {
+        margin: 0.5rem 0 0;
+        color: #BAC2DE; /* subtext1 */
+    }
+
+    .section-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    h2 {
+        color: #cba6f7;
+        border-bottom: 2px solid #45475a;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-bottom: 2rem;
+        border-radius: 15px;
+        overflow: hidden;
+        border: 1px solid #313244;
+    }
+
+    .table-header-row {
+        background-color: #313244;
+    }
+
+    th {
+        text-align: left;
+        padding: 0.75rem;
+        color: #cba6f7;
+        border-bottom: 2px solid #45475a;
+    }
+
+    td {
+        padding: 0.75rem;
+        border-bottom: 1px solid #313244;
+    }
+
+    /* Remove the right border from the last th and td in each row */
+    th:last-child,
+    td:last-child {
+        border-right: none;
+    }
+
+    tr:hover {
+        background-color: #1e1e2e;
+    }
+
+    .tag {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-right: 0.5rem;
+    }
+
+    .tag.active {
+        background: #A6E3A1; /* green */
+        color: #1E1E2E; /* base */
+    }
+
+    .tag.archived {
+        background: #F8BD96; /* peach */
+        color: #1E1E2E; /* base */
+    }
+
+    .table-section {
+        margin-bottom: 3rem;
+    }
+    .actions-cell {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+
+    .actions-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* Creates a 2-column grid */
+        gap: 1rem;
+        justify-content: center;
+        margin: 2rem auto;
+        max-width: 600px; /* Adjust as needed */
+    }
+
+    .actions-grid a {
+        display: flex; /* Use flexbox to center content */
+        justify-content: center; /* Center horizontally */
+        align-items: center; /* Center vertically */
+        text-align: center;
+    }
+
+    .back-to-index {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .back-to-index button, .btn-primary, .btn-danger, .btn-secondary {
+        background-color: #89b4fa;
+        color: #1e1e2e;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 15px;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+    }
+
+    .back-to-index button:hover, .btn-primary:hover, .btn-danger:hover, .btn-secondary:hover {
+        background-color: #74c7ec;
+    }
+
+    .btn-danger {
+        background-color: #F38BA8;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-danger:hover {
+        background-color: #dc7791;
+    }
+
+    .btn-primary {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+    }
+    .btn-secondary{
+        background-color: #A6E3A1;
+    }
+    .btn-secondary:hover{
+        background-color: #90d78c;
+    }
+
+    .status-new {
+        background-color: #a6e3a1; /* green */
+        color: #1e1e2e; /* base/black */
+        padding: 0.25rem 0.5rem;
+        border-radius: 5px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .status-in-progress {
+        background-color: #fab387; /* yellow */
+        color: #1e1e2e; /* base/black */
+        padding: 0.25rem 0.5rem;
+        border-radius: 5px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .module-manager-button {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background-color: #cba6f7;
+        color: #11111B;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    /* Dropdown styles */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #313244;
+        min-width: 200px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        border-radius: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .dropdown-content a {
+        color: #D9E0EE;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #45475a;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    /* New styles for this page */
+    h1, h3, h4{
+        color: #cba6f7;
+        margin-bottom: 1rem;
+    }
+    dl{
+        background-color: #181825;
+        border: none;
+        border-radius: 15px;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+    dt{
+        color: #cba6f7;
+        margin-top: 0.5rem;
+    }
+    dd{
+        color: #BAC2DE;
+        margin-top: 0.5rem;
+    }
+    .btn-lg{
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+    }
+    form{
+        margin-bottom: 2rem;
+    }
+</style>
+
+<div class="section-container">
+    <h1>@ViewData["Title"]</h1>
+
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+        <h4>Learner</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.FirstName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FirstName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.LastName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.LastName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Gender)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Gender)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CountryOfOrigin)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CountryOfOrigin)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CulturalBackground)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CulturalBackground)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.PersonalityTraits)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PersonalityTraits)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.EmotionalProfile)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.EmotionalProfile)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.PhysicalHealth)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PhysicalHealth)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.MentalHealth)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.MentalHealth)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ExperienceLevel)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ExperienceLevel)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.PasswordHash)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PasswordHash)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ProfilePictureUrl)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ProfilePictureUrl)
+            </dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="LearnerId" />
+            <input type="submit" value="Delete" class="btn btn-danger" /> |
+            <a asp-action="Index" class="btn-secondary">Back to List</a>
+        </form>
+    </div>
 </div>
